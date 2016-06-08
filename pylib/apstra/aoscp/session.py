@@ -20,22 +20,22 @@ class Session(object):
         'PASSWD': 'AOS_PASSWD'
     }
 
+    _DEFAULTS = {
+        'USER': 'admin',
+        'PASSWD': 'admin',
+        'PORT': 8888
+    }
+
     def __init__(self, **kwargs):
         self.api_headers = {}
         self.api_http = None
-        self.set_login(kwargs)
+        self.token = None
+        self.server = None
+        self.port = None
+        self.user = None
+        self.passwd = None
 
-    def set_login(self, **kwargs):
-        self.token = kwargs.get('token') or os.getenv(Session._ENV['TOKEN'])
-        self.server = kwargs.get('server') or os.getenv(Session._ENV['SERVER'])
-        self.port = kwargs.get('port') or os.getenv(Session._ENV['PORT'])
-        self.user = kwargs.get('user') or os.getenv(Session._ENV['USER'])
-        self.passwd = kwargs.get('passwd') or os.getenv(Session._ENV['PASSWD'])
-
-        self.api_http = "http://{server}:{port}/api".format(
-            server=self.server, port=self.port)
-
-        self.api_headers['authorization'] = self.token
+        self.set_login(**kwargs)
 
     # ### ---------------------------------------------------------------------
     # ###
@@ -43,60 +43,59 @@ class Session(object):
     # ###
     # ### ---------------------------------------------------------------------
 
+    def set_login(self, **kwargs):
+        self.token = kwargs.get('token') or os.getenv(Session._ENV['TOKEN'])
+
+        self.server = kwargs.get('server') or os.getenv(Session._ENV['SERVER'])
+
+        self.port = kwargs.get('port') \
+                    or os.getenv(Session._ENV['PORT']) or Session._DEFAULTS['PORT']
+
+        self.user = kwargs.get('user') \
+                    or os.getenv(Session._ENV['USER']) or Session._DEFAULTS['USER']
+
+        self.passwd = kwargs.get('passwd') \
+                      or os.getenv(Session._ENV['PASSWD']) or Session._DEFAULTS['PASSWD']
+
+
+    def accept_token(self, token):
+        self.token = token
+        self.api_headers['authorization'] = self.token
+
     def login(self):
+        self.api_http = "http://{server}:{port}/api".format(
+            server=self.server, port=self.port)
+
         if not self.server:
             raise LoginNoServerError()
 
         if not self.probe():
             raise LoginServerUnreachableError()
 
+        rsp = requests.post(
+            "%s/user/login" % self.api_http,
+            json=dict(username=self.user, password=self.passwd))
 
-    def authenticate(self, user, passwd):
-        got = self.sign_in(user, passwd)
-        if not got.ok:
-            # try to see if this is a first-time login
-            first_timer = self.sign_in(user, self.NOPASSWD)
-            err = AosLoginAuthFirstError \
-                if 403 == first_timer.status_code else AosLoginAuthError
-            raise err()
+        if not rsp.ok:
+            raise SessionRqstError(rsp)
 
-        self.token = got.json()['session_token']
-
-    def validate_token(self, token):
-        tmp_hdrs = copy(self.headers)
-        tmp_hdrs['authorization'] = token
-
-        got = requests.get(
-            "%s/session_test" % self.http_api,
-            headers=tmp_hdrs)
-
-        return got.ok
-
-    def sign_in(self, user, passwd):
-        return requests.post(
-            '%s/sign-in' % self.http_api,
-            json={
-                "user_name": user,
-                "user_password": passwd
-            })
+        self.accept_token(rsp.json()['token'])
 
     def probe(self, timeout=5, intvtimeout=1):
         start = datetime.datetime.now()
         end = start + datetime.timedelta(seconds=timeout)
-        hostname, port = self.server.split(':')
 
         while datetime.datetime.now() < end:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.settimeout(intvtimeout)
             try:
-                s.connect((hostname, int(port)))
+                s.connect((self.server, int(self.port)))
                 s.shutdown(socket.SHUT_RDWR)
                 s.close()
                 return True
-            except:
+            except socket.error:
                 time.sleep(1)
                 pass
         else:
             # elapsed = datetime.datetime.now() - start
             return False
-
