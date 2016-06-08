@@ -1,0 +1,1895 @@
+{
+    "errors": {
+        "system": {
+            "nodes": {
+                "leaf_3": {
+                    "system_id": [
+                        "u", 
+                        "w", 
+                        "y", 
+                        "r", 
+                        "l", 
+                        "a", 
+                        "d", 
+                        "c", 
+                        "e", 
+                        "V", 
+                        " ", 
+                        "t", 
+                        "s", 
+                        "o"
+                    ]
+                }, 
+                "leaf_2": {
+                    "system_id": [
+                        "u", 
+                        "w", 
+                        "y", 
+                        "r", 
+                        "l", 
+                        "a", 
+                        "d", 
+                        "c", 
+                        "e", 
+                        "V", 
+                        " ", 
+                        "t", 
+                        "s", 
+                        "o"
+                    ]
+                }, 
+                "leaf_1": {
+                    "system_id": [
+                        "u", 
+                        "w", 
+                        "y", 
+                        "r", 
+                        "l", 
+                        "a", 
+                        "d", 
+                        "c", 
+                        "e", 
+                        "V", 
+                        " ", 
+                        "t", 
+                        "s", 
+                        "o"
+                    ]
+                }, 
+                "spine_2": {
+                    "port_map": "Port map should be set"
+                }, 
+                "spine_1": {
+                    "system_id": [
+                        "u", 
+                        "w", 
+                        "y", 
+                        "r", 
+                        "l", 
+                        "a", 
+                        "d", 
+                        "c", 
+                        "e", 
+                        "V", 
+                        " ", 
+                        "t", 
+                        "s", 
+                        "o"
+                    ], 
+                    "port_map": "Port map should be set"
+                }
+            }, 
+            "links": {
+                "spine_2<->leaf_2[1]": {
+                    "endpoints": {
+                        "spine_2": {
+                            "interface": "Interface should be set"
+                        }
+                    }
+                }, 
+                "spine_1<->leaf_3[1]": {
+                    "endpoints": {
+                        "spine_1": {
+                            "interface": "Interface should be set"
+                        }
+                    }
+                }, 
+                "spine_2<->leaf_1[1]": {
+                    "endpoints": {
+                        "spine_2": {
+                            "interface": "Interface should be set"
+                        }
+                    }
+                }, 
+                "spine_1<->leaf_1[1]": {
+                    "endpoints": {
+                        "spine_1": {
+                            "interface": "Interface should be set"
+                        }
+                    }
+                }, 
+                "spine_2<->leaf_3[1]": {
+                    "endpoints": {
+                        "spine_2": {
+                            "interface": "Interface should be set"
+                        }
+                    }
+                }, 
+                "spine_1<->leaf_2[1]": {
+                    "endpoints": {
+                        "spine_1": {
+                            "interface": "Interface should be set"
+                        }
+                    }
+                }
+            }
+        }
+    }, 
+    "display_name": "pod_1", 
+    "reference_architecture": "two_stage_l3clos", 
+    "service": {}, 
+    "created_at": "2016-06-08T09:33:18.594880Z", 
+    "custom_extension": "", 
+    "system": {
+        "l3_edge_ip_connectivity_groups": {
+            "internal_subnets": [], 
+            "external_subnets": []
+        }, 
+        "nodes": [
+            {
+                "display_name": "leaf_2", 
+                "loopback_ip": "172.20.0.13/32", 
+                "hostname": "leaf-2", 
+                "port_map": "FooBaz", 
+                "id": "MDgwMDI3MDcyQkM4", 
+                "hcl_id": "Cumulus_VX", 
+                "role": "leaf", 
+                "device_config_rendering": "built_in", 
+                "deploy_mode": "undeploy", 
+                "server_vlan_ip": "172.20.2.0/24", 
+                "position": 2, 
+                "system_id": "080027072BC8", 
+                "logical_device": "c0ef8a21-54d2-4aff-b720-f621cc1c3d73", 
+                "asn": 11, 
+                "config_device_model_rendering": "built_in"
+            }, 
+            {
+                "display_name": "spine_1", 
+                "loopback_ip": "172.20.0.15/32", 
+                "hostname": "spine-1", 
+                "port_map": "", 
+                "id": "MDgwMDI3MTFCMzI3", 
+                "hcl_id": "Cumulus_VX", 
+                "role": "spine", 
+                "device_config_rendering": "built_in", 
+                "deploy_mode": "undeploy", 
+                "position": 1, 
+                "system_id": "08002711B327", 
+                "logical_device": "c0ef8a21-54d2-4aff-b720-f621cc1c3d73", 
+                "asn": 13, 
+                "config_device_model_rendering": "built_in"
+            }, 
+            {
+                "display_name": "leaf_3", 
+                "loopback_ip": "172.20.0.14/32", 
+                "hostname": "leaf-3", 
+                "port_map": "FooBaz", 
+                "id": "MDgwMDI3QURDMkJF", 
+                "hcl_id": "Cumulus_VX", 
+                "role": "leaf", 
+                "device_config_rendering": "built_in", 
+                "deploy_mode": "undeploy", 
+                "server_vlan_ip": "172.20.3.0/24", 
+                "position": 3, 
+                "system_id": "080027ADC2BE", 
+                "logical_device": "c0ef8a21-54d2-4aff-b720-f621cc1c3d73", 
+                "asn": 12, 
+                "config_device_model_rendering": "built_in"
+            }, 
+            {
+                "display_name": "leaf_1", 
+                "loopback_ip": "172.20.0.12/32", 
+                "hostname": "leaf-1", 
+                "port_map": "FooBaz", 
+                "id": "MDgwMDI3QjM0RTYw", 
+                "hcl_id": "Cumulus_VX", 
+                "role": "leaf", 
+                "device_config_rendering": "built_in", 
+                "deploy_mode": "undeploy", 
+                "server_vlan_ip": "172.20.1.0/24", 
+                "position": 1, 
+                "system_id": "080027B34E60", 
+                "logical_device": "c0ef8a21-54d2-4aff-b720-f621cc1c3d73", 
+                "asn": 10, 
+                "config_device_model_rendering": "built_in"
+            }, 
+            {
+                "display_name": "spine_2", 
+                "loopback_ip": "172.20.0.16/32", 
+                "hostname": "spine-2", 
+                "port_map": "", 
+                "id": "MDgwMDI3MDZFNDRE", 
+                "hcl_id": "Cumulus_VX", 
+                "role": "spine", 
+                "device_config_rendering": "built_in", 
+                "deploy_mode": "undeploy", 
+                "position": 2, 
+                "system_id": "08002706E44D", 
+                "logical_device": "c0ef8a21-54d2-4aff-b720-f621cc1c3d73", 
+                "asn": 14, 
+                "config_device_model_rendering": "built_in"
+            }
+        ], 
+        "dhcp_service_resources": {
+            "server_ip": ""
+        }, 
+        "links": [
+            {
+                "role": "spine_leaf", 
+                "endpoints": [
+                    {
+                        "interface": "swp1", 
+                        "ip": "172.20.0.11/31", 
+                        "display_name": "leaf_2", 
+                        "type": "leaf"
+                    }, 
+                    {
+                        "interface": "", 
+                        "ip": "172.20.0.10/31", 
+                        "display_name": "spine_1", 
+                        "type": "spine"
+                    }
+                ], 
+                "display_name": "spine_1<->leaf_2[1]"
+            }, 
+            {
+                "role": "spine_leaf", 
+                "endpoints": [
+                    {
+                        "interface": "swp2", 
+                        "ip": "172.20.0.5/31", 
+                        "display_name": "leaf_1", 
+                        "type": "leaf"
+                    }, 
+                    {
+                        "interface": "", 
+                        "ip": "172.20.0.4/31", 
+                        "display_name": "spine_2", 
+                        "type": "spine"
+                    }
+                ], 
+                "display_name": "spine_2<->leaf_1[1]"
+            }, 
+            {
+                "role": "spine_leaf", 
+                "endpoints": [
+                    {
+                        "interface": "", 
+                        "ip": "172.20.0.2/31", 
+                        "display_name": "spine_1", 
+                        "type": "spine"
+                    }, 
+                    {
+                        "interface": "swp1", 
+                        "ip": "172.20.0.3/31", 
+                        "display_name": "leaf_3", 
+                        "type": "leaf"
+                    }
+                ], 
+                "display_name": "spine_1<->leaf_3[1]"
+            }, 
+            {
+                "role": "spine_leaf", 
+                "endpoints": [
+                    {
+                        "interface": "", 
+                        "ip": "172.20.0.0/31", 
+                        "display_name": "spine_1", 
+                        "type": "spine"
+                    }, 
+                    {
+                        "interface": "swp1", 
+                        "ip": "172.20.0.1/31", 
+                        "display_name": "leaf_1", 
+                        "type": "leaf"
+                    }
+                ], 
+                "display_name": "spine_1<->leaf_1[1]"
+            }, 
+            {
+                "role": "spine_leaf", 
+                "endpoints": [
+                    {
+                        "interface": "swp2", 
+                        "ip": "172.20.0.9/31", 
+                        "display_name": "leaf_3", 
+                        "type": "leaf"
+                    }, 
+                    {
+                        "interface": "", 
+                        "ip": "172.20.0.8/31", 
+                        "display_name": "spine_2", 
+                        "type": "spine"
+                    }
+                ], 
+                "display_name": "spine_2<->leaf_3[1]"
+            }, 
+            {
+                "role": "spine_leaf", 
+                "endpoints": [
+                    {
+                        "interface": "swp2", 
+                        "ip": "172.20.0.7/31", 
+                        "display_name": "leaf_2", 
+                        "type": "leaf"
+                    }, 
+                    {
+                        "interface": "", 
+                        "ip": "172.20.0.6/31", 
+                        "display_name": "spine_2", 
+                        "type": "spine"
+                    }
+                ], 
+                "display_name": "spine_2<->leaf_2[1]"
+            }
+        ]
+    }, 
+    "last_modified_at": "2016-06-08T10:04:45.153859Z", 
+    "intent": {
+        "fabric_connectivity_intent": {
+            "design_template": {
+                "derived_metrics": {
+                    "spine_fabric_port_util": 0.3333333432674408, 
+                    "leaf_fabric_port_util": 0.2222222238779068, 
+                    "leaf_uplink_count": 2, 
+                    "leaf_server_port_util": 0.5555555820465088, 
+                    "oversubscription": 2.5
+                }, 
+                "leaf_spine_links_count": 1, 
+                "spine_count": 2, 
+                "leaf_count": 3, 
+                "logical_devices_intent": {
+                    "spine": {
+                        "panels": [
+                            {
+                                "port_groups": [
+                                    {
+                                        "count": 9, 
+                                        "speed": {
+                                            "value": 10, 
+                                            "unit": "G"
+                                        }, 
+                                        "roles": [
+                                            "server", 
+                                            "leaf", 
+                                            "l2_server", 
+                                            "l3_server", 
+                                            "spine", 
+                                            "external_router"
+                                        ]
+                                    }
+                                ], 
+                                "port_indexing": {
+                                    "order": "T-B, L-R", 
+                                    "start_index": 1, 
+                                    "schema": "absolute"
+                                }, 
+                                "panel_layout": {
+                                    "row_count": 1, 
+                                    "column_count": 9
+                                }
+                            }
+                        ], 
+                        "display_name": "vSwitch", 
+                        "id": "spine"
+                    }, 
+                    "leaf": {
+                        "panels": [
+                            {
+                                "port_groups": [
+                                    {
+                                        "count": 9, 
+                                        "speed": {
+                                            "value": 10, 
+                                            "unit": "G"
+                                        }, 
+                                        "roles": [
+                                            "server", 
+                                            "leaf", 
+                                            "l2_server", 
+                                            "l3_server", 
+                                            "spine", 
+                                            "external_router"
+                                        ]
+                                    }
+                                ], 
+                                "port_indexing": {
+                                    "order": "T-B, L-R", 
+                                    "start_index": 1, 
+                                    "schema": "absolute"
+                                }, 
+                                "panel_layout": {
+                                    "row_count": 1, 
+                                    "column_count": 9
+                                }
+                            }
+                        ], 
+                        "display_name": "vSwitch", 
+                        "id": "leaf"
+                    }
+                }, 
+                "server_per_leaf_count": 6
+            }, 
+            "design": {
+                "desired_oversubscription": 1.0, 
+                "server_link_speed": {
+                    "value": 10, 
+                    "unit": "G"
+                }, 
+                "server_count": 15, 
+                "minimize_oversubscription": false, 
+                "type": "endpoint_based_design", 
+                "utilize_all_server_ports": true
+            }
+        }, 
+        "l3_edge_ip_connectivity_intent": {
+            "active": false
+        }, 
+        "external_connectivity_intent": {
+            "routing_policy": {
+                "export_policy": {
+                    "all_routes": true, 
+                    "spine_leaf_links": false, 
+                    "loopbacks": true, 
+                    "l2edge_subnets": true, 
+                    "l3edge_server_links": true
+                }, 
+                "import_policy": "default_only"
+            }, 
+            "l3edge_to_server_bandwidth_ratio": 1.0, 
+            "device_hosting_external_links": "leaf", 
+            "port_speed": {
+                "value": 10, 
+                "unit": "G"
+            }, 
+            "design_template": {
+                "external_port_per_node_count": 1, 
+                "total_external_port_count": 1, 
+                "external_facing_node_count": 1
+            }, 
+            "external_links_count": 1
+        }, 
+        "l2_edge_ip_connectivity_intent": {
+            "active": true
+        }
+    }, 
+    "external_endpoints": {
+        "routers": []
+    }, 
+    "id": "53e8cfa9-a5d1-456e-af06-ffbf74a9b50d", 
+    "constraints": {
+        "logical_device_map_catalog": [
+            {
+                "display_name": "FooBaz", 
+                "id": "FooBaz", 
+                "key": {
+                    "hcl_id": "Cumulus_VX", 
+                    "logical_device_id": "c0ef8a21-54d2-4aff-b720-f621cc1c3d73", 
+                    "variant": "1"
+                }, 
+                "transforms": [
+                    {
+                        "logical": {
+                            "panel_id": 1, 
+                            "port_range_end": 9, 
+                            "port_range_start": 1
+                        }, 
+                        "physical": {
+                            "panel_id": 1, 
+                            "port_range_end": 9, 
+                            "port_range_start": 1
+                        }
+                    }
+                ]
+            }, 
+            {
+                "display_name": "vSwitch-CLVX", 
+                "id": "vSwitch-CLVX", 
+                "key": {
+                    "hcl_id": "Cumulus_VX", 
+                    "logical_device_id": "c0ef8a21-54d2-4aff-b720-f621cc1c3d73", 
+                    "variant": "1"
+                }, 
+                "transforms": [
+                    {
+                        "logical": {
+                            "panel_id": 1, 
+                            "port_range_end": 9, 
+                            "port_range_start": 1
+                        }, 
+                        "physical": {
+                            "panel_id": 1, 
+                            "port_range_end": 9, 
+                            "port_range_start": 1
+                        }
+                    }
+                ]
+            }, 
+            {
+                "display_name": "Gizmodo", 
+                "id": "Gizmodo", 
+                "key": {
+                    "hcl_id": "Cumulus_VX", 
+                    "logical_device_id": "c0ef8a21-54d2-4aff-b720-f621cc1c3d73", 
+                    "variant": "1"
+                }, 
+                "transforms": [
+                    {
+                        "logical": {
+                            "panel_id": 1, 
+                            "port_range_end": 9, 
+                            "port_range_start": 1
+                        }, 
+                        "physical": {
+                            "panel_id": 1, 
+                            "port_range_end": 9, 
+                            "port_range_start": 1
+                        }
+                    }
+                ]
+            }
+        ], 
+        "logical_device_catalog": [
+            {
+                "panels": [
+                    {
+                        "port_groups": [
+                            {
+                                "count": 9, 
+                                "speed": {
+                                    "value": 10, 
+                                    "unit": "G"
+                                }, 
+                                "roles": [
+                                    "server", 
+                                    "leaf", 
+                                    "l2_server", 
+                                    "l3_server", 
+                                    "spine", 
+                                    "external_router"
+                                ]
+                            }
+                        ], 
+                        "port_indexing": {
+                            "order": "T-B, L-R", 
+                            "start_index": 1, 
+                            "schema": "absolute"
+                        }, 
+                        "panel_layout": {
+                            "row_count": 1, 
+                            "column_count": 9
+                        }
+                    }
+                ], 
+                "display_name": "vSwitch", 
+                "id": "c0ef8a21-54d2-4aff-b720-f621cc1c3d73"
+            }
+        ], 
+        "port_map_catalog": [
+            {
+                "display_name": "FooBaz", 
+                "ports": [
+                    {
+                        "position": 8, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp8", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 4, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp4", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 9, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp9", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 6, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp6", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 20, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp20", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 10, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp10", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 11, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp11", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 16, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp16", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 17, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp17", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 19, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp19", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 13, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp13", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 14, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp14", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 18, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp18", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 12, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp12", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 7, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp7", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 3, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp3", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 2, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp2", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 21, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp21", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 1, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp1", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 24, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp24", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 23, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp23", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 22, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp22", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 15, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp15", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 5, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp5", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }
+                ]
+            }, 
+            {
+                "display_name": "vSwitch-CLVX", 
+                "ports": [
+                    {
+                        "position": 8, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp8", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 4, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp4", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 9, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp9", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 6, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp6", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 20, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp20", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 10, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp10", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 11, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp11", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 16, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp16", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 17, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp17", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 19, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp19", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 13, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp13", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 14, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp14", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 18, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp18", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 12, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp12", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 7, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp7", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 3, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp3", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 2, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp2", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 21, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp21", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 1, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp1", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 24, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp24", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 23, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp23", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 22, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp22", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 15, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp15", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 5, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp5", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }
+                ]
+            }, 
+            {
+                "display_name": "Gizmodo", 
+                "ports": [
+                    {
+                        "position": 8, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp8", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 4, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp4", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 9, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp9", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 6, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp6", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 20, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp20", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 10, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp10", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 11, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp11", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 16, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp16", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 17, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp17", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 19, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp19", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 13, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp13", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 14, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp14", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 18, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp18", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 12, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp12", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 7, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp7", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 3, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp3", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 2, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp2", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 21, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp21", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 1, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp1", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }, 
+                    {
+                        "position": 24, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp24", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 23, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp23", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 22, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp22", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 15, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp15", 
+                        "roles": [
+                            "unused"
+                        ]
+                    }, 
+                    {
+                        "position": 5, 
+                        "speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "setting": {
+                            "type": "cumulusForceSpeed", 
+                            "param": "10G"
+                        }, 
+                        "display_name": "swp5", 
+                        "roles": [
+                            "server", 
+                            "leaf", 
+                            "l2_server", 
+                            "l3_server", 
+                            "spine", 
+                            "external_router"
+                        ]
+                    }
+                ]
+            }
+        ], 
+        "hcl_catalog": [
+            {
+                "hardware_capabilities": {
+                    "userland": 64, 
+                    "ram": 16, 
+                    "asic": "", 
+                    "form_factor": "1RU", 
+                    "ecmp_limit": 64, 
+                    "cpu": "x86"
+                }, 
+                "layout": [
+                    {
+                        "panel_id": 1, 
+                        "supported_transformations": [], 
+                        "port_indexing": {
+                            "order": "L-R, T-B", 
+                            "start_index": 1, 
+                            "schema": "absolute"
+                        }, 
+                        "default_speed": {
+                            "value": 10, 
+                            "unit": "G"
+                        }, 
+                        "failure_domain_id": 1, 
+                        "type": "sfp", 
+                        "panel_layout": {
+                            "row_count": 2, 
+                            "column_count": 12
+                        }
+                    }
+                ], 
+                "selector": {
+                    "os_version": "2\\.5\\.[4-7][a-z]?", 
+                    "model": "VX", 
+                    "os": "Cumulus", 
+                    "manufacturer": "Cumulus"
+                }, 
+                "software_capabilities": {
+                    "onie": false, 
+                    "lxc_support": false
+                }, 
+                "display_name": "Cumulus VX", 
+                "slot_count": 0, 
+                "id": "Cumulus_VX"
+            }
+        ], 
+        "resource_pool_map": [
+            {
+                "resource_pool": [
+                    "7b19453e-a059-496c-b788-54b5fd8a5656"
+                ], 
+                "resource_group": "leaf_loopback_ips"
+            }, 
+            {
+                "resource_pool": [
+                    "7b19453e-a059-496c-b788-54b5fd8a5656"
+                ], 
+                "resource_group": "spine_leaf_link_ips"
+            }, 
+            {
+                "resource_pool": [
+                    "7b19453e-a059-496c-b788-54b5fd8a5656"
+                ], 
+                "resource_group": "server_vlan_ips"
+            }, 
+            {
+                "resource_pool": [
+                    "2a02ce6f-5c2b-4a54-aa92-ec7228e7f232"
+                ], 
+                "resource_group": "leaf_asns"
+            }, 
+            {
+                "resource_pool": [
+                    "7b19453e-a059-496c-b788-54b5fd8a5656"
+                ], 
+                "resource_group": "spine_loopback_ips"
+            }, 
+            {
+                "resource_pool": [
+                    "2a02ce6f-5c2b-4a54-aa92-ec7228e7f232"
+                ], 
+                "resource_group": "spine_asns"
+            }
+        ]
+    }
+}

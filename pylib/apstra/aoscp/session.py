@@ -60,7 +60,7 @@ class Session(object):
 
     def accept_token(self, token):
         self.token = token
-        self.api_headers['authorization'] = self.token
+        self.api_headers['AUTHTOKEN'] = self.token
 
     def login(self):
         self.api_http = "http://{server}:{port}/api".format(
