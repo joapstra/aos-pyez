@@ -3,13 +3,6 @@
 # This source code is licensed under End User License Agreement found in the
 # LICENSE file at http://www.apstra.com/community/eula
 
-#
-#  Copyright 2016-present, Apstra, Inc.  All rights reserved.
-#
-#  This source code is licensed under Community End User License Agreement
-#  found in the LICENSE.txt file in the root directory of this source tree.
-#
-
 from setuptools import setup, find_packages
 
 # parse requirements
