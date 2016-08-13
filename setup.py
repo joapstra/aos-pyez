@@ -1,3 +1,8 @@
+# Copyright 2014-present, Apstra, Inc. All rights reserved.
+#
+# This source code is licensed under End User License Agreement found in the
+# LICENSE file at http://www.apstra.com/community/eula
+
 #
 #  Copyright 2016-present, Apstra, Inc.  All rights reserved.
 #
@@ -18,7 +23,7 @@ packages = find_packages(libdir)
 setup(
     name="aos-pyez",
     namespace_packages=['apstra'],
-    version="0.0.2",
+    version="0.2.0",
     author="Jeremy Schulman",
     author_email="jeremy@apstra.com",
     description=("Python wrapper library for Apstra AOS REST API "),
