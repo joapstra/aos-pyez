@@ -15,6 +15,7 @@ import requests
 
 from apstra.aoscp.exc import *
 
+
 class Session(object):
     _ENV = {
         'SERVER': 'AOS_SERVER',
@@ -31,10 +32,18 @@ class Session(object):
     }
 
     class Api(object):
-        def __init__(self, server, port):
-            self.url = "http://{server}:{port}/api".format(server=server, port=port)
-            self.headers = {}
+        def __init__(self):
+            self.url = None
             self.ver = None
+            self.headers = {}
+
+        def set_url(self, server, port):
+            self.url = "http://{server}:{port}/api".format(server=server, port=port)
+
+        def resume(self, url, headers):
+            self.url = copy(url)
+            self.headers = copy(headers)
+            self.get_ver()
 
         def login(self, user, passwd):
             rsp = requests.post(
@@ -50,6 +59,7 @@ class Session(object):
         def get_ver(self):
             got = requests.get("%s/versions/api" % self.url)
             self.ver = got.json()
+            return self.ver
 
         def accept_token(self, token):
             self.headers['AUTHTOKEN'] = token
@@ -57,8 +67,8 @@ class Session(object):
     def __init__(self, **kwargs):
         self.user, self.passwd = (None, None)
         self.server, self.port = (None, None)
+        self.api = Session.Api()
         self.set_login(**kwargs)
-        self.api = Session.Api(self.server, self.port)
 
     # ### ---------------------------------------------------------------------
     # ###
@@ -85,11 +95,10 @@ class Session(object):
         if not self.server:
             raise LoginNoServerError()
 
-        self.api = Session.Api(server=self.server, port=self.port)
-
         if not self.probe():
             raise LoginServerUnreachableError()
 
+        self.api.set_url(server=self.server, port=self.port)
         self.api.login(self.user, self.passwd)
 
     def probe(self, timeout=5, intvtimeout=1):
