@@ -4,7 +4,11 @@
 # LICENSE file at http://www.apstra.com/community/eula
 
 
-class LoginError(Exception):
+class AosCpError(Exception):
+    pass
+
+
+class LoginError(AosCpError):
     pass
 
 
@@ -16,7 +20,11 @@ class LoginServerUnreachableError(LoginError):
     pass
 
 
-class SessionError(Exception):
+class LoginAuthError(LoginError):
+    pass
+
+
+class SessionError(AosCpError):
     pass
 
 

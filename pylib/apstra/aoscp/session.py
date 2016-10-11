@@ -15,7 +15,6 @@ import requests
 
 from apstra.aoscp.exc import *
 
-
 class Session(object):
     _ENV = {
         'SERVER': 'AOS_SERVER',
@@ -31,16 +30,35 @@ class Session(object):
         'PORT': 8888
     }
 
-    def __init__(self, **kwargs):
-        self.api_headers = {}
-        self.api_http = None
-        self.token = None
-        self.server = None
-        self.port = None
-        self.user = None
-        self.passwd = None
+    class Api(object):
+        def __init__(self, server, port):
+            self.url = "http://{server}:{port}/api".format(server=server, port=port)
+            self.headers = {}
+            self.ver = None
 
+        def login(self, user, passwd):
+            rsp = requests.post(
+                "%s/user/login" % self.url,
+                json=dict(username=user, password=passwd))
+
+            if not rsp.ok:
+                raise LoginAuthError()
+
+            self.accept_token(rsp.json()['token'])
+            self.get_ver()
+
+        def get_ver(self):
+            got = requests.get("%s/versions/api" % self.url)
+            self.ver = got.json()
+
+        def accept_token(self, token):
+            self.headers['AUTHTOKEN'] = token
+
+    def __init__(self, **kwargs):
+        self.user, self.passwd = (None, None)
+        self.server, self.port = (None, None)
         self.set_login(**kwargs)
+        self.api = Session.Api(self.server, self.port)
 
     # ### ---------------------------------------------------------------------
     # ###
@@ -49,42 +67,30 @@ class Session(object):
     # ### ---------------------------------------------------------------------
 
     def set_login(self, **kwargs):
-        self.token = kwargs.get('token') or os.getenv(Session._ENV['TOKEN'])
-
         self.server = kwargs.get('server') or os.getenv(Session._ENV['SERVER'])
 
-        self.port = kwargs.get('port') \
-                    or os.getenv(Session._ENV['PORT']) or Session._DEFAULTS['PORT']
+        self.port = kwargs.get('port') or \
+            os.getenv(Session._ENV['PORT']) or \
+            Session._DEFAULTS['PORT']
 
-        self.user = kwargs.get('user') \
-                    or os.getenv(Session._ENV['USER']) or Session._DEFAULTS['USER']
+        self.user = kwargs.get('user') or \
+            os.getenv(Session._ENV['USER']) or \
+            Session._DEFAULTS['USER']
 
-        self.passwd = kwargs.get('passwd') \
-                      or os.getenv(Session._ENV['PASSWD']) or Session._DEFAULTS['PASSWD']
-
-
-    def accept_token(self, token):
-        self.token = token
-        self.api_headers['AUTHTOKEN'] = self.token
+        self.passwd = kwargs.get('passwd') or \
+            os.getenv(Session._ENV['PASSWD']) or \
+            Session._DEFAULTS['PASSWD']
 
     def login(self):
-        self.api_http = "http://{server}:{port}/api".format(
-            server=self.server, port=self.port)
-
         if not self.server:
             raise LoginNoServerError()
+
+        self.api = Session.Api(server=self.server, port=self.port)
 
         if not self.probe():
             raise LoginServerUnreachableError()
 
-        rsp = requests.post(
-            "%s/user/login" % self.api_http,
-            json=dict(username=self.user, password=self.passwd))
-
-        if not rsp.ok:
-            raise SessionRqstError(rsp)
-
-        self.accept_token(rsp.json()['token'])
+        self.api.login(self.user, self.passwd)
 
     def probe(self, timeout=5, intvtimeout=1):
         start = datetime.datetime.now()
