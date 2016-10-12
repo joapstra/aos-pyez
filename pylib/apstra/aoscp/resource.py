@@ -12,11 +12,36 @@ __all__ = [
 class ResourcePoolItem(object):
     def __init__(self, pool, datum):
         self.pool = pool
+        self.api = pool.api
         self.datum = datum
 
     @property
     def exists(self):
-        return bool(self.datum)
+        return bool(self.datum and self.name in self.pool)
+
+    @property
+    def name(self):
+        return self.datum['display_name']
+
+    @property
+    def id(self):
+        return self.datum.get('id')
+
+    def write(self):
+        if self.exists:
+            raise NotImplementedError()
+
+        got = requests.post(self.pool.url, headers=self.api.headers,
+                            json=self.datum)
+
+        if not got.ok:
+            raise SessionRqstError(resp=got)
+
+        # if OK, then the 'id' value is returned; update the datum
+        body = got.json()
+        self.datum['id'] = body['id']
+
+        return True
 
 
 class ResourcePool(object):
@@ -47,6 +72,9 @@ class ResourcePool(object):
         self._cache['by_name'] = {get_name(n): n for n in self._cache['list']}
 
         return self._cache['by_name']
+
+    def __contains__(self, item_name):
+        return bool(item_name in self._cache.get('names'))
 
     def __getitem__(self, item_name):
         if not self._cache:
