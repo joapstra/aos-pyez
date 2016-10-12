@@ -4,12 +4,12 @@ import requests
 from apstra.aoscp.exc import SessionRqstError
 
 __all__ = [
-    'ResourcePool',
-    'ResourcePoolItem'
+    'Collection',
+    'CollectionItem'
 ]
 
 
-class ResourcePoolItem(object):
+class CollectionItem(object):
     def __init__(self, pool, datum):
         self.pool = pool
         self.api = pool.api
@@ -43,11 +43,18 @@ class ResourcePoolItem(object):
 
         return True
 
+    def __repr__(self):
+        return {
+            'name': self.name,
+            'id': self.id,
+            'datum': self.datum
+        }
 
-class ResourcePool(object):
+
+class Collection(object):
     RESOURCE_URI = None
 
-    class Item(ResourcePoolItem):
+    class Item(CollectionItem):
         pass
 
     def __init__(self, api):
