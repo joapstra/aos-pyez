@@ -29,6 +29,6 @@ class SessionError(AosCpError):
 
 
 class SessionRqstError(SessionError):
-    def __init__(self, response):
-        self.response = response
+    def __init__(self, resp):
         super(SessionRqstError, self).__init__()
+        self.resp = resp

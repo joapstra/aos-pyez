@@ -8,12 +8,14 @@ import os
 import datetime
 import socket
 import time
+import importlib
 
 from copy import copy
 
 import requests
 
 from apstra.aoscp.exc import *
+from apstra.aoscp.amods import AosModuleCatalog
 
 
 class Session(object):
@@ -68,7 +70,7 @@ class Session(object):
         self.user, self.passwd = (None, None)
         self.server, self.port = (None, None)
         self.api = Session.Api()
-        self.set_login(**kwargs)
+        self._set_login(**kwargs)
 
     # ### ---------------------------------------------------------------------
     # ###
@@ -76,7 +78,23 @@ class Session(object):
     # ###
     # ### ---------------------------------------------------------------------
 
-    def set_login(self, **kwargs):
+    def login(self):
+        if not self.server:
+            raise LoginNoServerError()
+
+        if not self._probe():
+            raise LoginServerUnreachableError()
+
+        self.api.set_url(server=self.server, port=self.port)
+        self.api.login(self.user, self.passwd)
+
+    # ### ---------------------------------------------------------------------
+    # ###
+    # ###                         PRIVATE METHODS
+    # ###
+    # ### ---------------------------------------------------------------------
+
+    def _set_login(self, **kwargs):
         self.server = kwargs.get('server') or os.getenv(Session._ENV['SERVER'])
 
         self.port = kwargs.get('port') or \
@@ -91,17 +109,7 @@ class Session(object):
             os.getenv(Session._ENV['PASSWD']) or \
             Session._DEFAULTS['PASSWD']
 
-    def login(self):
-        if not self.server:
-            raise LoginNoServerError()
-
-        if not self.probe():
-            raise LoginServerUnreachableError()
-
-        self.api.set_url(server=self.server, port=self.port)
-        self.api.login(self.user, self.passwd)
-
-    def probe(self, timeout=5, intvtimeout=1):
+    def _probe(self, timeout=5, intvtimeout=1):
         start = datetime.datetime.now()
         end = start + datetime.timedelta(seconds=timeout)
 
@@ -119,3 +127,19 @@ class Session(object):
         else:
             # elapsed = datetime.datetime.now() - start
             return False
+
+    # ### ---------------------------------------------------------------------
+    # ###
+    # ###                         DYNAMIC MODULE LOADER
+    # ###
+    # ### ---------------------------------------------------------------------
+
+    def __getattr__(self, amod_name):
+        if amod_name not in AosModuleCatalog:
+            raise NotImplementedError()
+
+        amod_file = AosModuleCatalog[amod_name]
+        got = importlib.import_module(".amods.%s" % amod_file, package=__package__)
+        cls = getattr(got, got.__all__[0])
+        setattr(self, amod_name, cls(api=self.api))
+        return getattr(self, amod_name)
