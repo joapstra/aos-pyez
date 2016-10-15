@@ -4,7 +4,11 @@
 # LICENSE file at http://www.apstra.com/community/eula
 
 
-class LoginError(Exception):
+class AosCpError(Exception):
+    pass
+
+
+class LoginError(AosCpError):
     pass
 
 
@@ -16,11 +20,15 @@ class LoginServerUnreachableError(LoginError):
     pass
 
 
-class SessionError(Exception):
+class LoginAuthError(LoginError):
+    pass
+
+
+class SessionError(AosCpError):
     pass
 
 
 class SessionRqstError(SessionError):
-    def __init__(self, response):
-        self.response = response
+    def __init__(self, resp):
         super(SessionRqstError, self).__init__()
+        self.resp = resp
