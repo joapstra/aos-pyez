@@ -31,6 +31,20 @@ class BlueprintItemParamsItem(object):
 
     @value.setter
     def value(self, replace_value):
+        """
+        This setter will replace the slot value entirely with the value provided
+        by the :replace_value:.  This means that all slot/ids must be provided
+        in the :replace_avlue:.  If this setter is successful, the :replace_value:
+        will be stored in the object param cache, and returned to the caller
+
+        Args:
+            replace_value:
+                The new slot value.  An empty dictionary will clear the slot.
+
+        Returns:
+            The replace_value provided
+
+        """
         got = requests.put(self.url, headers=self.api.headers, json=replace_value)
         if not got.ok:
             raise SessionRqstError(
@@ -38,6 +52,7 @@ class BlueprintItemParamsItem(object):
                 message='unable to clear slot: %s' % self.name)
 
         self._param['value'] = replace_value
+        return self._param['value']
 
     def get_value(self):
         got = requests.get(self.url, headers=self.api.headers)
