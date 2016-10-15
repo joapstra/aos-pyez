@@ -10,14 +10,26 @@ __all__ = [
 
 
 class CollectionItem(object):
-    def __init__(self, pool, datum):
-        self.pool = pool
-        self.api = pool.api
+    def __init__(self, parent, datum):
+        self._parent = parent
+        self.api = parent.api
         self.datum = datum
+        self._url = None
+
+    @property
+    def url(self):
+        if self._url:
+            return self._url
+
+        if not self.id:
+            return None
+
+        self._url = "%s/%s" % (self._parent.url, self.id)
+        return self._url
 
     @property
     def exists(self):
-        return bool(self.datum and self.name in self.pool)
+        return bool(self.datum and self.name in self._parent)
 
     @property
     def name(self):
@@ -31,7 +43,7 @@ class CollectionItem(object):
         if self.exists:
             raise NotImplementedError()
 
-        got = requests.post(self.pool.url, headers=self.api.headers,
+        got = requests.post(self._parent.url, headers=self.api.headers,
                             json=self.datum)
 
         if not got.ok:

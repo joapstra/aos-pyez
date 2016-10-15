@@ -5,7 +5,8 @@
 
 
 class AosCpError(Exception):
-    pass
+    def __init__(self, **kwargs):
+        super(AosCpError, self).__init__(**kwargs)
 
 
 class LoginError(AosCpError):
@@ -29,6 +30,6 @@ class SessionError(AosCpError):
 
 
 class SessionRqstError(SessionError):
-    def __init__(self, resp):
-        super(SessionRqstError, self).__init__()
+    def __init__(self, resp, **kwargs):
+        super(SessionRqstError, self).__init__(**kwargs)
         self.resp = resp
