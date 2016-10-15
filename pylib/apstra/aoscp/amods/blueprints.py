@@ -34,8 +34,7 @@ class BlueprintItemParamsItem(object):
         """
         This setter will replace the slot value entirely with the value provided
         by the :replace_value:.  This means that all slot/ids must be provided
-        in the :replace_avlue:.  If this setter is successful, the :replace_value:
-        will be stored in the object param cache, and returned to the caller
+        in the :replace_avlue:.
 
         Args:
             replace_value:
@@ -52,7 +51,6 @@ class BlueprintItemParamsItem(object):
                 message='unable to clear slot: %s' % self.name)
 
         self._param['value'] = replace_value
-        return self._param['value']
 
     def get_value(self):
         got = requests.get(self.url, headers=self.api.headers)
@@ -69,6 +67,15 @@ class BlueprintItemParamsItem(object):
 
 class BlueprintItemParamsCollection(object):
     Item = BlueprintItemParamsItem
+
+    class ItemIter(object):
+        def __init__(self, params):
+            self._params = params
+            self._iter = iter(self._params.names)
+
+        def next(self):
+            name = next(self._iter)
+            return name, self._params[name].value
 
     def __init__(self, parent):
         self.api = parent.api
@@ -103,8 +110,8 @@ class BlueprintItemParamsCollection(object):
         # we want a KeyError to raise if the caller provides an unknown item_name
         return self.Item(self.blueprint, item_name, self._cache['by_name'][item_name])
 
-
-
+    def __iter__(self):
+        return self.ItemIter(self)
 
 
 class BlueprintCollectionItem(CollectionItem):
