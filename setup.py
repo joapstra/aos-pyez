@@ -16,7 +16,7 @@ packages = find_packages(libdir)
 setup(
     name="aos-pyez",
     namespace_packages=['apstra'],
-    version="0.2.0",
+    version="0.3.0",
     author="Jeremy Schulman",
     author_email="jeremy@apstra.com",
     description=("Python wrapper library for Apstra AOS REST API "),
