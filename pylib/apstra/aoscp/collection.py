@@ -33,11 +33,11 @@ class CollectionItem(object):
 
     @property
     def name(self):
-        return self.datum['display_name']
+        return self.datum[self._parent.DISPLAY_NAME]
 
     @property
     def id(self):
-        return self.datum.get('id')
+        return self.datum.get(self._parent.UNIQUE_ID)
 
     def write(self):
         if self.exists:
@@ -51,20 +51,22 @@ class CollectionItem(object):
 
         # if OK, then the 'id' value is returned; update the datum
         body = got.json()
-        self.datum['id'] = body['id']
+        self.datum[self._parent.UNIQUE_ID] = body[self._parent.UNIQUE_ID]
 
         return True
 
     def __repr__(self):
-        return {
+        return str({
             'name': self.name,
             'id': self.id,
             'datum': self.datum
-        }
+        })
 
 
 class Collection(object):
     RESOURCE_URI = None
+    DISPLAY_NAME = 'display_name'
+    UNIQUE_ID = 'id'
 
     class Item(CollectionItem):
         pass
@@ -78,17 +80,27 @@ class Collection(object):
     def names(self):
         if not self._cache:
             self.digest()
-        return self._cache['names']
+        return self._cache['by_names']
+
+    @property
+    def cache(self):
+        if not self._cache:
+            self.digest()
+
+        return self._cache
 
     def digest(self):
         got = requests.get(self.url, headers=self.api.headers)
         if not got.ok:
             raise SessionRqstError(resp=got)
 
+        get_name = itemgetter(self.DISPLAY_NAME)
+        get_id = itemgetter(self.UNIQUE_ID)
+
         self._cache['list'] = got.json()
-        get_name = itemgetter('display_name')
         self._cache['names'] = map(get_name, self._cache['list'])
         self._cache['by_name'] = {get_name(n): n for n in self._cache['list']}
+        self._cache['by_id'] = {get_id(n): n for n in self._cache['list']}
 
         return self._cache['by_name']
 

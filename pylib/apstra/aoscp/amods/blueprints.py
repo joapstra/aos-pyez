@@ -1,13 +1,49 @@
 import requests
+import json
 from operator import itemgetter
+from copy import copy
 
 from apstra.aoscp.collection import Collection, CollectionItem
 from apstra.aoscp.exc import SessionRqstError
 
-__all__ = ['Blueprints']
+__all__ = ['Blueprints', 'BlueprintParamValueTransform']
+
+
+class BlueprintParamValueTransformer(object):
+    def __init__(self, collection,
+                 read_given='by_id', read_item=None,
+                 write_given='by_name', write_item=None):
+
+        self.collection = collection
+        self._read_given = read_given
+        self._read_item = read_item or collection.DISPLAY_NAME
+        self._write_given = write_given
+        self._write_item = write_item or collection.UNIQUE_ID
+
+    def read(self, value):
+        """
+        transforms the native API stored value (e.g. 'id') into something else,
+        (e.g. 'display_name')
+        """
+        rd_xf = {}
+        for _key, _val in value.iteritems():
+            item = self.collection.cache[self._read_given][_val]
+            rd_xf[_key] = item[self._read_item]
+
+        return rd_xf
+
+    def write(self, value):
+        wr_xf = {}
+        for _key, _val in value.iteritems():
+            item = self.collection.cache[self._write_given][_val]
+            wr_xf[_key] = item[self._write_item]
+
+        return wr_xf
 
 
 class BlueprintItemParamsItem(object):
+    Transformer = BlueprintParamValueTransformer
+
     def __init__(self, blueprint, name, datum):
         self.api = blueprint.api
         self.blueprint = blueprint
@@ -25,25 +61,29 @@ class BlueprintItemParamsItem(object):
     def url(self):
         return "%s/slots/%s" % (self.blueprint.url, self.name)
 
+    # #### ----------------------------------------------------------
+    # ####   PROPERTY: value [read, write, delete]
+    # #### ----------------------------------------------------------
+
     @property
     def value(self):
-        return self._param.get('value') or self.get_value()
+        return self._param.get('value') or self.read()
 
     @value.setter
     def value(self, replace_value):
-        """
-        This setter will replace the slot value entirely with the value provided
-        by the :replace_value:.  This means that all slot/ids must be provided
-        in the :replace_avlue:.
+        self.write(replace_value)
 
-        Args:
-            replace_value:
-                The new slot value.  An empty dictionary will clear the slot.
+    @value.deleter
+    def value(self):
+        self.clear()
 
-        Returns:
-            The replace_value provided
+    # #### ----------------------------------------------------------
+    # ####
+    # ####                   PUBLIC METHODS
+    # ####
+    # #### ----------------------------------------------------------
 
-        """
+    def write(self, replace_value):
         got = requests.put(self.url, headers=self.api.headers, json=replace_value)
         if not got.ok:
             raise SessionRqstError(
@@ -52,17 +92,27 @@ class BlueprintItemParamsItem(object):
 
         self._param['value'] = replace_value
 
-    def get_value(self):
+    def read(self):
         got = requests.get(self.url, headers=self.api.headers)
         if not got.ok:
-            raise SessionRqstError(resp=got,
-                                   message='unable to get value on slot: %s' % self.name)
+            raise SessionRqstError(
+                resp=got,
+                message='unable to get value on slot: %s' % self.name)
 
-        self._param['value'] = got.json()
+        self._param['value'] = copy(got.json())
         return self._param['value']
 
-    def clear_value(self):
-        self.value = {}
+
+    def clear(self):
+        self.write({})
+
+    def __str__(self):
+        return json.dumps({
+            'Blueprint Name': self.blueprint.name,
+            'Blueprint ID': self.blueprint.id,
+            'Parameter Name': self.name,
+            'Parameter Info': self.info,
+            'Parameter Value': self.value}, indent=3)
 
 
 class BlueprintItemParamsCollection(object):
