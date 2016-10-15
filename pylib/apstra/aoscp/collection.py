@@ -80,7 +80,7 @@ class Collection(object):
     def names(self):
         if not self._cache:
             self.digest()
-        return self._cache['by_names']
+        return self._cache['by_name']
 
     @property
     def cache(self):
@@ -105,6 +105,9 @@ class Collection(object):
         return self._cache['by_name']
 
     def __contains__(self, item_name):
+        if not self._cache:
+            self.digest()
+
         return bool(item_name in self._cache.get('names'))
 
     def __getitem__(self, item_name):
@@ -112,3 +115,9 @@ class Collection(object):
             self.digest()
 
         return self.Item(self, self._cache['by_name'].get(item_name))
+
+    def __iter__(self):
+        if not self._cache:
+            self.digest()
+
+        return self._cache['by_name'].iteritems()
