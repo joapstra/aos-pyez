@@ -3,53 +3,17 @@ import json
 from operator import itemgetter
 from copy import copy
 
-from apstra.aoscp.collection import Collection, CollectionItem
-from apstra.aoscp.exc import SessionRqstError, AccessValueError
+from apstra.aoscp.collection import Collection, CollectionItem, CollectionValueTransformer
+from apstra.aoscp.exc import SessionRqstError
 
-__all__ = ['Blueprints', 'BlueprintParamValueTransform']
-
-
-class BlueprintParamValueTransformer(object):
-    def __init__(self, collection,
-                 read_given=None, read_item=None,
-                 write_given=None, write_item=None):
-
-        self.collection = collection
-        self._read_given = read_given or collection.UNIQUE_ID
-        self._read_item = read_item or collection.DISPLAY_NAME
-        self._write_given = write_given or collection.DISPLAY_NAME
-        self._write_item = write_item or collection.UNIQUE_ID
-
-    def read(self, value):
-        """
-        transforms the native API stored value (e.g. 'id') into something else,
-        (e.g. 'display_name')
-        """
-        rd_xf = {}
-        for _key, _val in value.iteritems():
-            item = self.collection.find(key=_val, method=self._read_given)
-            if not item:
-                raise AccessValueError('unable to find item key=%s, by=%s' %
-                                       (_val, self._write_given))
-
-            rd_xf[_key] = item[self._read_item]
-
-        return rd_xf
-
-    def write(self, value):
-        wr_xf = {}
-        for _key, _val in value.iteritems():
-            item = self.collection.find(key=_val, method=self._write_given)
-            if not item:
-                raise AccessValueError('unable to find item key=%s, by=%s' %
-                                       (_val, self._write_given))
-            wr_xf[_key] = item[self._write_item]
-
-        return wr_xf
+__all__ = [
+    'Blueprints',
+    'BlueprintParamValueTransformer'
+]
 
 
 class BlueprintItemParamsItem(object):
-    Transformer = BlueprintParamValueTransformer
+    Transformer = CollectionValueTransformer
 
     def __init__(self, blueprint, name, datum):
         self.api = blueprint.api
@@ -94,8 +58,8 @@ class BlueprintItemParamsItem(object):
         got = requests.put(self.url, headers=self.api.headers, json=replace_value)
         if not got.ok:
             raise SessionRqstError(
-                resp=got,
-                message='unable to clear slot: %s' % self.name)
+                message='unable to write slot: %s' % self.name,
+                resp=got)
 
         self._param['value'] = replace_value
 
