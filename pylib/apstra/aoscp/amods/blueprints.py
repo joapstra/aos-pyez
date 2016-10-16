@@ -3,8 +3,10 @@ import json
 from operator import itemgetter
 from copy import copy
 
+import retrying
+
 from apstra.aoscp.collection import Collection, CollectionItem, CollectionValueTransformer
-from apstra.aoscp.exc import SessionRqstError
+from apstra.aoscp.exc import SessionRqstError, SessionError
 
 __all__ = [
     'Blueprints',
@@ -94,8 +96,7 @@ class BlueprintItemParamsCollection(object):
             self._iter = iter(self._params.names)
 
         def next(self):
-            name = next(self._iter)
-            return name, self._params[name].value
+            return self._params[next(self._iter)]
 
     def __init__(self, parent):
         self.api = parent.api
@@ -140,8 +141,32 @@ class BlueprintCollectionItem(CollectionItem):
         super(BlueprintCollectionItem, self).__init__(*vargs, **kwargs)
         self.params = BlueprintItemParamsCollection(self)
 
-    def __repr__(self):
-        return str(self.datum)
+    @property
+    def contents(self):
+        got = requests.get(self.url, headers=self.api.headers)
+        if not got.ok:
+            raise SessionRqstError(
+                message='unable to get blueprint contents',
+                resp=got,
+                blueprint=self)
+
+        return got.json()
+
+    def create(self, design_template_id, blocking=True):
+
+        data = dict(
+            display_name=self.name,
+            template_id=design_template_id,
+            reference_architecture="two_stage_l3clos")
+
+        super(BlueprintCollectionItem, self).create(data)
+
+        if not blocking:
+            return True
+
+        @retrying.retry(wait_fixed=1000, stop_max_delay=10000)
+        def wait_for_id():
+            return self.contents
 
 
 class Blueprints(Collection):

@@ -4,7 +4,7 @@ import json
 
 import requests
 
-from apstra.aoscp.exc import SessionRqstError, AccessValueError
+from apstra.aoscp.exc import SessionError, SessionRqstError, AccessValueError
 
 __all__ = [
     'Collection',
@@ -108,11 +108,11 @@ class CollectionItem(object):
 
     @property
     def exists(self):
-        return bool(self.datum and self.name in self._parent)
+        return bool(self.datum and self.id)
 
     @property
     def id(self):
-        return self.datum.get(self._parent.UNIQUE_ID) if self.exists else None
+        return self.datum.get(self._parent.UNIQUE_ID)
 
     def write(self):
         if self.exists:
@@ -138,6 +138,15 @@ class CollectionItem(object):
                 message='unable to get item name: %s' % self.name)
 
         self.datum = copy(got.json())
+        return self.datum
+
+    def create(self, datum):
+        if self.exists:
+            raise SessionError(message='cannot create, already exists')
+
+        self.datum = copy(datum)
+        return self.write()
+
 
     def __str__(self):
         return json.dumps({
