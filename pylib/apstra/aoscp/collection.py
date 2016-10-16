@@ -1,7 +1,9 @@
 from operator import itemgetter
+from copy import copy
 
 import requests
-from apstra.aoscp.exc import SessionRqstError
+
+from apstra.aoscp.exc import SessionRqstError, AccessValueError
 
 __all__ = [
     'Collection',
@@ -55,6 +57,15 @@ class CollectionItem(object):
 
         return True
 
+    def read(self):
+        got = requests.get(self.url, headers=self.api.headers)
+        if not got.ok:
+            raise SessionRqstError(
+                resp=got,
+                message='unable to get item name: %s' % self.name)
+
+        self.datum = copy(got.json())
+
     def __repr__(self):
         return str({
             'name': self.name,
@@ -68,8 +79,15 @@ class Collection(object):
     DISPLAY_NAME = 'display_name'
     UNIQUE_ID = 'id'
 
-    class Item(CollectionItem):
-        pass
+    Item = CollectionItem
+
+    class ItemIter(object):
+        def __init__(self, parent):
+            self._parent = parent
+            self._iter = iter(self._parent.names)
+
+        def next(self):
+            return self._parent[next(self._iter)]
 
     def __init__(self, api):
         self.api = api
@@ -80,7 +98,7 @@ class Collection(object):
     def names(self):
         if not self._cache:
             self.digest()
-        return self._cache['by_name']
+        return self._cache['names']
 
     @property
     def cache(self):
@@ -99,10 +117,22 @@ class Collection(object):
 
         self._cache['list'] = got.json()
         self._cache['names'] = map(get_name, self._cache['list'])
-        self._cache['by_name'] = {get_name(n): n for n in self._cache['list']}
-        self._cache['by_id'] = {get_id(n): n for n in self._cache['list']}
+        self._cache['by_%s' % self.DISPLAY_NAME] = {
+            get_name(n): n for n in self._cache['list']}
+        self._cache['by_%s' % self.UNIQUE_ID] = {
+            get_id(n): n for n in self._cache['list']}
 
-        return self._cache['by_name']
+        return self._cache['by_%s' % self.DISPLAY_NAME]
+
+    def find(self, key, method):
+        if not self._cache:
+            self.digest()
+
+        by_method = 'by_%s' % method
+        if by_method not in self._cache:
+            raise AccessValueError(message='unable to use find method: %s' % by_method)
+
+        return self._cache[by_method].get(key)
 
     def __contains__(self, item_name):
         if not self._cache:
@@ -114,10 +144,10 @@ class Collection(object):
         if not self._cache:
             self.digest()
 
-        return self.Item(self, self._cache['by_name'].get(item_name))
+        return self.Item(self, self._cache['by_%s' % self.DISPLAY_NAME].get(item_name))
 
     def __iter__(self):
         if not self._cache:
             self.digest()
 
-        return self._cache['by_name'].iteritems()
+        return self.ItemIter(self)

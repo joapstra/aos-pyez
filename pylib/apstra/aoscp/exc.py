@@ -5,31 +5,41 @@
 
 
 class AosCpError(Exception):
-    def __init__(self, **kwargs):
-        super(AosCpError, self).__init__(**kwargs)
+    def __init__(self, *vargs, **kwargs):
+        super(AosCpError, self).__init__(*vargs, **kwargs)
+
+
+class AccessValueError(AosCpError):
+    def __init__(self, *vargs, **kwargs):
+        super(AccessValueError, self).__init__(*vargs, **kwargs)
 
 
 class LoginError(AosCpError):
-    pass
+    def __init__(self, *vargs, **kwargs):
+        super(LoginError, self).__init__(*vargs, **kwargs)
 
 
 class LoginNoServerError(LoginError):
-    pass
+    def __init__(self, *vargs, **kwargs):
+        super(LoginNoServerError, self).__init__(*vargs, **kwargs)
 
 
 class LoginServerUnreachableError(LoginError):
-    pass
+    def __init__(self, *vargs, **kwargs):
+        super(LoginServerUnreachableError, self).__init__(*vargs, **kwargs)
 
 
 class LoginAuthError(LoginError):
-    pass
+    def __init__(self, *vargs, **kwargs):
+        super(LoginAuthError, self).__init__(*vargs, **kwargs)
 
 
 class SessionError(AosCpError):
-    pass
+    def __init__(self, *vargs, **kwargs):
+        super(SessionError, self).__init__(*vargs, **kwargs)
 
 
 class SessionRqstError(SessionError):
-    def __init__(self, resp, **kwargs):
-        super(SessionRqstError, self).__init__(**kwargs)
+    def __init__(self, resp, *vargs, **kwargs):
+        super(SessionRqstError, self).__init__(*vargs, **kwargs)
         self.resp = resp

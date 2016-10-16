@@ -11,13 +11,13 @@ __all__ = ['Blueprints', 'BlueprintParamValueTransform']
 
 class BlueprintParamValueTransformer(object):
     def __init__(self, collection,
-                 read_given='by_id', read_item=None,
-                 write_given='by_name', write_item=None):
+                 read_given=None, read_item=None,
+                 write_given=None, write_item=None):
 
         self.collection = collection
-        self._read_given = read_given
+        self._read_given = read_given or collection.UNIQUE_ID
         self._read_item = read_item or collection.DISPLAY_NAME
-        self._write_given = write_given
+        self._write_given = write_given or collection.DISPLAY_NAME
         self._write_item = write_item or collection.UNIQUE_ID
 
     def read(self, value):
@@ -27,7 +27,7 @@ class BlueprintParamValueTransformer(object):
         """
         rd_xf = {}
         for _key, _val in value.iteritems():
-            item = self.collection.cache[self._read_given][_val]
+            item = self.collection.find(key=_val, method=self._read_given)
             rd_xf[_key] = item[self._read_item]
 
         return rd_xf
@@ -35,13 +35,13 @@ class BlueprintParamValueTransformer(object):
     def write(self, value):
         wr_xf = {}
         for _key, _val in value.iteritems():
-            item = self.collection.cache[self._write_given][_val]
+            item = self.collection.find(key=_val, method=self._write_given)
             wr_xf[_key] = item[self._write_item]
 
         return wr_xf
 
 
-class BlueprintItemParamsItem(object):
+class _BlueprintItemParamsItem(object):
     Transformer = BlueprintParamValueTransformer
 
     def __init__(self, blueprint, name, datum):
@@ -102,7 +102,6 @@ class BlueprintItemParamsItem(object):
         self._param['value'] = copy(got.json())
         return self._param['value']
 
-
     def clear(self):
         self.write({})
 
@@ -116,7 +115,7 @@ class BlueprintItemParamsItem(object):
 
 
 class BlueprintItemParamsCollection(object):
-    Item = BlueprintItemParamsItem
+    Item = _BlueprintItemParamsItem
 
     class ItemIter(object):
         def __init__(self, params):
