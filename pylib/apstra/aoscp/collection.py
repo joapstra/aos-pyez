@@ -9,7 +9,8 @@ from apstra.aoscp.exc import SessionRqstError, AccessValueError
 __all__ = [
     'Collection',
     'CollectionItem',
-    'CollectionValueTransformer'
+    'CollectionValueTransformer',
+    'CollectionValueMultiTransformer'
 ]
 
 
@@ -66,6 +67,25 @@ class CollectionValueTransformer(object):
 
         return retval
 
+
+class CollectionValueMultiTransformer(object):
+    def __init__(self, session, xf_map):
+        self.xfs = {
+            id_name: CollectionValueTransformer(getattr(session, id_type))
+            for id_name, id_type in xf_map.items()
+        }
+
+    def xf_in(self, values):
+        return {
+            id_name: self.xfs[id_name].xf_in({id_name: id_value})
+            for id_name, id_value in values.items()
+        }
+
+    def xf_out(self, values):
+        retval = {}
+        for id_name, id_value in values.items():
+            retval.update(self.xfs[id_name].xf_out({id_name: id_value}))
+        return retval
 
 class CollectionItem(object):
     def __init__(self, parent, name, datum):

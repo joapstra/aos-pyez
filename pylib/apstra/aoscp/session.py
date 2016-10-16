@@ -17,6 +17,8 @@ import requests
 from apstra.aoscp.exc import *
 from apstra.aoscp.amods import AosModuleCatalog
 
+__all__ = ['Session']
+
 
 class Session(object):
     _ENV = {
