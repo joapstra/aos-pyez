@@ -152,14 +152,22 @@ class BlueprintCollectionItem(CollectionItem):
 
         return got.json()
 
-    def create(self, design_template_id, blocking=True):
+    @contents.deleter
+    def contents(self):
+        got = requests.delete(self.url, headers=self.api.headers)
+        if not got.ok:
+            raise SessionRqstError(
+                message='unable to delete blueprint: %s' % got.reason,
+                resp=got, blueprint=self)
+
+    def create(self, design_template_id, reference_arch, blocking=True):
 
         data = dict(
             display_name=self.name,
             template_id=design_template_id,
-            reference_architecture="two_stage_l3clos")
+            reference_architecture=reference_arch)
 
-        super(BlueprintCollectionItem, self).create(data)
+        super(BlueprintCollectionItem, self).create(datum=data)
 
         if not blocking:
             return True

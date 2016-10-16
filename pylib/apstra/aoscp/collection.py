@@ -140,11 +140,11 @@ class CollectionItem(object):
         self.datum = copy(got.json())
         return self.datum
 
-    def create(self, datum):
+    def create(self, **kwargs):
         if self.exists:
             raise SessionError(message='cannot create, already exists')
 
-        self.datum = copy(datum)
+        self.datum = copy(kwargs['datum'])
         return self.write()
 
 
