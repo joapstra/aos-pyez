@@ -4,7 +4,7 @@ from operator import itemgetter
 from copy import copy
 
 from apstra.aoscp.collection import Collection, CollectionItem
-from apstra.aoscp.exc import SessionRqstError
+from apstra.aoscp.exc import SessionRqstError, AccessValueError
 
 __all__ = ['Blueprints', 'BlueprintParamValueTransform']
 
@@ -28,6 +28,10 @@ class BlueprintParamValueTransformer(object):
         rd_xf = {}
         for _key, _val in value.iteritems():
             item = self.collection.find(key=_val, method=self._read_given)
+            if not item:
+                raise AccessValueError('unable to find item key=%s, by=%s' %
+                                       (_val, self._write_given))
+
             rd_xf[_key] = item[self._read_item]
 
         return rd_xf
@@ -36,12 +40,15 @@ class BlueprintParamValueTransformer(object):
         wr_xf = {}
         for _key, _val in value.iteritems():
             item = self.collection.find(key=_val, method=self._write_given)
+            if not item:
+                raise AccessValueError('unable to find item key=%s, by=%s' %
+                                       (_val, self._write_given))
             wr_xf[_key] = item[self._write_item]
 
         return wr_xf
 
 
-class _BlueprintItemParamsItem(object):
+class BlueprintItemParamsItem(object):
     Transformer = BlueprintParamValueTransformer
 
     def __init__(self, blueprint, name, datum):
@@ -115,7 +122,7 @@ class _BlueprintItemParamsItem(object):
 
 
 class BlueprintItemParamsCollection(object):
-    Item = _BlueprintItemParamsItem
+    Item = BlueprintItemParamsItem
 
     class ItemIter(object):
         def __init__(self, params):
@@ -165,8 +172,8 @@ class BlueprintItemParamsCollection(object):
 
 class BlueprintCollectionItem(CollectionItem):
 
-    def __init__(self, parent, datum):
-        super(BlueprintCollectionItem, self).__init__(parent, datum)
+    def __init__(self, *vargs, **kwargs):
+        super(BlueprintCollectionItem, self).__init__(*vargs, **kwargs)
         self.params = BlueprintItemParamsCollection(self)
 
     def __repr__(self):
@@ -175,6 +182,4 @@ class BlueprintCollectionItem(CollectionItem):
 
 class Blueprints(Collection):
     RESOURCE_URI = 'blueprints'
-
-    class Item(BlueprintCollectionItem):
-        pass
+    Item = BlueprintCollectionItem

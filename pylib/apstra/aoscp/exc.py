@@ -9,9 +9,7 @@ class AosCpError(Exception):
         super(AosCpError, self).__init__(*vargs, **kwargs)
 
 
-class AccessValueError(AosCpError):
-    def __init__(self, *vargs, **kwargs):
-        super(AccessValueError, self).__init__(*vargs, **kwargs)
+
 
 
 class LoginError(AosCpError):
@@ -43,3 +41,8 @@ class SessionRqstError(SessionError):
     def __init__(self, resp, *vargs, **kwargs):
         super(SessionRqstError, self).__init__(*vargs, **kwargs)
         self.resp = resp
+
+
+class AccessValueError(SessionError):
+    def __init__(self, *vargs, **kwargs):
+        super(AccessValueError, self).__init__(*vargs, **kwargs)

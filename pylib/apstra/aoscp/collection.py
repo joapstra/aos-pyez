@@ -1,5 +1,6 @@
 from operator import itemgetter
 from copy import copy
+import json
 
 import requests
 
@@ -12,7 +13,8 @@ __all__ = [
 
 
 class CollectionItem(object):
-    def __init__(self, parent, datum):
+    def __init__(self, parent, name, datum):
+        self.name = name
         self._parent = parent
         self.api = parent.api
         self.datum = datum
@@ -34,12 +36,8 @@ class CollectionItem(object):
         return bool(self.datum and self.name in self._parent)
 
     @property
-    def name(self):
-        return self.datum[self._parent.DISPLAY_NAME]
-
-    @property
     def id(self):
-        return self.datum.get(self._parent.UNIQUE_ID)
+        return self.datum.get(self._parent.UNIQUE_ID) if self.exists else None
 
     def write(self):
         if self.exists:
@@ -66,12 +64,12 @@ class CollectionItem(object):
 
         self.datum = copy(got.json())
 
-    def __repr__(self):
-        return str({
+    def __str__(self):
+        return json.dumps({
             'name': self.name,
             'id': self.id,
             'datum': self.datum
-        })
+        }, indent=3)
 
 
 class Collection(object):
@@ -79,7 +77,8 @@ class Collection(object):
     DISPLAY_NAME = 'display_name'
     UNIQUE_ID = 'id'
 
-    Item = CollectionItem
+    class Item(CollectionItem):
+        pass
 
     class ItemIter(object):
         def __init__(self, parent):
@@ -144,7 +143,8 @@ class Collection(object):
         if not self._cache:
             self.digest()
 
-        return self.Item(self, self._cache['by_%s' % self.DISPLAY_NAME].get(item_name))
+        return self.Item(parent=self, name=item_name,
+                         datum=self._cache['by_%s' % self.DISPLAY_NAME].get(item_name))
 
     def __iter__(self):
         if not self._cache:
