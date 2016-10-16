@@ -169,12 +169,18 @@ class BlueprintCollectionItem(CollectionItem):
 
         super(BlueprintCollectionItem, self).create(datum=data)
 
+        # TODO fix this ... need a better mech to 'register' a new
+        # TODO item in the parent collection
+        self._parent.names.append(self.name)
+
         if not blocking:
             return True
 
         @retrying.retry(wait_fixed=1000, stop_max_delay=10000)
         def wait_for_id():
             return self.contents
+
+
 
 
 class Blueprints(Collection):

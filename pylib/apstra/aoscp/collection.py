@@ -112,11 +112,11 @@ class CollectionItem(object):
 
     @property
     def id(self):
-        return self.datum.get(self._parent.UNIQUE_ID)
+        return self.datum.get(self._parent.UNIQUE_ID) if self.name in self._parent else None
 
     def write(self):
         if self.exists:
-            raise NotImplementedError()
+            raise NotImplementedError('cannot write to an existing object here')
 
         got = requests.post(self._parent.url, headers=self.api.headers,
                             json=self.datum)
