@@ -122,7 +122,9 @@ class CollectionItem(object):
                             json=self.datum)
 
         if not got.ok:
-            raise SessionRqstError(resp=got)
+            raise SessionRqstError(
+                message='unable to write: %s' % got.reason,
+                resp=got)
 
         # if OK, then the 'id' value is returned; update the datum
         body = got.json()
