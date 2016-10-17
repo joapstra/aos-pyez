@@ -5,30 +5,41 @@
 
 
 class AosCpError(Exception):
-    pass
+    def __init__(self, message=None, **kwargs):
+        super(AosCpError, self).__init__(message)
 
 
 class LoginError(AosCpError):
-    pass
+    def __init__(self, message=None, **kwargs):
+        super(self.__class__, self).__init__(message, **kwargs)
 
 
 class LoginNoServerError(LoginError):
-    pass
+    def __init__(self, message=None, **kwargs):
+        super(self.__class__, self).__init__(message, **kwargs)
 
 
 class LoginServerUnreachableError(LoginError):
-    pass
+    def __init__(self, message=None, **kwargs):
+        super(self.__class__, self).__init__(message, **kwargs)
 
 
 class LoginAuthError(LoginError):
-    pass
+    def __init__(self, message=None, **kwargs):
+        super(self.__class__, self).__init__(message, **kwargs)
 
 
 class SessionError(AosCpError):
-    pass
+    def __init__(self, message=None, **kwargs):
+        super(SessionError, self).__init__(message, **kwargs)
 
 
 class SessionRqstError(SessionError):
-    def __init__(self, resp):
-        super(SessionRqstError, self).__init__()
+    def __init__(self, resp, message=None, **kwargs):
         self.resp = resp
+        super(SessionRqstError, self).__init__(message, **kwargs)
+
+
+class AccessValueError(SessionError):
+    def __init__(self, message=None, **kwargs):
+        super(AccessValueError, self).__init__(message, **kwargs)

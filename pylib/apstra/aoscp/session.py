@@ -17,8 +17,12 @@ import requests
 from apstra.aoscp.exc import *
 from apstra.aoscp.amods import AosModuleCatalog
 
+__all__ = ['Session']
+
 
 class Session(object):
+    ModuleCatalog = AosModuleCatalog.keys()
+
     _ENV = {
         'SERVER': 'AOS_SERVER',
         'PORT': 'AOS_SERVER_PORT',
@@ -136,7 +140,7 @@ class Session(object):
 
     def __getattr__(self, amod_name):
         if amod_name not in AosModuleCatalog:
-            raise NotImplementedError()
+            raise SessionError(message='request for unknown module: %s' % amod_name)
 
         amod_file = AosModuleCatalog[amod_name]
         got = importlib.import_module(".amods.%s" % amod_file, package=__package__)
