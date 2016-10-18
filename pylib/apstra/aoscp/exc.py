@@ -4,10 +4,17 @@
 # LICENSE file at http://www.apstra.com/community/eula
 
 
+# ##### ---------------------------------------------------
+# ##### Parent Exception class for everything
+# ##### ---------------------------------------------------
+
 class AosCpError(Exception):
     def __init__(self, message=None, **kwargs):
         super(AosCpError, self).__init__(message)
 
+# ##### ---------------------------------------------------
+# ##### Login related exceptions
+# ##### ---------------------------------------------------
 
 class LoginError(AosCpError):
     def __init__(self, message=None, **kwargs):
@@ -16,18 +23,24 @@ class LoginError(AosCpError):
 
 class LoginNoServerError(LoginError):
     def __init__(self, message=None, **kwargs):
-        super(self.__class__, self).__init__(message, **kwargs)
+        super(self.__class__, self).__init__(
+            message or 'AOS-server value not provided', **kwargs)
 
 
 class LoginServerUnreachableError(LoginError):
     def __init__(self, message=None, **kwargs):
-        super(self.__class__, self).__init__(message, **kwargs)
+        super(self.__class__, self).__init__(
+            message or 'AOS-server unreachable', **kwargs)
 
 
 class LoginAuthError(LoginError):
     def __init__(self, message=None, **kwargs):
-        super(self.__class__, self).__init__(message, **kwargs)
+        super(self.__class__, self).__init__(
+            message or 'AOS-server authentication error', **kwargs)
 
+# ##### ---------------------------------------------------
+# ##### Session processing exceptions
+# ##### ---------------------------------------------------
 
 class SessionError(AosCpError):
     def __init__(self, message=None, **kwargs):
