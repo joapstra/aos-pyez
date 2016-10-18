@@ -9,50 +9,52 @@
 # ##### ---------------------------------------------------
 
 class AosCpError(Exception):
-    def __init__(self, message=None, **kwargs):
+    def __init__(self, message=None):
         super(AosCpError, self).__init__(message)
+
 
 # ##### ---------------------------------------------------
 # ##### Login related exceptions
 # ##### ---------------------------------------------------
 
 class LoginError(AosCpError):
-    def __init__(self, message=None, **kwargs):
-        super(self.__class__, self).__init__(message, **kwargs)
+    def __init__(self, message=None):
+        super(LoginError, self).__init__(
+            message or 'AOS-server login error')
 
 
 class LoginNoServerError(LoginError):
-    def __init__(self, message=None, **kwargs):
-        super(self.__class__, self).__init__(
-            message or 'AOS-server value not provided', **kwargs)
+    def __init__(self, message=None):
+        super(LoginNoServerError, self).__init__(
+            message or 'AOS-server value not provided')
 
 
 class LoginServerUnreachableError(LoginError):
-    def __init__(self, message=None, **kwargs):
-        super(self.__class__, self).__init__(
-            message or 'AOS-server unreachable', **kwargs)
+    def __init__(self, message=None):
+        super(LoginServerUnreachableError, self).__init__(
+            message or 'AOS-server unreachable')
 
 
 class LoginAuthError(LoginError):
-    def __init__(self, message=None, **kwargs):
-        super(self.__class__, self).__init__(
-            message or 'AOS-server authentication error', **kwargs)
+    def __init__(self):
+        super(LoginAuthError).__init__()
 
 # ##### ---------------------------------------------------
 # ##### Session processing exceptions
 # ##### ---------------------------------------------------
 
+
 class SessionError(AosCpError):
-    def __init__(self, message=None, **kwargs):
-        super(SessionError, self).__init__(message, **kwargs)
+    def __init__(self, message=None):
+        super(SessionError, self).__init__(message)
 
 
 class SessionRqstError(SessionError):
-    def __init__(self, resp, message=None, **kwargs):
+    def __init__(self, resp, message=None):
         self.resp = resp
-        super(SessionRqstError, self).__init__(message, **kwargs)
+        super(SessionRqstError, self).__init__(message)
 
 
 class AccessValueError(SessionError):
-    def __init__(self, message=None, **kwargs):
-        super(AccessValueError, self).__init__(message, **kwargs)
+    def __init__(self, message=None):
+        super(AccessValueError, self).__init__(message)
