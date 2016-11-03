@@ -14,8 +14,9 @@ from copy import copy
 
 import requests
 
-from apstra.aoscp.exc import *
-from apstra.aoscp.amods import AosModuleCatalog
+from apstra.aosom.exc import LoginAuthError, LoginNoServerError, LoginServerUnreachableError
+from apstra.aosom.exc import SessionError
+from apstra.aosom.amods import AosModuleCatalog
 
 __all__ = ['Session']
 
