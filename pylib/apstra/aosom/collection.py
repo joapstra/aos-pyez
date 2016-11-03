@@ -4,7 +4,7 @@ import json
 
 import requests
 
-from apstra.aoscp.exc import SessionError, SessionRqstError, AccessValueError
+from apstra.aosom.exc import SessionError, SessionRqstError, AccessValueError
 
 __all__ = [
     'Collection',
@@ -87,6 +87,7 @@ class CollectionValueMultiTransformer(object):
             retval.update(self.xfs[id_name].xf_out({id_name: id_value}))
         return retval
 
+
 class CollectionItem(object):
     def __init__(self, parent, name, datum):
         self.name = name
@@ -148,7 +149,6 @@ class CollectionItem(object):
 
         self.datum = copy(kwargs['datum'])
         return self.write()
-
 
     def __str__(self):
         return json.dumps({

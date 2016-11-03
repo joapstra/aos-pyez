@@ -1,3 +1,8 @@
+# Copyright 2014-present, Apstra, Inc. All rights reserved.
+#
+# This source code is licensed under End User License Agreement found in the
+# LICENSE file at http://www.apstra.com/community/eula
+
 import requests
 import json
 from operator import itemgetter
@@ -5,12 +10,11 @@ from copy import copy
 
 import retrying
 
-from apstra.aoscp.collection import Collection, CollectionItem, CollectionValueTransformer
-from apstra.aoscp.exc import SessionRqstError, SessionError
+from apstra.aosom.collection import Collection, CollectionItem, CollectionValueTransformer
+from apstra.aosom.exc import SessionRqstError
 
 __all__ = [
-    'Blueprints',
-    'BlueprintParamValueTransformer'
+    'Blueprints'
 ]
 
 
@@ -179,8 +183,6 @@ class BlueprintCollectionItem(CollectionItem):
         @retrying.retry(wait_fixed=1000, stop_max_delay=10000)
         def wait_for_id():
             return self.contents
-
-
 
 
 class Blueprints(Collection):
