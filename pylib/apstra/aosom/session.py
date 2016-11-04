@@ -109,13 +109,14 @@ class Session(object):
         calls to the API.
 
         Raises:
-            LoginNoServerError: when the instance does not have :attr:`server`
-             configured
+            LoginNoServerError:
+                when the instance does not have :attr:`server` configured
 
-            LoginServerUnreachableError:  when the API is not able to connect
-            to the AOS-server via the API.  This could be due to any number
-            of networking related issues.  For example, the :attr:`port` is blocked by
-            a firewall, or the :attr:`server` value is IP unreachable.
+            LoginServerUnreachableError:
+                when the API is not able to connect to the AOS-server via the API.
+                This could be due to any number of networking related issues.
+                For example, the :attr:`port` is blocked by a firewall, or the :attr:`server`
+                value is IP unreachable.
 
         Returns:
             None
