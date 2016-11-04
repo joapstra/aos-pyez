@@ -5,6 +5,7 @@
 
 AosModuleCatalog = {
     # key=resource-name, value=module-name
+    "Devices": "devices",
     "IpPools": "ip_pools",
     "AsnPools": "asn_pools",
     "ExternalRouters": "ext_rtrs",

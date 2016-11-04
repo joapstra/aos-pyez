@@ -13,6 +13,7 @@ import importlib
 from copy import copy
 
 import requests
+import semantic_version
 
 from apstra.aosom.exc import LoginAuthError, LoginNoServerError, LoginServerUnreachableError
 from apstra.aosom.exc import SessionError
@@ -41,7 +42,8 @@ class Session(object):
     class Api(object):
         def __init__(self):
             self.url = None
-            self.ver = None
+            self.version = None
+            self.semantic_ver = None
             self.headers = {}
 
         def set_url(self, server, port):
@@ -65,17 +67,18 @@ class Session(object):
 
         def get_ver(self):
             got = requests.get("%s/versions/api" % self.url)
-            self.ver = got.json()
-            return self.ver
+            self.version = copy(got.json())
+            self.version['semantic'] = semantic_version.Version(self.version['version'], partial=True)
+            return self.version
 
         def accept_token(self, token):
             self.headers['AUTHTOKEN'] = token
 
-    def __init__(self, **kwargs):
+    def __init__(self, server=None, **kwargs):
         self.user, self.passwd = (None, None)
-        self.server, self.port = (None, None)
+        self.server, self.port = (server, None)
         self.api = Session.Api()
-        self._set_login(**kwargs)
+        self._set_login(server=server, **kwargs)
 
     # ### ---------------------------------------------------------------------
     # ###
