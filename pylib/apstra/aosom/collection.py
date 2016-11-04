@@ -3,6 +3,7 @@ from copy import copy
 import json
 
 import requests
+import semantic_version
 
 from apstra.aosom.exc import SessionError, SessionRqstError, AccessValueError
 
@@ -112,6 +113,10 @@ class CollectionItem(object):
         return bool(self.datum and self.id)
 
     @property
+    def value(self):
+        return self.datum
+
+    @property
     def id(self):
         return self.datum.get(self._parent.UNIQUE_ID) if self.name in self._parent else None
 
@@ -154,7 +159,7 @@ class CollectionItem(object):
         return json.dumps({
             'name': self.name,
             'id': self.id,
-            'datum': self.datum
+            'value': self.value
         }, indent=3)
 
 
@@ -200,7 +205,10 @@ class Collection(object):
         get_name = itemgetter(self.DISPLAY_NAME)
         get_id = itemgetter(self.UNIQUE_ID)
 
-        self._cache['list'] = got.json()
+        body = got.json()
+        aos_1_0 = semantic_version.Version('1.0', partial=True)
+        self._cache['list'] = body['items'] if self.api.version['semantic'] >= aos_1_0 else body
+
         self._cache['names'] = map(get_name, self._cache['list'])
         self._cache['by_%s' % self.DISPLAY_NAME] = {
             get_name(n): n for n in self._cache['list']}
