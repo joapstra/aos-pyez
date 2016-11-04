@@ -48,7 +48,8 @@ class Approved(object):
         if not diff_ids:
             return   # nothing to add
 
-        # keep what's already in the pool, since this is a PUT
+        # need to append to what's already in the pool,
+        # since this is a PUT action
 
         for new_id in diff_ids:
             has_devices.append(dict(id=new_id))
