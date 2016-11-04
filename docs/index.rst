@@ -8,8 +8,7 @@ Welcome to Apstra AOS PyEZ!
 
 These documents are under active development, stay tuned!
 
-.. C  Contents:
+.. toctree::
+   :maxdepth: 2
 
-.. C .. toctree::
-.. C  :maxdepth: 2
-
+   apstra/modules

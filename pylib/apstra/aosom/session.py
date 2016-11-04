@@ -23,9 +23,26 @@ __all__ = ['Session']
 
 
 class Session(object):
+    """
+    The Session class is used to create a client connection with the AOS-server.  The general
+    process to create a connection is as follows::
+
+        from apstra.aosom.session import Session
+
+        aos = Session('aos-session')                  # hostname or ip-addr of AOS-server
+        aos.login()                                   # username/password uses defaults
+
+    This module will use your environment variables to provde the default login values,
+    if they are set.  Refer to :data:`~Session.ENV` for specific values.
+
+    This module will use value defaults as defined in :data:`~Session.DEFAULTS`.
+
+    Once you have an active session with the AOS-server you the aos-pyez modules as
+    defined in the :data:`~Session.ModuleCatalog`.
+    """
     ModuleCatalog = AosModuleCatalog.keys()
 
-    _ENV = {
+    ENV = {
         'SERVER': 'AOS_SERVER',
         'PORT': 'AOS_SERVER_PORT',
         'TOKEN': 'AOS_SESSION_TOKEN',
@@ -33,7 +50,7 @@ class Session(object):
         'PASSWD': 'AOS_PASSWD'
     }
 
-    _DEFAULTS = {
+    DEFAULTS = {
         'USER': 'admin',
         'PASSWD': 'admin',
         'PORT': 8888
@@ -87,6 +104,22 @@ class Session(object):
     # ### ---------------------------------------------------------------------
 
     def login(self):
+        """
+        Login to the AOS-server, obtaining a session token for use with later
+        calls to the API.
+
+        Raises:
+            LoginNoServerError: when the instance does not have :attr:`server`
+             configured
+
+            LoginServerUnreachableError:  when the API is not able to connect
+            to the AOS-server via the API.  This could be due to any number
+            of networking related issues.  For example, the :attr:`port` is blocked by
+            a firewall, or the :attr:`server` value is IP unreachable.
+
+        Returns:
+            None
+        """
         if not self.server:
             raise LoginNoServerError()
 
@@ -103,19 +136,19 @@ class Session(object):
     # ### ---------------------------------------------------------------------
 
     def _set_login(self, **kwargs):
-        self.server = kwargs.get('server') or os.getenv(Session._ENV['SERVER'])
+        self.server = kwargs.get('server') or os.getenv(Session.ENV['SERVER'])
 
         self.port = kwargs.get('port') or \
-            os.getenv(Session._ENV['PORT']) or \
-            Session._DEFAULTS['PORT']
+            os.getenv(Session.ENV['PORT']) or \
+                    Session.DEFAULTS['PORT']
 
         self.user = kwargs.get('user') or \
-            os.getenv(Session._ENV['USER']) or \
-            Session._DEFAULTS['USER']
+            os.getenv(Session.ENV['USER']) or \
+                    Session.DEFAULTS['USER']
 
         self.passwd = kwargs.get('passwd') or \
-            os.getenv(Session._ENV['PASSWD']) or \
-            Session._DEFAULTS['PASSWD']
+            os.getenv(Session.ENV['PASSWD']) or \
+                      Session.DEFAULTS['PASSWD']
 
     def _probe(self, timeout=5, intvtimeout=1):
         start = datetime.datetime.now()
