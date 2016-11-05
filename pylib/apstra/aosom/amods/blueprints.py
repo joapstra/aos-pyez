@@ -126,7 +126,7 @@ class BlueprintItemParamsCollection(object):
         body = got.json()
         aos_1_0 = semantic_version.Version('1.0', partial=True)
 
-        self._cache['list'] = body['items'] if self.api.version['semantic'] >= aos_1_0 else body
+        self._cache['list'] = body['items'] if self.api.version['semantic'] > aos_1_0 else body
         self._cache['names'] = map(get_name, self._cache['list'])
         self._cache['by_name'] = {get_name(i): i for i in self._cache['list']}
 
