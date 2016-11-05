@@ -1,3 +1,4 @@
+from os import path
 from operator import itemgetter
 from copy import copy
 import json
@@ -155,6 +156,27 @@ class CollectionItem(object):
         self.datum = copy(kwargs['datum'])
         return self.write()
 
+    def jsonfile_save(self, dirpath=None, filename=None, indent=3):
+        """
+        Saves the contents of the item to a JSON file.
+
+        Args:
+            dirpath:
+                The path to the directory to store the file.  If none provided
+                then the file will be stored in the current working directory
+
+            filename:
+                The name of the file, stored within the :param:`dirpath`.  If
+                not provided, then the filename will be the item name.
+
+        Raises:
+            IOError: for any I/O related error
+
+        Returns: n/a
+        """
+        ofpath = path.join(dirpath or '.', filename or self.name) + '.json'
+        json.dump(self.value, open(ofpath, 'w+'), indent=indent)
+
     def __str__(self):
         return json.dumps({
             'name': self.name,
@@ -164,6 +186,10 @@ class CollectionItem(object):
 
 
 class Collection(object):
+    """
+    The :class:`Collection` is used to manage a group of similar items.  This is the base
+    class for all of these types of managed objects.
+    """
     RESOURCE_URI = None
     DISPLAY_NAME = 'display_name'
     UNIQUE_ID = 'id'
@@ -186,12 +212,23 @@ class Collection(object):
 
     @property
     def names(self):
+        """
+        Returns:
+            A list of all item names in the current cache
+        """
         if not self._cache:
             self.digest()
         return self._cache['names']
 
     @property
     def cache(self):
+        """
+        This property returns the collection digest.  If collection does not have a cached
+        digest, then the :func:`digest` is called to create the cache.
+
+        Returns:
+            The collection digest current in cache
+        """
         if not self._cache:
             self.digest()
 
