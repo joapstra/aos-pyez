@@ -32,6 +32,9 @@ class Session(object):
         aos = Session('aos-session')                  # hostname or ip-addr of AOS-server
         aos.login()                                   # username/password uses defaults
 
+        print aos.api.version
+        >>> {u'major': u'1', u'version': u'1.0', 'semantic': Version('1.0', partial=True), u'minor': u'0'}
+
     This module will use your environment variables to provide the default login values,
     if they are set.  Refer to :data:`~Session.ENV` for specific values.
 
