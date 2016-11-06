@@ -150,27 +150,73 @@ class BlueprintCollectionItem(CollectionItem):
         super(BlueprintCollectionItem, self).__init__(*vargs, **kwargs)
         self.params = BlueprintItemParamsCollection(self)
 
+    # =========================================================================
+    #
+    #                             PROPERTIES
+    #
+    # =========================================================================
+
+    # -------------------------------------------------------------------------
+    # PROPERTY: contents
+    # -------------------------------------------------------------------------
+
     @property
     def contents(self):
+        """
+        Raises:
+            SessionRqstError: upon issue with HTTP GET request
+
+        Returns: The complete blueprint `dict` data-set
+        """
         got = requests.get(self.url, headers=self.api.headers)
         if not got.ok:
             raise SessionRqstError(
                 message='unable to get blueprint contents',
-                resp=got,
-                blueprint=self)
+                resp=got)
 
         return got.json()
 
     @contents.deleter
     def contents(self):
+        """
+        When the `del` operation is applied to this property, then this
+        action will attempt to delete the blueprint from AOS-server.  For
+        example:
+
+        >>> del my_blueprint.contents
+
+        Raises:
+            SessionRqstError: upon issue with HTTP DELETE request
+        """
         got = requests.delete(self.url, headers=self.api.headers)
         if not got.ok:
             raise SessionRqstError(
                 message='unable to delete blueprint: %s' % got.reason,
-                resp=got, blueprint=self)
+                resp=got)
+
+    # -------------------------------------------------------------------------
+    # PROPERTY: build_errors
+    # -------------------------------------------------------------------------
+
+    @property
+    def build_errors(self):
+        """
+        Raises:
+            SessionReqstError: upon error with obtaining the blueprint contents
+
+        Returns:
+            - either the `dict` of existing errors within the blueprint contents
+            - `None` if no errors
+        """
+        return self.contents.get('errors')
+
+    # =========================================================================
+    #
+    #                             PUBLIC METHODS
+    #
+    # =========================================================================
 
     def create(self, design_template_id, reference_arch, blocking=True):
-
         data = dict(
             display_name=self.name,
             template_id=design_template_id,
@@ -186,8 +232,39 @@ class BlueprintCollectionItem(CollectionItem):
             return True
 
         @retrying.retry(wait_fixed=1000, stop_max_delay=10000)
-        def wait_for_id():
+        def wait_for_contents():
             return self.contents
+
+        try:
+            wait_for_contents()
+        except:
+            return False
+
+        return True
+
+    def await_build_ready(self, timeout=5000):
+        """
+        Wait a specific amount of `timeout` for the blueprint build status
+        to return no errors.  The waiting polling interval is fixed at 1sec.
+
+        Args:
+            timeout (int): timeout to wait in miliseconds
+
+        Returns:
+            True: when the blueprint contains to build errors
+            False: when the blueprint contains build errors, even after waiting `timeout`
+
+        """
+        @retrying.retry(wait_fixed=1000, stop_max_delay=timeout)
+        def wait_for_no_errors():
+            assert not self.build_errors
+
+        try:
+            wait_for_no_errors()
+        except:
+            return False
+
+        return True
 
 
 class Blueprints(Collection):
