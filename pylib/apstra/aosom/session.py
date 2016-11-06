@@ -32,13 +32,28 @@ class Session(object):
         aos = Session('aos-session')                  # hostname or ip-addr of AOS-server
         aos.login()                                   # username/password uses defaults
 
-    This module will use your environment variables to provde the default login values,
+        print aos.api.version
+        >>> {u'major': u'1', u'version': u'1.0', 'semantic': Version('1.0', partial=True), u'minor': u'0'}
+
+    This module will use your environment variables to provide the default login values,
     if they are set.  Refer to :data:`~Session.ENV` for specific values.
 
     This module will use value defaults as defined in :data:`~Session.DEFAULTS`.
 
-    Once you have an active session with the AOS-server you the aos-pyez modules as
-    defined in the :data:`~Session.ModuleCatalog`.
+    Once you have an active session with the AOS-server you use the modules defined in the
+    :data:`~Session.ModuleCatalog`.
+
+    The following are the available public attributes of a Session instance:
+        * `api` - an instance of the :class:`Session.Api` that provides HTTP access capabilities.
+        * `server` - the provided AOS-server hostname/ip-addr value.
+        * `user` - the provided AOS login user-name
+
+    The following are the available user-shell environment variables that are used by the Session instance:
+        * :data:`AOS_SERVER` - the AOS-server hostname/ip-addr
+        * :data:`AOS_SERVER_PORT` - the AOS-server API port, defaults to :data:`~DEFAULTS[\"PORT\"]`.
+        * :data:`AOS_USER` - the login user-name, defaults to :data:`~DEFAULTS[\"USER\"]`.
+        * :data:`AOS_PASSWD` - the login user-password, defaults to :data:`~DEFAULTS[\"PASSWD\"]`.
+        * :data:`AOS_SESSION_TOKEN` - a pre-existing API session-token to avoid user login/authentication.
     """
     ModuleCatalog = AosModuleCatalog.keys()
 
@@ -92,6 +107,21 @@ class Session(object):
             self.headers['AUTHTOKEN'] = token
 
     def __init__(self, server=None, **kwargs):
+        """
+        Create a Session instance that will connect to an AOS-server, `server`.  Additional
+        keyword arguments can be provided that override the default values, as defined
+        in :data:`~Session.DEFAULTS`, or the values that are taken from the callers shell
+        environment, as defined in :data:`~Session.ENV`.  Once a Session instance has been
+        created, the caller can complete the login process by invoking :meth:`login`.
+
+        Args:
+            server (str): the hostname or ip-addr of the AOS-server.
+
+        Keyword Args:
+            user (str): the login user-name
+            passwd (str): the login password
+            port (int): the AOS-server API port
+        """
         self.user, self.passwd = (None, None)
         self.server, self.port = (server, None)
         self.api = Session.Api()

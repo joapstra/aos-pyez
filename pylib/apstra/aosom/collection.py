@@ -1,3 +1,4 @@
+from os import path
 from operator import itemgetter
 from copy import copy
 import json
@@ -90,6 +91,17 @@ class CollectionValueMultiTransformer(object):
 
 
 class CollectionItem(object):
+    """
+    An item within a given :class:`Collection`.  The following public attributes and
+    properties are available:
+
+        * :attr:`name` - the user provided item name
+        * :attr:`id` - the AOS-server unique ID value
+        * :attr:`api` - the instance to the :mod:`Session.Api` instance.
+        * :attr:`url` - the string URL for this instance.
+        * :attr:`exists` - True if this item exists in AOS-server
+
+    """
     def __init__(self, parent, name, datum):
         self.name = name
         self._parent = parent
@@ -139,6 +151,14 @@ class CollectionItem(object):
         return True
 
     def read(self):
+        """
+        Retrieves the item value from the AOS-server.
+
+        Raises:
+            SessionRqstError: upon REST call error
+
+        Returns: a copy of the item value, usually a `dict`.
+        """
         got = requests.get(self.url, headers=self.api.headers)
         if not got.ok:
             raise SessionRqstError(
@@ -155,6 +175,37 @@ class CollectionItem(object):
         self.datum = copy(kwargs['datum'])
         return self.write()
 
+    def jsonfile_save(self, dirpath=None, filename=None, indent=3):
+        """
+        Saves the contents of the item to a JSON file.
+
+        Args:
+            dirpath:
+                The path to the directory to store the file.  If none provided
+                then the file will be stored in the current working directory
+
+            filename:
+                The name of the file, stored within the `dirpath`.  If
+                not provided, then the filename will be the item name.
+
+        Raises:
+            IOError: for any I/O related error
+        """
+        ofpath = path.join(dirpath or '.', filename or self.name) + '.json'
+        json.dump(self.value, open(ofpath, 'w+'), indent=indent)
+
+    def jsonfile_load(self, filepath):
+        """
+        Loads the contents of the JSON file, `filepath`, as the item value.
+
+        Args:
+            filepath (str): complete path to JSON file
+
+        Raises:
+            IOError: for any I/O related error
+        """
+        self.datum = json.load(open(filepath))
+
     def __str__(self):
         return json.dumps({
             'name': self.name,
@@ -164,6 +215,10 @@ class CollectionItem(object):
 
 
 class Collection(object):
+    """
+    The :class:`Collection` is used to manage a group of similar items.  This is the base
+    class for all of these types of managed objects.
+    """
     RESOURCE_URI = None
     DISPLAY_NAME = 'display_name'
     UNIQUE_ID = 'id'
@@ -186,12 +241,23 @@ class Collection(object):
 
     @property
     def names(self):
+        """
+        Returns:
+            A list of all item names in the current cache
+        """
         if not self._cache:
             self.digest()
         return self._cache['names']
 
     @property
     def cache(self):
+        """
+        This property returns the collection digest.  If collection does not have a cached
+        digest, then the :func:`digest` is called to create the cache.
+
+        Returns:
+            The collection digest current in cache
+        """
         if not self._cache:
             self.digest()
 
