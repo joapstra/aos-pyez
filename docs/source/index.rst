@@ -8,5 +8,6 @@ AOS-PyEZ Modules
 
    modules/session
    modules/collections
+   modules/blueprints
 
 
