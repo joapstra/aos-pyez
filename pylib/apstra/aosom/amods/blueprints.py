@@ -145,6 +145,9 @@ class BlueprintItemParamsCollection(object):
 
 
 class BlueprintCollectionItem(CollectionItem):
+    """
+    This class provides :class:`Blueprint` item instance management.
+    """
 
     def __init__(self, *vargs, **kwargs):
         super(BlueprintCollectionItem, self).__init__(*vargs, **kwargs)
@@ -163,10 +166,14 @@ class BlueprintCollectionItem(CollectionItem):
     @property
     def contents(self):
         """
-        Raises:
-            SessionRqstError: upon issue with HTTP GET request
+        Property accessor to blueprint contents.
 
-        Returns: The complete blueprint `dict` data-set
+        :getter: returns the current blueprint data :class:`dict`
+        :deletter: removes the blueprint from AOS-server
+
+        Raises:
+            SessionRqstError: upon issue with HTTP requests
+
         """
         got = requests.get(self.url, headers=self.api.headers)
         if not got.ok:
@@ -201,6 +208,8 @@ class BlueprintCollectionItem(CollectionItem):
     @property
     def build_errors(self):
         """
+        Property accessor to any existing blueprint build errors.
+
         Raises:
             SessionReqstError: upon error with obtaining the blueprint contents
 
@@ -222,7 +231,7 @@ class BlueprintCollectionItem(CollectionItem):
             template_id=design_template_id,
             reference_architecture=reference_arch)
 
-        super(BlueprintCollectionItem, self).create(datum=data)
+        super(BlueprintCollectionItem, self).create(data)
 
         # TODO fix this ... need a better mech to 'register' a new
         # TODO item in the parent collection
@@ -268,5 +277,8 @@ class BlueprintCollectionItem(CollectionItem):
 
 
 class Blueprints(Collection):
+    """
+    Blueprints collection class provides management of AOS blueprint instances.
+    """
     RESOURCE_URI = 'blueprints'
     Item = BlueprintCollectionItem
