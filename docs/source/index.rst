@@ -7,4 +7,6 @@ AOS-PyEZ Modules
    :maxdepth: 2
 
    modules/session
+   modules/collections
+
 
