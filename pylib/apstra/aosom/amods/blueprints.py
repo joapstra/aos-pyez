@@ -233,19 +233,18 @@ class BlueprintCollectionItem(CollectionItem):
 
         super(BlueprintCollectionItem, self).create(data)
 
-        # TODO fix this ... need a better mech to 'register' a new
-        # TODO item in the parent collection
-        self._parent.names.append(self.name)
-
         if not blocking:
             return True
 
         @retrying.retry(wait_fixed=1000, stop_max_delay=10000)
-        def wait_for_contents():
-            return self.contents
+        def wait_for_blueprint():
+            # TODO - fix this
+            if not self._parent.find(key=self.name, method=self._parent.DISPLAY_NAME):
+                self._parent.digest()
+                assert False
 
         try:
-            wait_for_contents()
+            wait_for_blueprint()
         except:
             return False
 
