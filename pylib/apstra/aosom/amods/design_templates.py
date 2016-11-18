@@ -3,3 +3,10 @@
 # This source code is licensed under End User License Agreement found in the
 # LICENSE file at http://www.apstra.com/community/eula
 
+from apstra.aosom.collection import Collection
+
+__all__ = ['DesignTemplates']
+
+
+class DesignTemplates(Collection):
+    RESOURCE_URI = 'design/templates'
