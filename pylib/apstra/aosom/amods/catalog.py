@@ -12,5 +12,6 @@ AosModuleCatalog = {
     "LogicalDevices": "logical_devices",
     "LogicalDeviceMaps": "logical_device_maps",
     "DesignTemplates": "design_templates",
-    "Blueprints": "blueprints"
+    "Blueprints": "blueprints",
+    "RackTypes": "design_racktypes"
 }
