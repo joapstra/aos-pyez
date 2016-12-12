@@ -3,4 +3,4 @@
 # This source code is licensed under End User License Agreement found in the
 # LICENSE file at http://www.apstra.com/community/eula
 
-from apstra.aosom.amods.catalog import AosModuleCatalog     # NOQA
+from apstra.aosom.session_modules.catalog import AosModuleCatalog     # NOQA

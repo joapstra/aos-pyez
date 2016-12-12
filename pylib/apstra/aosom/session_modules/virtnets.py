@@ -3,16 +3,8 @@
 # This source code is licensed under End User License Agreement found in the
 # LICENSE file at http://www.apstra.com/community/eula
 
-import requests
-import json
-from operator import itemgetter
-from copy import copy
 
-import retrying
-import semantic_version
-
-from apstra.aosom.collection import Collection, CollectionItem, CollectionValueTransformer
-from apstra.aosom.exc import SessionRqstError
+from apstra.aosom.collection import Collection, CollectionItem
 
 __all__ = [
     'VirtualNetworks'

@@ -1,324 +1,19 @@
-from os import path
-from operator import itemgetter
-from copy import copy
-import json
+# Copyright 2014-present, Apstra, Inc. All rights reserved.
+#
+# This source code is licensed under End User License Agreement found in the
+# LICENSE file at http://www.apstra.com/community/eula
 
 import requests
 import semantic_version
 
-from apstra.aosom.exc import SessionError, SessionRqstError, AccessValueError
+from apstra.aosom.exc import SessionRqstError, AccessValueError
+from apstra.aosom.collection_item import CollectionItem
 
 __all__ = [
     'Collection',
-    'CollectionItem',
-    'CollectionValueTransformer',
-    'CollectionValueMultiTransformer'
+    'CollectionItem'
 ]
 
-
-class CollectionValueTransformer(object):
-    def __init__(self, collection,
-                 read_given=None, read_item=None,
-                 write_given=None, write_item=None):
-
-        self.collection = collection
-        self._read_given = read_given or collection.UNIQUE_ID
-        self._read_item = read_item or collection.DISPLAY_NAME
-        self._write_given = write_given or collection.DISPLAY_NAME
-        self._write_item = write_item or collection.UNIQUE_ID
-
-    def xf_in(self, value):
-        """
-        transforms the native API stored value (e.g. 'id') into something else,
-        (e.g. 'display_name')
-        """
-        retval = {}
-
-        def lookup(lookup_value):
-            item = self.collection.find(key=lookup_value, method=self._read_given)
-            if not item:
-                raise AccessValueError(message='unable to find item key=%s, by=%s' %
-                                               (_val, self._write_given))
-            return item[self._read_item]
-
-        for _key, _val in value.iteritems():
-            if isinstance(_val, (list, dict)):
-                retval[_key] = map(lookup, _val)
-            else:
-                retval[_key] = lookup(_val)
-
-        return retval
-
-    def xf_out(self, value):
-        retval = {}
-
-        def lookup(lookup_value):
-            item = self.collection.find(key=lookup_value, method=self._write_given)
-            if not item:
-                raise AccessValueError(
-                    message='unable to find item key=%s, by=%s' %
-                            (_val, self._write_given))
-
-            return item[self._write_item]
-
-        for _key, _val in value.iteritems():
-            if isinstance(_val, (list, dict)):
-                retval[_key] = map(lookup, _val)
-            else:
-                retval[_key] = lookup(_val)
-
-        return retval
-
-
-class CollectionValueMultiTransformer(object):
-    def __init__(self, session, xf_map):
-        self.xfs = {
-            id_name: CollectionValueTransformer(getattr(session, id_type))
-            for id_name, id_type in xf_map.items()
-        }
-
-    def xf_in(self, values):
-        return {
-            id_name: self.xfs[id_name].xf_in({id_name: id_value})
-            for id_name, id_value in values.items()
-        }
-
-    def xf_out(self, values):
-        retval = {}
-        for id_name, id_value in values.items():
-            retval.update(self.xfs[id_name].xf_out({id_name: id_value}))
-        return retval
-
-# #############################################################################
-# #############################################################################
-#
-#                                Collection Item
-#
-# #############################################################################
-# #############################################################################
-
-
-class CollectionItem(object):
-    """
-    An item within a given :class:`Collection`.  The following public attributes
-    are available:
-
-        * :attr:`name` - the user provided item name
-        * :attr:`api` - the instance to the :mod:`Session.Api` instance.
-
-    """
-    def __init__(self, parent, name, datum):
-        self.name = name
-        self._parent = parent
-        self.api = parent.api
-        self.datum = datum
-        self._url = None
-
-    # =========================================================================
-    #
-    #                             PROPERTIES
-    #
-    # =========================================================================
-
-    @property
-    def collection(self):
-        return self._parent
-
-    # -------------------------------------------------------------------------
-    # PROPERTY: id
-    # -------------------------------------------------------------------------
-
-    @property
-    def id(self):
-        """
-        Property access for the item AOS unique ID value.
-
-        Returns:
-            - id string value if the item exists
-            - `None` if the item does not exist.
-        """
-        return self.datum.get(self._parent.UNIQUE_ID) if self.name in self._parent else None
-
-    # -------------------------------------------------------------------------
-    # PROPERTY: url
-    # -------------------------------------------------------------------------
-
-    @property
-    def url(self):
-        """
-        Property accessor for item URL.
-
-        :getter: returns the URL string for this specific item
-        """
-        if self._url:
-            return self._url
-
-        if not self.id:
-            return None
-
-        self._url = "%s/%s" % (self._parent.url, self.id)
-        return self._url
-
-    # -------------------------------------------------------------------------
-    # PROPERTY: exists
-    # -------------------------------------------------------------------------
-
-    @property
-    def exists(self):
-        """
-        Property accessor to determine if item exists on the AOS-server.
-
-        Returns:
-            - True if the item exists
-            - False if the item does not exist
-        """
-        return bool(self.datum and self.id)
-
-    # -------------------------------------------------------------------------
-    # PROPERTY: value
-    # -------------------------------------------------------------------------
-
-    @property
-    def value(self):
-        """
-        Property accessor for item value.
-
-        :getter: returns the item data dictionary
-        :deletter: deletes the item from the AOS-server
-
-        Raises:
-            SessionRqstError: upon any HTTP requests issue.
-        """
-        return self.datum
-
-    @value.deleter
-    def value(self):
-        """
-        Used to delete the item from the AOS-server.  For example:
-
-            >>> del aos.IpPools['Servers-IpAddrs'].value
-
-        """
-        got = requests.delete(self.url, headers=self.api.headers)
-        if not got.ok:
-            raise SessionRqstError(
-                resp=got,
-                message='unable to delete item (%s): %s' %
-                        (self.name, got.reason))
-
-    # =========================================================================
-    #
-    #                             PUBLIC METHODS
-    #
-    # =========================================================================
-
-    def write(self):
-        """
-        Used to write the item value back to the AOS-server.  Currently this method only
-        serves to :emphasis:`create` a new item instance.  This will method will not allow you
-        to overwrite and existing instance.  Adding this enhancement is a "to-do".
-
-        Raises:
-            NotImplementedError: upon attempting to write to an existing item
-            SessionRqstError: upon HTTP request issue
-
-        Returns:
-            - True when the write to the AOS-server was successful.
-        """
-        if self.exists:
-            raise NotImplementedError('cannot write to an existing object here')
-
-        got = requests.post(self._parent.url, headers=self.api.headers,
-                            json=self.datum)
-
-        if not got.ok:
-            raise SessionRqstError(
-                message='unable to write: %s' % got.reason,
-                resp=got)
-
-        # if OK, then the 'id' value is returned; update the datum
-        body = got.json()
-        self.datum[self._parent.UNIQUE_ID] = body[self._parent.UNIQUE_ID]
-
-        return True
-
-    def read(self):
-        """
-        Retrieves the item value from the AOS-server.
-
-        Raises:
-            SessionRqstError: upon REST call error
-
-        Returns: a copy of the item value, usually a :class:`dict`.
-        """
-        got = requests.get(self.url, headers=self.api.headers)
-        if not got.ok:
-            raise SessionRqstError(
-                resp=got,
-                message='unable to get item name: %s' % self.name)
-
-        self.datum = copy(got.json())
-        return self.datum
-
-    def create(self, value):
-        """
-        Creates a new item using the `value` provided.
-
-        Args:
-            value (dict): item value dictionary.
-
-        Raises:
-            SessionError: upon any HTTP request issue.
-
-        Returns:
-            - the result of the :meth:`write` call.
-        """
-        if self.exists:
-            raise SessionError(message='cannot create, already exists')
-
-        self.datum = copy(value)
-        return self.write()
-
-    def jsonfile_save(self, dirpath=None, filename=None, indent=3):
-        """
-        Saves the contents of the item to a JSON file.
-
-        Args:
-            dirpath:
-                The path to the directory to store the file.  If none provided
-                then the file will be stored in the current working directory
-
-            filename:
-                The name of the file, stored within the `dirpath`.  If
-                not provided, then the filename will be the item name.
-
-            indent:
-                The indent spacing in the JSON file.
-
-        Raises:
-            IOError: for any I/O related error
-        """
-        ofpath = path.join(dirpath or '.', filename or self.name) + '.json'
-        json.dump(self.value, open(ofpath, 'w+'), indent=indent)
-
-    def jsonfile_load(self, filepath):
-        """
-        Loads the contents of the JSON file, `filepath`, as the item value.
-
-        Args:
-            filepath (str): complete path to JSON file
-
-        Raises:
-            IOError: for any I/O related error
-        """
-        self.datum = json.load(open(filepath))
-
-    def __str__(self):
-        return json.dumps({
-            'name': self.name,
-            'id': self.id,
-            'value': self.value
-        }, indent=3)
 
 # #############################################################################
 # #############################################################################
@@ -418,6 +113,7 @@ class Collection(object):
         """
         if not self._cache:
             self.digest()
+
         return self._cache['names']
 
     @property
@@ -452,18 +148,18 @@ class Collection(object):
         if not got.ok:
             raise SessionRqstError(resp=got)
 
-        get_name = itemgetter(self.DISPLAY_NAME)
-        get_id = itemgetter(self.UNIQUE_ID)
-
         body = got.json()
         aos_1_0 = semantic_version.Version('1.0', partial=True)
-        self._cache['list'] = body['items'] if self.api.version['semantic'] > aos_1_0 else body
 
-        self._cache['names'] = map(get_name, self._cache['list'])
-        self._cache['by_%s' % self.DISPLAY_NAME] = {
-            get_name(n): n for n in self._cache['list']}
-        self._cache['by_%s' % self.UNIQUE_ID] = {
-            get_id(n): n for n in self._cache['list']}
+        self._cache.clear()
+        self._cache['list'] = list()
+        self._cache['names'] = list()
+        self._cache['by_%s' % self.DISPLAY_NAME] = dict()
+        self._cache['by_%s' % self.UNIQUE_ID] = dict()
+
+        items = body['items'] if self.api.version['semantic'] > aos_1_0 else body
+        for item in items:
+            self._add_item(item)
 
         return self._cache['by_%s' % self.DISPLAY_NAME]
 
@@ -507,6 +203,52 @@ class Collection(object):
 
     # =========================================================================
     #
+    #                             PRIVATE METHODS
+    #
+    # =========================================================================
+
+    def _add_item(self, item):
+        """
+        Add a new item to the collection.
+
+        Args:
+            item (dict): the datum of the actual item.
+
+        """
+        item_name = item[self.DISPLAY_NAME]
+        item_id = item[self.UNIQUE_ID]
+        self._cache['list'].append(item)
+        self._cache['names'].append(item_name)
+        self._cache['by_%s' % self.DISPLAY_NAME][item_name] = item
+        self._cache['by_%s' % self.UNIQUE_ID][item_id] = item
+
+    def _remove_item(self, item):
+        """
+        Removes an item from the collection
+
+        Args:
+            item (dict): the datum of the actual item
+
+        Raises:
+            RuntimeError - if item does not exist in the collection
+        """
+        item_name = item[self.DISPLAY_NAME]
+        item_id = item[self.UNIQUE_ID]
+
+        try:
+            idx = next(i for i, li in enumerate(self._cache['list']) if li[self.DISPLAY_NAME] == item_name)
+            del self._cache['list'][idx]
+        except StopIteration:
+            raise RuntimeError('attempting to delete item name (%s) not found' % item_name)
+
+        idx = self._cache['names'].index(item_name)
+        del self._cache['names'][idx]
+
+        del self._cache['by_%s' % self.DISPLAY_NAME][item_name]
+        del self._cache['by_%s' % self.UNIQUE_ID][item_id]
+
+    # =========================================================================
+    #
     #                             OPERATORS
     #
     # =========================================================================
@@ -521,7 +263,7 @@ class Collection(object):
         if not self._cache:
             self.digest()
 
-        return self.Item(parent=self, name=item_name,
+        return self.Item(collection=self, name=item_name,
                          datum=self._cache['by_%s' % self.DISPLAY_NAME].get(item_name))
 
     def __iter__(self):
@@ -529,3 +271,17 @@ class Collection(object):
             self.digest()
 
         return self.ItemIter(self)
+
+    def __iadd__(self, other):
+        if not isinstance(other, CollectionItem):
+            raise RuntimeError("attempting to add item type(%s) not CollectionItem" % str(type(other)))
+
+        self._add_item(other.value)
+        return self
+
+    def __isub__(self, other):
+        if not isinstance(other, CollectionItem):
+            raise RuntimeError("attempting to remove item type(%s) not CollectionItem" % str(type(other)))
+
+        self._remove_item(other.value)
+        return self
