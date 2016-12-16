@@ -132,33 +132,28 @@ class CollectionItem(object):
     #
     # =========================================================================
 
-    def write(self):
+    def write(self, value=None):
         """
-        Used to write the item value back to the AOS-server.  Currently this method only
-        serves to :emphasis:`create` a new item instance.  This will method will not allow you
-        to overwrite and existing instance.  Adding this enhancement is a "to-do".
+        Used to write the item value back to the AOS-server.
 
         Raises:
-            NotImplementedError: upon attempting to write to an existing item
             SessionRqstError: upon HTTP request issue
-
-        Returns:
-            - True when the write to the AOS-server was successful.
         """
-        if self.exists:
-            raise NotImplementedError('cannot write to an existing object here')
 
-        got = requests.post(self.collection.url, headers=self.api.headers,
+        if value:
+            self.datum = copy(value)
+
+        if not self.exists:
+            return self.create()
+
+        got = requests.put(self.url,
+                            headers=self.api.headers,
                             json=self.datum)
 
         if not got.ok:
             raise SessionRqstError(
-                message='unable to write: %s' % got.reason,
+                message='unable to update: %s' % got.reason,
                 resp=got)
-
-        # if OK, then the 'id' value is returned; update the datum
-        body = got.json()
-        self.datum[self.collection.UNIQUE_ID] = body[self.collection.UNIQUE_ID]
 
     def read(self):
         """
@@ -197,16 +192,22 @@ class CollectionItem(object):
         if value:
             self.datum = copy(value)
 
-        # write the new item back to the AOS server.  If this fails, an Exception
-        # will be raised
+        got = requests.post(self.collection.url,
+                            headers=self.api.headers,
+                            json=self.datum)
 
-        self.write()
+        if not got.ok:
+            raise SessionRqstError(
+                message='unable to create: %s' % got.reason,
+                resp=got)
+
+        body = got.json()
+        self.datum[self.collection.UNIQUE_ID] = body[self.collection.UNIQUE_ID]
 
         # now add this item to the parent collection so it can be used by other
         # invocations
 
         self.collection += self
-
 
     def jsonfile_save(self, dirpath=None, filename=None, indent=3):
         """
