@@ -3,6 +3,7 @@
 # This source code is licensed under End User License Agreement found in the
 # LICENSE file at http://www.apstra.com/community/eula
 
+import json
 import requests
 import semantic_version
 
@@ -285,3 +286,14 @@ class Collection(object):
 
         self._remove_item(other.value)
         return self
+
+    def __str__(self):
+        return json.dumps({
+            'url': self.RESOURCE_URI,
+            'by_display_name': self.DISPLAY_NAME,
+            'by_id': self.UNIQUE_ID,
+            'item-names': self.names
+        }, indent=3)
+
+    __repr__ = __str__
+

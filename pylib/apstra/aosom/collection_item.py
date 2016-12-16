@@ -254,3 +254,5 @@ class CollectionItem(object):
             'id': self.id,
             'value': self.value
         }, indent=3)
+
+    __repr__ = __str__

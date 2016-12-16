@@ -144,6 +144,14 @@ class BlueprintItemParamsCollection(object):
     def __iter__(self):
         return self.ItemIter(self)
 
+    def __str__(self):
+        return json.dumps({
+            'name': self.blueprint.name,
+            'slots': self.names
+        }, indent=3)
+
+    __repr__ = __str__
+
 
 class BlueprintCollectionItem(CollectionItem):
     """
