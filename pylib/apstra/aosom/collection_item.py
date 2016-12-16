@@ -9,7 +9,7 @@ import json
 
 import requests
 
-from apstra.aosom.exc import SessionRqstError, SessionError
+from apstra.aosom.exc import SessionRqstError, SessionError, NoExistsError
 
 # #############################################################################
 # #############################################################################
@@ -34,7 +34,6 @@ class CollectionItem(object):
         self.collection = collection
         self.api = collection.api
         self.datum = datum
-        self._url = None
 
     # =========================================================================
     #
@@ -68,14 +67,20 @@ class CollectionItem(object):
 
         :getter: returns the URL string for this specific item
         """
-        if self._url:
-            return self._url
+        # if self._url:
+        #     return self._url
+        #
+        # if not self.id:
+        #     return None
+        #
+        # self._url = "%s/%s" % (self.collection.url, self.id)
+        # return self._url
 
-        if not self.id:
-            return None
+        if not self.exists:
+            raise NoExistsError("name=%s, collection=%s" %
+                                (self.name, self.collection.url))
 
-        self._url = "%s/%s" % (self.collection.url, self.id)
-        return self._url
+        return "%s/%s" % (self.collection.url, self.id)
 
     # -------------------------------------------------------------------------
     # PROPERTY: exists
