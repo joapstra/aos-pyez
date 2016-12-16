@@ -11,7 +11,8 @@ from copy import copy
 import retrying
 import semantic_version
 
-from apstra.aosom.collection import Collection, CollectionItem, CollectionValueTransformer
+from apstra.aosom.collection import Collection, CollectionItem
+from apstra.aosom.valuexf import CollectionValueTransformer
 from apstra.aosom.exc import SessionRqstError
 
 __all__ = [
@@ -143,6 +144,14 @@ class BlueprintItemParamsCollection(object):
     def __iter__(self):
         return self.ItemIter(self)
 
+    def __str__(self):
+        return json.dumps({
+            'name': self.blueprint.name,
+            'slots': self.names
+        }, indent=3)
+
+    __repr__ = __str__
+
 
 class BlueprintCollectionItem(CollectionItem):
     """
@@ -239,8 +248,8 @@ class BlueprintCollectionItem(CollectionItem):
         @retrying.retry(wait_fixed=1000, stop_max_delay=10000)
         def wait_for_blueprint():
             # TODO - fix this
-            if not self._parent.find(key=self.name, method=self._parent.DISPLAY_NAME):
-                self._parent.digest()
+            if not self.collection.find(key=self.name, method=self.collection.DISPLAY_NAME):
+                self.collection.digest()
                 assert False
 
         try:
