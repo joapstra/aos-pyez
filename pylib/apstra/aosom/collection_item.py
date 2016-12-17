@@ -121,15 +121,11 @@ class CollectionItem(object):
 
             >>> del aos.IpPools['Servers-IpAddrs'].value
 
-        """
-        got = requests.delete(self.url, headers=self.api.headers)
-        if not got.ok:
-            raise SessionRqstError(
-                resp=got,
-                message='unable to delete item (%s): %s' %
-                        (self.name, got.reason))
+        Another way to do:
 
-        self.collection -= self
+            >>> del aos.IpPools['Servers-IpAddrs'].delete()
+        """
+        self.delete()
 
     # =========================================================================
     #
@@ -213,6 +209,22 @@ class CollectionItem(object):
         # invocations
 
         self.collection += self
+
+    def delete(self):
+        """
+        Deletes the item from the AOS server
+
+        Raises:
+            SessionRqstError - when API error
+            NoExistsError - when item does not actually exist
+        """
+        got = requests.delete(self.url, headers=self.api.headers)
+        if not got.ok:
+            raise SessionRqstError(
+                message='unable to delete item: %s' % got.reason,
+                resp=got)
+
+        self.collection -= self
 
     def jsonfile_save(self, dirpath=None, filename=None, indent=3):
         """

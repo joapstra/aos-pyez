@@ -3,4 +3,13 @@
 # This source code is licensed under End User License Agreement found in the
 # LICENSE file at http://www.apstra.com/community/eula
 
-# from apstra.aosom.session_modules.catalog import AosModuleCatalog     # NOQA
+
+from apstra.aosom.collection import Collection
+
+__all__ = [
+    'VirtualNetworks'
+]
+
+
+class VirtualNetworks(Collection):
+    RESOURCE_URI = 'virtual-networks'

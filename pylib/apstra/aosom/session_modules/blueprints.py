@@ -14,6 +14,7 @@ import semantic_version
 from apstra.aosom.collection import Collection, CollectionItem
 from apstra.aosom.valuexf import CollectionValueTransformer
 from apstra.aosom.exc import SessionRqstError
+from apstra.aosom.dynmodldr import DynamicModuleOwner
 
 __all__ = [
     'Blueprints'
@@ -153,10 +154,13 @@ class BlueprintItemParamsCollection(object):
     __repr__ = __str__
 
 
-class BlueprintCollectionItem(CollectionItem):
+class BlueprintCollectionItem(CollectionItem, DynamicModuleOwner):
     """
     This class provides :class:`Blueprint` item instance management.
     """
+
+    DYNMODULEDIR = '.blueprint_modules'
+
 
     def __init__(self, *vargs, **kwargs):
         super(BlueprintCollectionItem, self).__init__(*vargs, **kwargs)
@@ -201,14 +205,11 @@ class BlueprintCollectionItem(CollectionItem):
 
         >>> del my_blueprint.contents
 
-        Raises:
-            SessionRqstError: upon issue with HTTP DELETE request
+        Another way to do the same as:
+
+        >>> my_blueprint.delete()
         """
-        got = requests.delete(self.url, headers=self.api.headers)
-        if not got.ok:
-            raise SessionRqstError(
-                message='unable to delete blueprint: %s' % got.reason,
-                resp=got)
+        self.delete()
 
     # -------------------------------------------------------------------------
     # PROPERTY: build_errors
@@ -247,10 +248,7 @@ class BlueprintCollectionItem(CollectionItem):
 
         @retrying.retry(wait_fixed=1000, stop_max_delay=10000)
         def wait_for_blueprint():
-            # TODO - fix this
-            if not self.collection.find(key=self.name, method=self.collection.DISPLAY_NAME):
-                self.collection.digest()
-                assert False
+            assert self.id
 
         try:
             wait_for_blueprint()
