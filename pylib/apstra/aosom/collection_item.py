@@ -123,7 +123,7 @@ class CollectionItem(object):
 
         Another way to do:
 
-            >>> del aos.IpPools['Servers-IpAddrs'].delete()
+            >>> aos.IpPools['Servers-IpAddrs'].delete()
         """
         self.delete()
 
