@@ -6,4 +6,5 @@
 AosModuleCatalog = {
     # key=resource-name, value=module-name
     "VirtualNetworks": "virtnets",
+    "params": 'slot_params'
 }
