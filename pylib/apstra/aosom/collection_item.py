@@ -140,21 +140,19 @@ class CollectionItem(object):
         Raises:
             SessionRqstError: upon HTTP request issue
         """
-
-        if value:
-            self.datum = copy(value)
-
         if not self.exists:
-            return self.create()
+            return self.create(value)
 
         got = requests.put(self.url,
                             headers=self.api.headers,
-                            json=self.datum)
+                            json=value or self.datum)
 
         if not got.ok:
             raise SessionRqstError(
                 message='unable to update: %s' % got.reason,
                 resp=got)
+
+        self.read()
 
     def read(self):
         """
