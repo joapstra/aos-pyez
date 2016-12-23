@@ -47,5 +47,5 @@ class DynamicModuleOwner(object):
 
         cls = getattr(got, got.__all__[0])
 
-        setattr(self, amod_name, cls(api=self.api))
+        setattr(self, amod_name, cls(owner=self))
         return getattr(self, amod_name)

@@ -129,6 +129,10 @@ class Session(DynamicModuleOwner):
         self.api = Session.Api()
         self._set_login(server=server, **kwargs)
 
+    @property
+    def url(self):
+        return self.api.url
+
     # ### ---------------------------------------------------------------------
     # ###
     # ###                         PUBLIC METHODS

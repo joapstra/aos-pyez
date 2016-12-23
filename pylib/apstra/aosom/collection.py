@@ -95,9 +95,9 @@ class Collection(object):
         def next(self):
             return self._parent[next(self._iter)]
 
-    def __init__(self, api):
-        self.api = api
-        self.url = "{api}/{uri}".format(api=api.url, uri=self.__class__.RESOURCE_URI)
+    def __init__(self, owner):
+        self.api = owner.api
+        self.url = "{api}/{uri}".format(api=owner.url, uri=self.__class__.RESOURCE_URI)
         self._cache = {}
 
     # =========================================================================
@@ -282,7 +282,8 @@ class Collection(object):
 
     def __isub__(self, other):
         if not isinstance(other, CollectionItem):
-            raise RuntimeError("attempting to remove item type(%s) not CollectionItem" % str(type(other)))
+            raise RuntimeError(
+                "attempting to remove item type(%s) not CollectionItem" % str(type(other)))
 
         self._remove_item(other.value)
         return self
