@@ -68,3 +68,12 @@ class NoExistsError(SessionError):
     """
     def __init__(self, message=None):
         super(NoExistsError, self).__init__(message)
+
+
+class DuplicateError(SessionError):
+    """
+    Attempting to take action that would result in a duplicate;
+    for example creating something that already exists
+    """
+    def __init__(self, message=None):
+        super(DuplicateError, self).__init__(message)
