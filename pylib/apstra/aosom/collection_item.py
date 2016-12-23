@@ -207,6 +207,7 @@ class CollectionItem(object):
         # invocations
 
         self.collection += self
+        return self
 
     def delete(self):
         """
