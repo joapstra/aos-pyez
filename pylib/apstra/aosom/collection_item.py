@@ -9,7 +9,9 @@ import json
 
 import requests
 
-from apstra.aosom.exc import SessionRqstError, SessionError, NoExistsError
+from apstra.aosom.exc import SessionRqstError, SessionError
+from apstra.aosom.exc import NoExistsError, DuplicateError
+
 
 # #############################################################################
 # #############################################################################
@@ -18,7 +20,6 @@ from apstra.aosom.exc import SessionRqstError, SessionError, NoExistsError
 #
 # #############################################################################
 # #############################################################################
-
 
 class CollectionItem(object):
     """
@@ -143,9 +144,10 @@ class CollectionItem(object):
         if not self.exists:
             return self.create(value)
 
-        got = requests.put(self.url,
-                            headers=self.api.headers,
-                            json=value or self.datum)
+        got = requests.put(
+            self.url,
+            headers=self.api.headers,
+            json=value or self.datum)
 
         if not got.ok:
             raise SessionRqstError(
@@ -172,24 +174,52 @@ class CollectionItem(object):
         self.datum = copy(got.json())
         return self.datum
 
-    def create(self, value=None):
+    def create(self, value=None, replace=False):
         """
         Creates a new item using the `value` provided.
 
         Args:
             value (dict): item value dictionary.
+            replace (bool): determine if this method should replace and
+                existing item with the same name
 
         Raises:
             SessionError: upon any HTTP request issue.
+            DuplicateError: attempting to create an existing item
 
         Returns:
-            - the result of the :meth:`write` call.
+            the instance to the new collection item
         """
+
+        # check to see if this item currently exists, using the name/URI
+        # when this instances was instantiated from the collection; *not*
+        # from the `value` data.
+
+        def throw_duplicate(name):
+            raise DuplicateError("'{}' already exists in collection: {}.".format(
+                name, self.collection.RESOURCE_URI))
+
         if self.exists:
-            raise SessionError(message='cannot create, already exists')
+            if not replace:
+                throw_duplicate(self.name)
+
+            self.delete()
+
+        # the caller can either pass the new data to this method, or they
+        # could have already assigned it into the :prop:`datum`.  This
+        # latter approach should be discouraged.
 
         if value:
             self.datum = copy(value)
+
+        # now check to see if the new value/name exists
+
+        new_name = self.datum.get(self.collection.DISPLAY_NAME)
+        if new_name in self.collection:
+            throw_duplicate(new_name)
+
+        # at this point we should be good to execute the POST and
+        # create the new item in the server
 
         got = requests.post(self.collection.url,
                             headers=self.api.headers,
