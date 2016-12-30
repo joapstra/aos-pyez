@@ -297,4 +297,3 @@ class Collection(object):
         }, indent=3)
 
     __repr__ = __str__
-

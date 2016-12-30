@@ -40,6 +40,10 @@ class LoginAuthError(LoginError):
         super(LoginAuthError).__init__()
 
 
+class NoLoginError(LoginError):
+    pass
+
+
 # ##### ---------------------------------------------------
 # ##### Session processing exceptions
 # ##### ---------------------------------------------------
