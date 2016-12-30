@@ -16,7 +16,8 @@ import requests
 import semantic_version
 
 from apstra.aosom.dynmodldr import DynamicModuleOwner
-from apstra.aosom.exc import LoginAuthError, LoginNoServerError, LoginServerUnreachableError
+from apstra.aosom.exc import NoLoginError, LoginAuthError, LoginNoServerError
+from apstra.aosom.exc import LoginServerUnreachableError
 
 __all__ = ['Session']
 
@@ -131,6 +132,10 @@ class Session(DynamicModuleOwner):
 
     @property
     def url(self):
+        if not self.api.url:
+            raise NoLoginError(
+                "not logged into server '{}:{}'".format(self.server, self.port))
+
         return self.api.url
 
     # ### ---------------------------------------------------------------------

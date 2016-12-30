@@ -68,14 +68,6 @@ class CollectionItem(object):
 
         :getter: returns the URL string for this specific item
         """
-        # if self._url:
-        #     return self._url
-        #
-        # if not self.id:
-        #     return None
-        #
-        # self._url = "%s/%s" % (self.collection.url, self.id)
-        # return self._url
 
         if not self.exists:
             raise NoExistsError("name=%s, collection=%s" %
