@@ -39,10 +39,14 @@ class LoginAuthError(LoginError):
     def __init__(self):
         super(LoginAuthError).__init__()
 
+
+class NoLoginError(LoginError):
+    pass
+
+
 # ##### ---------------------------------------------------
 # ##### Session processing exceptions
 # ##### ---------------------------------------------------
-
 
 class SessionError(AosCpError):
     def __init__(self, message=None):
@@ -52,9 +56,28 @@ class SessionError(AosCpError):
 class SessionRqstError(SessionError):
     def __init__(self, resp, message=None):
         self.resp = resp
-        super(SessionRqstError, self).__init__(message)
+        emsg = '{}:{}'.format(resp.status_code, resp.text)
+        emsg = emsg + ' - %s' % message if message else emsg
+        super(SessionRqstError, self).__init__(emsg)
 
 
 class AccessValueError(SessionError):
     def __init__(self, message=None):
         super(AccessValueError, self).__init__(message)
+
+
+class NoExistsError(SessionError):
+    """
+    Attempting to take action on an item when it does not exist.
+    """
+    def __init__(self, message=None):
+        super(NoExistsError, self).__init__(message)
+
+
+class DuplicateError(SessionError):
+    """
+    Attempting to take action that would result in a duplicate;
+    for example creating something that already exists
+    """
+    def __init__(self, message=None):
+        super(DuplicateError, self).__init__(message)

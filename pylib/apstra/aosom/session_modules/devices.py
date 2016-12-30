@@ -112,6 +112,6 @@ class DeviceManager(Collection):
     DISPLAY_NAME = 'device_key'
     Item = DeviceItem
 
-    def __init__(self, api):
-        super(DeviceManager, self).__init__(api)
-        self.approved = Approved(api)
+    def __init__(self, owner):
+        super(DeviceManager, self).__init__(owner)
+        self.approved = Approved(owner.api)

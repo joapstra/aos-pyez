@@ -8,21 +8,21 @@ import os
 import datetime
 import socket
 import time
-import importlib
+
 
 from copy import copy
 
 import requests
 import semantic_version
 
-from apstra.aosom.exc import LoginAuthError, LoginNoServerError, LoginServerUnreachableError
-from apstra.aosom.exc import SessionError
-from apstra.aosom.amods import AosModuleCatalog
+from apstra.aosom.dynmodldr import DynamicModuleOwner
+from apstra.aosom.exc import NoLoginError, LoginAuthError, LoginNoServerError
+from apstra.aosom.exc import LoginServerUnreachableError
 
 __all__ = ['Session']
 
 
-class Session(object):
+class Session(DynamicModuleOwner):
     """
     The Session class is used to create a client connection with the AOS-server.  The general
     process to create a connection is as follows::
@@ -55,7 +55,10 @@ class Session(object):
         * :data:`AOS_PASSWD` - the login user-password, defaults to :data:`~DEFAULTS[\"PASSWD\"]`.
         * :data:`AOS_SESSION_TOKEN` - a pre-existing API session-token to avoid user login/authentication.
     """
-    ModuleCatalog = AosModuleCatalog.keys()
+    DYNMODULEDIR = '.session_modules'
+
+
+    #    ModuleCatalog = AosModuleCatalog.keys()
 
     ENV = {
         'SERVER': 'AOS_SERVER',
@@ -126,6 +129,14 @@ class Session(object):
         self.server, self.port = (server, None)
         self.api = Session.Api()
         self._set_login(server=server, **kwargs)
+
+    @property
+    def url(self):
+        if not self.api.url:
+            raise NoLoginError(
+                "not logged into server '{}:{}'".format(self.server, self.port))
+
+        return self.api.url
 
     # ### ---------------------------------------------------------------------
     # ###
@@ -200,18 +211,3 @@ class Session(object):
             # elapsed = datetime.datetime.now() - start
             return False
 
-    # ### ---------------------------------------------------------------------
-    # ###
-    # ###                         DYNAMIC MODULE LOADER
-    # ###
-    # ### ---------------------------------------------------------------------
-
-    def __getattr__(self, amod_name):
-        if amod_name not in AosModuleCatalog:
-            raise SessionError(message='request for unknown module: %s' % amod_name)
-
-        amod_file = AosModuleCatalog[amod_name]
-        got = importlib.import_module(".amods.%s" % amod_file, package=__package__)
-        cls = getattr(got, got.__all__[0])
-        setattr(self, amod_name, cls(api=self.api))
-        return getattr(self, amod_name)
