@@ -54,6 +54,18 @@ class BlueprintItemParamsItem(object):
     # #### ----------------------------------------------------------
 
     def write(self, replace_value):
+        """
+        This method writes (PUT) the given parameter value.  If you are looking
+        to merge/update a value into the existing parameter, use the :meth:`update`
+        instead.
+
+        Args:
+            replace_value (dict): the new parameter value; will replace anything that
+             previously exists.
+
+        Raises:
+            SesssionRqstError - upon API request error
+        """
         got = requests.put(self.url, headers=self.api.headers, json=replace_value)
         if not got.ok:
             raise SessionRqstError(
@@ -63,6 +75,12 @@ class BlueprintItemParamsItem(object):
         self._param['value'] = replace_value
 
     def read(self):
+        """
+        This method will retrieve the current parameter/slot value.
+
+        Returns:
+            The value, as a dict, of the parameter.
+        """
         got = requests.get(self.url, headers=self.api.headers)
         if not got.ok:
             raise SessionRqstError(
@@ -73,7 +91,32 @@ class BlueprintItemParamsItem(object):
         return self._param['value']
 
     def clear(self):
+        """
+        This method will remove any values currently stored in the parameter.  This action
+        is accomplished by writing (PUT) an empty dictionary value; see the :meth:`write`
+        for further details.
+        """
         self.write({})
+
+    def update(self, merge_value):
+        """
+        This method will issue a PATCH to the slot value so that the caller can merge the
+        provided :param:`merge_value` with the existing value.  Once the PATCH completes,
+        this method with then invoke :meth:`read` to retrieve the fully updated value.
+
+        Args:
+            merge_value: data value to merge with existing slot value.
+
+        Raises:
+            SessionRqstError - if error with API request
+        """
+        got = requests.patch(self.url, headers=self.api.headers, json=merge_value)
+        if not got.ok:
+            raise SessionRqstError(
+                message='unable to patch slot: %s' % self.name,
+                resp=got)
+
+        self.read()
 
     def __str__(self):
         return json.dumps({
@@ -82,6 +125,8 @@ class BlueprintItemParamsItem(object):
             'Parameter Name': self.name,
             'Parameter Info': self.info,
             'Parameter Value': self.value}, indent=3)
+
+    __repr__ = __str__
 
 
 class BlueprintItemParamsCollection(object):
