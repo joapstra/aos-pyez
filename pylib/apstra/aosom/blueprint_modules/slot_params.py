@@ -126,6 +126,8 @@ class BlueprintItemParamsItem(object):
             'Parameter Info': self.info,
             'Parameter Value': self.value}, indent=3)
 
+    __repr__ = __str__
+
 
 class BlueprintItemParamsCollection(object):
     Item = BlueprintItemParamsItem
