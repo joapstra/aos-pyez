@@ -9,7 +9,7 @@ import json
 
 import requests
 
-from apstra.aosom.exc import SessionRqstError, SessionError
+from apstra.aosom.exc import SessionRqstError
 from apstra.aosom.exc import NoExistsError, DuplicateError
 
 

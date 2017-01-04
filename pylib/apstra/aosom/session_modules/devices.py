@@ -6,7 +6,7 @@
 import requests
 import retrying
 
-from apstra.aosom.exc import SessionRqstError, SessionError
+from apstra.aosom.exc import SessionRqstError
 from apstra.aosom.collection import Collection, CollectionItem
 
 __all__ = ['DeviceManager']
@@ -93,6 +93,7 @@ class Approved(object):
             has_devices.append(dict(id=new_id))
 
         timeout = 3000
+
         @retrying.retry(wait_fixed=1000, stop_max_delay=timeout)
         def put_updated():
             got = requests.put(self.url, headers=self.api.headers,
