@@ -1,7 +1,17 @@
 language: python
 install:
-  - pip install tox
+- pip install tox
 script:
-  - tox
+- tox
 env:
-  - TOXENV=flake8
+- TOXENV=flake8
+deploy:
+  provider: pypi
+  user: apstra
+  password:
+    secure: qwlf7Podfd4HX83CS0O0mQGIhU63SLN1sAxaF0S7cTSfVRtrGDWL4KQjKwVOUlImkuduVf70sdmYTTlWRZJ//VlCpU1ULSLqfRcMwSHiFXehAMEZylxKfwPz5fxozstXpMM+e0599vxUnNbkfv2bIgRSVNxygdLB8/YnpIbLaNLobhKvjHVkpU2S9WDHu7FQifoUviUurfUG+OEiPCzRZRSqO3pgtK8jjvff7m2v4vBfTySnyWqZPUUY4/987NEFjABXNmFrOJsQujnrtcFRynFrSQ9ev6q3Cm7h4Hgd2MPiowfLFX1AZgu8C3zxa8aYjXgpLcKJZzpy8Mtlyf30XSnY2X935a4TAX8xK2tjiyjT3Mevx686slVWqyPsGv5I8C08y12Z+saXPSGQLCYINbJfnLnPPtbjZqAGZT2cp+jK5efRdvhwOvDDUu9UaxJCqJyp00I1wgq967uT+xi0AMXgDThwOBbeDpyI5z+4ggjrY1sUYa/ulpVnqINac5/eAegSD/AkWXsJRB1wvOBcP1Nuf3wKOePgNJJ6QqcK0hgMT1fIwFisY2dJNHb02LoQH8AWMgH7lAnsKQNf6Hf5JE3JiwaDfMnEA58cPMgx8ftVhAfWL0iZayn8S1RKigikwDXEG4cpar0Zn2ww8UF+6IrV5Fjk8rloQyvWhZuwQw0=
+  on:
+    distributions: sdist bdist_wheel
+    repo: Apstra/aos-pyez
+    branch: travis
+  server: https://testpypi.python.org/pypi
