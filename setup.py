@@ -16,6 +16,7 @@ packages = find_packages(libdir)
 setup(
     name="aos-pyez",
     namespace_packages=['apstra'],
+    url="https://github.com/Apstra/aos-pyez",
     version="0.5.0",
     author="Jeremy Schulman",
     author_email="jeremy@apstra.com",

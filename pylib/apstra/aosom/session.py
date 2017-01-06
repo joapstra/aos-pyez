@@ -57,7 +57,6 @@ class Session(DynamicModuleOwner):
     """
     DYNMODULEDIR = '.session_modules'
 
-
     #    ModuleCatalog = AosModuleCatalog.keys()
 
     ENV = {
@@ -182,15 +181,15 @@ class Session(DynamicModuleOwner):
 
         self.port = kwargs.get('port') or \
             os.getenv(Session.ENV['PORT']) or \
-                    Session.DEFAULTS['PORT']
+            Session.DEFAULTS['PORT']
 
         self.user = kwargs.get('user') or \
             os.getenv(Session.ENV['USER']) or \
-                    Session.DEFAULTS['USER']
+            Session.DEFAULTS['USER']
 
         self.passwd = kwargs.get('passwd') or \
             os.getenv(Session.ENV['PASSWD']) or \
-                      Session.DEFAULTS['PASSWD']
+            Session.DEFAULTS['PASSWD']
 
     def _probe(self, timeout=5, intvtimeout=1):
         start = datetime.datetime.now()
@@ -210,4 +209,3 @@ class Session(DynamicModuleOwner):
         else:
             # elapsed = datetime.datetime.now() - start
             return False
-
