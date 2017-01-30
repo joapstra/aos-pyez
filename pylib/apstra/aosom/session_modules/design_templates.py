@@ -9,4 +9,4 @@ __all__ = ['DesignTemplates']
 
 
 class DesignTemplates(Collection):
-    RESOURCE_URI = 'design/templates'
+    URI = 'design/templates'

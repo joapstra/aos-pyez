@@ -108,7 +108,7 @@ class Approved(object):
 
 
 class DeviceManager(Collection):
-    RESOURCE_URI = 'systems'
+    URI = 'systems'
     DISPLAY_NAME = 'device_key'
     Item = DeviceItem
 

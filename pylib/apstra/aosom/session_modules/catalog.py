@@ -5,13 +5,14 @@
 
 AosModuleCatalog = {
     # key=resource-name, value=module-name
-    "Devices": "devices",
-    "IpPools": "ip_pools",
+    "Alerts": "alerts",
     "AsnPools": "asn_pools",
+    "Blueprints": "blueprints",
+    "DesignTemplates": "design_templates",
+    "Devices": "devices",
     "ExternalRouters": "ext_rtrs",
+    "IpPools": "ip_pools",
     "LogicalDevices": "logical_devices",
     "LogicalDeviceMaps": "logical_device_maps",
-    "DesignTemplates": "design_templates",
-    "Blueprints": "blueprints",
     "RackTypes": "design_racktypes"
 }

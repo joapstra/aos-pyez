@@ -70,7 +70,7 @@ class Collection(object):
         Switches-IpAddrs
         [{u'status': u'pool_element_in_use', u'network': u'172.20.0.0/16'}]
     """
-    RESOURCE_URI = None
+    URI = None
 
     #: :data:`DISPLAY_NAME` class value identifies the API property associated with the user-defined name.  Not
     #: all items use the same API property.
@@ -97,7 +97,7 @@ class Collection(object):
 
     def __init__(self, owner):
         self.api = owner.api
-        self.url = "{api}/{uri}".format(api=owner.url, uri=self.__class__.RESOURCE_URI)
+        self.url = "{api}/{uri}".format(api=owner.url, uri=self.__class__.URI)
         self._cache = {}
 
     # =========================================================================
@@ -267,6 +267,9 @@ class Collection(object):
         return self.Item(collection=self, name=item_name,
                          datum=self._cache['by_%s' % self.DISPLAY_NAME].get(item_name))
 
+    def __len__(self):
+        return len(self.cache['list'])
+
     def __iter__(self):
         if not self._cache:
             self.digest()
@@ -290,7 +293,7 @@ class Collection(object):
 
     def __str__(self):
         return json.dumps({
-            'url': self.RESOURCE_URI,
+            'url': self.URI,
             'by_display_name': self.DISPLAY_NAME,
             'by_id': self.UNIQUE_ID,
             'item-names': self.names

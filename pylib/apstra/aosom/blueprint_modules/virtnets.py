@@ -12,4 +12,4 @@ __all__ = [
 
 
 class VirtualNetworks(Collection):
-    RESOURCE_URI = 'virtual-networks'
+    URI = 'virtual-networks'

@@ -9,4 +9,4 @@ __all__ = ['AsnPools']
 
 
 class AsnPools(Collection):
-    RESOURCE_URI = 'resources/asn-pools'
+    URI = 'resources/asn-pools'

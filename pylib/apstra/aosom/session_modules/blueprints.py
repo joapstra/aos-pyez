@@ -145,5 +145,5 @@ class Blueprints(Collection):
     """
     Blueprints collection class provides management of AOS blueprint instances.
     """
-    RESOURCE_URI = 'blueprints'
+    URI = 'blueprints'
     Item = BlueprintCollectionItem

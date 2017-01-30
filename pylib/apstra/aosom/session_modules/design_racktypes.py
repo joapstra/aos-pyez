@@ -9,4 +9,4 @@ __all__ = ['DesignRackTypes']
 
 
 class DesignRackTypes(Collection):
-    RESOURCE_URI = 'design/rack-types'
+    URI = 'design/rack-types'

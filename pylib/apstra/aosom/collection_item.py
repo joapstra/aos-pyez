@@ -189,7 +189,7 @@ class CollectionItem(object):
 
         def throw_duplicate(name):
             raise DuplicateError("'{}' already exists in collection: {}.".format(
-                name, self.collection.RESOURCE_URI))
+                name, self.collection.URI))
 
         if self.exists:
             if not replace:

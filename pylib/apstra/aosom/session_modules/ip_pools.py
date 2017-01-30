@@ -9,4 +9,4 @@ __all__ = ['IpPools']
 
 
 class IpPools(Collection):
-    RESOURCE_URI = 'resources/ip-pools'
+    URI = 'resources/ip-pools'
