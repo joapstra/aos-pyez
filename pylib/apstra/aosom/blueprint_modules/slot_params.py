@@ -5,14 +5,14 @@ from copy import copy
 
 import semantic_version
 
-from apstra.aosom.valuexf import CollectionValueTransformer
+from apstra.aosom.collection_mapper import CollectionMapper
 from apstra.aosom.exc import SessionRqstError
 
 __all__ = ['BlueprintItemParamsCollection']
 
 
 class BlueprintItemParamsItem(object):
-    Transformer = CollectionValueTransformer
+    Transformer = CollectionMapper
 
     def __init__(self, blueprint, name, datum):
         self.api = blueprint.api

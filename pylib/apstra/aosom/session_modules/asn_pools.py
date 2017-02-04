@@ -4,9 +4,18 @@
 # LICENSE file at http://www.apstra.com/community/eula
 
 from apstra.aosom.collection import Collection
+from apstra.aosom.collection_item import CollectionItem
 
 __all__ = ['AsnPools']
 
 
+class AsnPoolItem(CollectionItem):
+
+    @property
+    def in_use(self):
+        return self.value['status'] == "in_use"
+
+
 class AsnPools(Collection):
-    RESOURCE_URI = 'resources/asn-pools'
+    Item = AsnPoolItem
+    URI = 'resources/asn-pools'

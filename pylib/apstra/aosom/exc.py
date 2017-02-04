@@ -36,12 +36,15 @@ class LoginServerUnreachableError(LoginError):
 
 
 class LoginAuthError(LoginError):
-    def __init__(self):
-        super(LoginAuthError).__init__()
+    def __init__(self, message=None):
+        super(LoginAuthError, self).__init__(
+            message or 'AOS-server invalid auth credentials')
 
 
 class NoLoginError(LoginError):
-    pass
+    def __init__(self, message=None):
+        super(NoLoginError, self).__init__(
+            message or 'AOS-server no valid session')
 
 
 # ##### ---------------------------------------------------

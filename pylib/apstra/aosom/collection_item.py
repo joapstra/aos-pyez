@@ -9,8 +9,7 @@ import json
 
 import requests
 
-from apstra.aosom.exc import SessionRqstError
-from apstra.aosom.exc import NoExistsError, DuplicateError
+from apstra.aosom.exc import SessionRqstError, NoExistsError, DuplicateError
 
 
 # #############################################################################
@@ -112,11 +111,11 @@ class CollectionItem(object):
         """
         Used to delete the item from the AOS-server.  For example:
 
-            >>> del aos.IpPools['Servers-IpAddrs'].value
+        #    >>> del aos.IpPools['Servers-IpAddrs'].value
 
         Another way to do:
 
-            >>> aos.IpPools['Servers-IpAddrs'].delete()
+        #    >>> aos.IpPools['Servers-IpAddrs'].delete()
         """
         self.delete()
 
@@ -206,7 +205,7 @@ class CollectionItem(object):
 
         # now check to see if the new value/name exists
 
-        new_name = self.datum.get(self.collection.DISPLAY_NAME)
+        new_name = self.datum.get(self.collection.LABEL)
         if new_name in self.collection:
             throw_duplicate(new_name)
 

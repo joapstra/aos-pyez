@@ -109,8 +109,8 @@ class Approved(object):
 
 
 class DeviceManager(Collection):
-    RESOURCE_URI = 'systems'
-    DISPLAY_NAME = 'device_key'
+    URI = 'systems'
+    LABEL = 'device_key'
     Item = DeviceItem
 
     def __init__(self, owner):

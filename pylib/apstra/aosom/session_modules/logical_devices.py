@@ -9,4 +9,4 @@ __all__ = ['LogicalDevices']
 
 
 class LogicalDevices(Collection):
-    RESOURCE_URI = 'design/logical-devices'
+    URI = 'design/logical-devices'
