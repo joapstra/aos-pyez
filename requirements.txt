@@ -1,3 +1,4 @@
+pyyaml
 requests
 retrying
 semantic_version

@@ -3,7 +3,6 @@
 # This source code is licensed under End User License Agreement found in the
 # LICENSE file at http://www.apstra.com/community/eula
 
-import requests
 import retrying
 
 from apstra.aosom.collection import Collection, CollectionItem
@@ -47,7 +46,7 @@ class BlueprintCollectionItem(CollectionItem, DynamicModuleOwner):
             SessionRqstError: upon issue with HTTP requests
 
         """
-        got = requests.get(self.url, headers=self.api.headers)
+        got = self.api.requests.get(self.url)
         if not got.ok:
             raise SessionRqstError(
                 message='unable to get blueprint contents',
@@ -62,11 +61,11 @@ class BlueprintCollectionItem(CollectionItem, DynamicModuleOwner):
         action will attempt to delete the blueprint from AOS-server.  For
         example:
 
-        >>> del my_blueprint.contents
+        # >>> del my_blueprint.contents
 
         Another way to do the same as:
 
-        >>> my_blueprint.delete()
+        # >>> my_blueprint.delete()
         """
         self.delete()
 
@@ -109,6 +108,7 @@ class BlueprintCollectionItem(CollectionItem, DynamicModuleOwner):
         def wait_for_blueprint():
             assert self.id
 
+        # noinspection PyBroadException
         try:
             wait_for_blueprint()
         except:
@@ -133,6 +133,7 @@ class BlueprintCollectionItem(CollectionItem, DynamicModuleOwner):
         def wait_for_no_errors():
             assert not self.build_errors
 
+        # noinspection PyBroadException
         try:
             wait_for_no_errors()
         except:

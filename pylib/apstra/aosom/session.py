@@ -83,7 +83,15 @@ class Session(DynamicModuleOwner):
             self.url = None
             self.version = None
             self.semantic_ver = None
-            self.headers = {}
+            self.requests = requests.Session()
+
+        @property
+        def token(self):
+            return self.requests.headers['AUTHTOKEN']
+
+        @property
+        def headers(self):
+            return self.requests.headers
 
         def set_url(self, server, port):
             """
@@ -114,7 +122,7 @@ class Session(DynamicModuleOwner):
                 - LoginError: unable to get the version information
                 - LoginAuthError: the `headers` do not contain valid token
             """
-            if 'api' not in url:
+            if not url.endswith('/api'):
                 raise LoginError(
                     message='missing "/api" in URL: [{}]'.format(url))
 
@@ -128,16 +136,12 @@ class Session(DynamicModuleOwner):
                     message="Trying URL: [{}]".format(url))
 
             self.url = copy(url)
-            self.headers = copy(headers)
-
-            try:
-                self.get_ver()
-            except:
-                raise LoginError(
-                    message='unable get AOS-server version via API: [{}]'.format(url))
+            self.requests.headers.update(headers)
 
             if not self.verify_token():
                 raise LoginAuthError()
+
+            self.get_ver()
 
         def login(self, user, passwd):
             """
@@ -152,14 +156,14 @@ class Session(DynamicModuleOwner):
                 - LoginAuthError: if the provided `user` and `passwd` values do not
                     authenticate with the AOS-server
             """
-            rsp = requests.post(
+            rsp = self.requests.post(
                 "%s/user/login" % self.url,
                 json=dict(username=user, password=passwd))
 
             if not rsp.ok:
                 raise LoginAuthError()
 
-            self.headers['AUTHTOKEN'] = rsp.json()['token']
+            self.requests.headers['AUTHTOKEN'] = rsp.json()['token']
             self.get_ver()
 
         def get_ver(self):
@@ -169,7 +173,7 @@ class Session(DynamicModuleOwner):
             Raises:
                 - ValueError: the retrieve version string is not semantically valid
             """
-            got = requests.get("%s/versions/api" % self.url)
+            got = self.requests.get("%s/versions/api" % self.url)
             self.version = copy(got.json())
 
             try:
@@ -182,13 +186,14 @@ class Session(DynamicModuleOwner):
         def verify_token(self):
             """
             This method is used to verify that the existing AUTHTOKEN is still valid.
+            Given that there is currently not a specific API for this, going to use
+            the "get user" API as a test-point.
 
             Returns:
-                - True if it is
-                - False if it is not
+                - True if able to access API with auth headers
+                - False otherwise
             """
-            got = requests.get('%s/user' % self.url, headers=self.headers)
-            return got.ok
+            return self.requests.get('%s/user' % self.url).ok
 
         def probe(self, timeout=5, intvtimeout=1):
             """
@@ -261,6 +266,19 @@ class Session(DynamicModuleOwner):
 
         return self.api.url
 
+    @property
+    def token(self):
+        """
+        Returns: (str) - authentication token from login/resume
+
+        Raises:
+            - NoLoginError: if no token is present
+        """
+        try:
+            return self.api.token
+        except:
+            raise NoLoginError()
+
     # ### ---------------------------------------------------------------------
     # ###
     # ###                         PUBLIC METHODS
@@ -294,6 +312,21 @@ class Session(DynamicModuleOwner):
             raise LoginServerUnreachableError()
 
         self.api.login(self.user, self.passwd)
+
+    def resume(self, token, server=None):
+        """
+        Attempts to resume an existing session with the AOS-server using the
+        provided session token.  If there is an error, an exception is raised.
+
+        Args:
+            token (str): session-token from previous login
+
+        Raises:
+            See Session.Api.resume for list of exceptions
+        """
+        self.server = server or self.server
+        self.api.set_url(self.server, self.port)
+        self.api.resume(url=self.api.url, headers=dict(AUTHTOKEN=token))
 
     # ### ---------------------------------------------------------------------
     # ###

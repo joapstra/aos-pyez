@@ -3,7 +3,6 @@
 # This source code is licensed under End User License Agreement found in the
 # LICENSE file at http://www.apstra.com/community/eula
 
-import requests
 import retrying
 
 from apstra.aosom.exc import SessionRqstError
@@ -29,8 +28,8 @@ class DeviceItem(CollectionItem):
 
     @user_config.setter
     def user_config(self, value):
-        got = requests.put(
-            self.url, headers=self.api.headers,
+        got = self.api.requests.put(
+            self.url,
             json=dict(user_config=value))
 
         if not got.ok:
@@ -63,14 +62,14 @@ class Approved(object):
         return [item['id'] for item in self.get_devices()]
 
     def get(self):
-        got = requests.get(self.url, headers=self.api.headers)
+        got = self.api.requests.get(self.url)
         if not got.ok:
             raise SessionRqstError(got)
 
         return got.json()
 
     def get_devices(self):
-        got = requests.get(self.url, headers=self.api.headers)
+        got = self.api.requests.get(self.url)
         if not got.ok:
             raise SessionRqstError(got)
 
@@ -96,9 +95,9 @@ class Approved(object):
 
         @retrying.retry(wait_fixed=1000, stop_max_delay=timeout)
         def put_updated():
-            got = requests.put(self.url, headers=self.api.headers,
-                               json=dict(display_name='Default Pool',
-                                         devices=has_devices))
+            got = self.api.requests.put(
+                self.url, json=dict(display_name='Default Pool',
+                                    devices=has_devices))
 
             if not got.ok:
                 raise SessionRqstError(

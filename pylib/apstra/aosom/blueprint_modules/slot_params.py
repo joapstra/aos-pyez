@@ -1,4 +1,8 @@
-import requests
+# Copyright 2014-present, Apstra, Inc. All rights reserved.
+#
+# This source code is licensed under End User License Agreement found in the
+# LICENSE file at http://www.apstra.com/community/eula
+
 import json
 from operator import itemgetter
 from copy import copy
@@ -66,7 +70,7 @@ class BlueprintItemParamsItem(object):
         Raises:
             SesssionRqstError - upon API request error
         """
-        got = requests.put(self.url, headers=self.api.headers, json=replace_value)
+        got = self.api.requests.put(self.url, json=replace_value)
         if not got.ok:
             raise SessionRqstError(
                 message='unable to write slot: %s' % self.name,
@@ -81,7 +85,7 @@ class BlueprintItemParamsItem(object):
         Returns:
             The value, as a dict, of the parameter.
         """
-        got = requests.get(self.url, headers=self.api.headers)
+        got = self.api.requests.get(self.url)
         if not got.ok:
             raise SessionRqstError(
                 resp=got,
@@ -110,7 +114,7 @@ class BlueprintItemParamsItem(object):
         Raises:
             SessionRqstError - if error with API request
         """
-        got = requests.patch(self.url, headers=self.api.headers, json=merge_value)
+        got = self.api.requests.patch(self.url, json=merge_value)
         if not got.ok:
             raise SessionRqstError(
                 message='unable to patch slot: %s' % self.name,
@@ -154,7 +158,7 @@ class BlueprintItemParamsCollection(object):
         return self._cache['names']
 
     def digest(self):
-        got = requests.get("%s/slots" % self.blueprint.url, headers=self.api.headers)
+        got = self.api.requests.get("%s/slots" % self.blueprint.url)
         if not got.ok:
             raise SessionRqstError(resp=got, message="error fetching slots")
 

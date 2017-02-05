@@ -4,7 +4,6 @@
 # LICENSE file at http://www.apstra.com/community/eula
 
 import json
-import requests
 import semantic_version
 
 from apstra.aosom.collection_item import CollectionItem
@@ -147,7 +146,7 @@ class Collection(object):
 
         Returns: a list of all known items; each item is the dictionary of item data.
         """
-        got = requests.get(self.url, headers=self.api.headers)
+        got = self.api.requests.get(self.url)
         if not got.ok:
             raise SessionRqstError(resp=got)
 

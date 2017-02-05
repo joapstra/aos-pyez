@@ -7,7 +7,6 @@ from os import path
 from copy import copy
 import json
 
-import requests
 
 from apstra.aosom.exc import SessionRqstError, NoExistsError, DuplicateError
 
@@ -135,10 +134,8 @@ class CollectionItem(object):
         if not self.exists:
             return self.create(value)
 
-        got = requests.put(
-            self.url,
-            headers=self.api.headers,
-            json=value or self.datum)
+        got = self.api.requests.put(
+            self.url, json=value or self.datum)
 
         if not got.ok:
             raise SessionRqstError(
@@ -156,7 +153,7 @@ class CollectionItem(object):
 
         Returns: a copy of the item value, usually a :class:`dict`.
         """
-        got = requests.get(self.url, headers=self.api.headers)
+        got = self.api.requests.get(self.url)
         if not got.ok:
             raise SessionRqstError(
                 resp=got,
@@ -212,9 +209,7 @@ class CollectionItem(object):
         # at this point we should be good to execute the POST and
         # create the new item in the server
 
-        got = requests.post(self.collection.url,
-                            headers=self.api.headers,
-                            json=self.datum)
+        got = self.api.requests.post(self.collection.url, json=self.datum)
 
         if not got.ok:
             raise SessionRqstError(
@@ -238,7 +233,7 @@ class CollectionItem(object):
             SessionRqstError - when API error
             NoExistsError - when item does not actually exist
         """
-        got = requests.delete(self.url, headers=self.api.headers)
+        got = self.api.requests.delete(self.url)
         if not got.ok:
             raise SessionRqstError(
                 message='unable to delete item: %s' % got.reason,
