@@ -38,7 +38,7 @@ class TestAosomSession(unittest.TestCase):
 
     def test_login_pass(self):
         self.aos.login()
-        self.assertEquals(self.aos.token, "GoodToken")
+        self.assertEquals(self.aos.token, Config.test_auth_token)
         self.assertEquals(self.aos.api.version['version'], Config.test_server_version)
 
     def test_login_no_server(self):
