@@ -27,7 +27,7 @@ mock_server_json_dir = path.join(path.dirname(path.realpath(__file__)), 'mock_se
 
 def load_mock_server_json_data(cls_name, named):
 
-    filepath = path.join(mock_server_json_dir,"{}.{}*.json".format(
+    filepath = path.join(mock_server_json_dir, "{}.{}*.json".format(
         cls_name, named))
 
     json_data = [json.load(open(f_name)) for f_name in glob(filepath)]
@@ -35,6 +35,7 @@ def load_mock_server_json_data(cls_name, named):
         raise RuntimeError("No JSON files for '{}'".format(filepath))
 
     return json_data
+
 
 def mock_server_json_data(method):
     cls_name = inspect.stack()[1][3]
@@ -64,6 +65,7 @@ def mock_server_json_data_named(named):
 
 # noinspection PyUnresolvedReferences
 class AosPyEzCommonTestCase(unittest.TestCase):
+
     def setUp(self):
         self.adapter = requests_mock.Adapter()
         self.aos = Session(Config.test_server)

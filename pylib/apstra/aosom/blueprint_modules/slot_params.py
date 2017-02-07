@@ -149,6 +149,24 @@ class BlueprintItemParamsCollection(object):
         self._cache = {}
 
     @property
+    def url(self):
+        return "%s/slots" % self.blueprint.url
+
+    @property
+    def cache(self):
+        """
+        This property returns the collection digest.  If collection does not have a cached
+        digest, then the :func:`digest` is called to create the cache.
+
+        Returns:
+            The collection digest current in cache
+        """
+        if not self._cache:
+            self.digest()
+
+        return self._cache
+
+    @property
     def names(self):
         if not self._cache:
             self.digest()
@@ -156,7 +174,7 @@ class BlueprintItemParamsCollection(object):
         return self._cache['names']
 
     def digest(self):
-        got = self.api.requests.get("%s/slots" % self.blueprint.url)
+        got = self.api.requests.get(self.url)
         if not got.ok:
             raise SessionRqstError(resp=got, message="error fetching slots")
 

@@ -1,0 +1,108 @@
+{
+  "hcls": {}, 
+  "spine_leaf_link_ips": {}, 
+  "node_server_1_leaf_1_interfaces": {}, 
+  "node_server_5_leaf_2_interfaces": {}, 
+  "l3_server_asns": {}, 
+  "node_server_2_leaf_3_interfaces": {}, 
+  "node_server_1_leaf_3_interfaces": {}, 
+  "dhcp_server_ip": {
+    "value": "192.168.59.254"
+  }, 
+  "spine_asns": {}, 
+  "node_server_2_leaf_1_interfaces": {}, 
+  "node_leaf_3_interfaces": {}, 
+  "leaf_loopback_ips": {}, 
+  "ip_connectivity": {}, 
+  "node_leaf_2_interfaces": {}, 
+  "leaf_l3_server_link_ips": {}, 
+  "node_spine_1_interfaces": {}, 
+  "external_router_interfaces": {}, 
+  "leaf_asns": {}, 
+  "node_server_2_leaf_2_interfaces": {}, 
+  "to_external_router_link_ips": {
+    "spine_1<->router0": "1.1.1.0/31", 
+    "spine_2<->router1": "1.2.1.0/31"
+  }, 
+  "logical_device_maps": {
+    "leaf_3": "56333cae-a682-4818-bea8-d369e043c298", 
+    "leaf_2": "56333cae-a682-4818-bea8-d369e043c298", 
+    "server_3_leaf_2": "AOS-1x10-1___Generic_Server_1RU_1x10G___v1", 
+    "server_3_leaf_3": "AOS-1x10-1___Generic_Server_1RU_1x10G___v1", 
+    "server_2_leaf_3": "AOS-1x10-1___Generic_Server_1RU_1x10G___v1", 
+    "server_2_leaf_2": "AOS-1x10-1___Generic_Server_1RU_1x10G___v1", 
+    "server_2_leaf_1": "AOS-1x10-1___Generic_Server_1RU_1x10G___v1", 
+    "server_1_leaf_2": "AOS-1x10-1___Generic_Server_1RU_1x10G___v1", 
+    "server_1_leaf_3": "AOS-1x10-1___Generic_Server_1RU_1x10G___v1", 
+    "server_1_leaf_1": "AOS-1x10-1___Generic_Server_1RU_1x10G___v1", 
+    "spine_2": "784ab213-03fc-491e-99ba-700dc85f60c5", 
+    "server_4_leaf_1": "AOS-1x10-1___Generic_Server_1RU_1x10G___v1", 
+    "server_4_leaf_3": "AOS-1x10-1___Generic_Server_1RU_1x10G___v1", 
+    "server_4_leaf_2": "AOS-1x10-1___Generic_Server_1RU_1x10G___v1", 
+    "server_3_leaf_1": "AOS-1x10-1___Generic_Server_1RU_1x10G___v1", 
+    "leaf_1": "56333cae-a682-4818-bea8-d369e043c298", 
+    "server_5_leaf_2": "AOS-1x10-1___Generic_Server_1RU_1x10G___v1", 
+    "server_5_leaf_3": "AOS-1x10-1___Generic_Server_1RU_1x10G___v1", 
+    "spine_1": "997b11a4-e8e7-40e7-b3c9-9bfe9a29aed6", 
+    "server_5_leaf_1": "AOS-1x10-1___Generic_Server_1RU_1x10G___v1"
+  }, 
+  "node_leaf_1_interfaces": {}, 
+  "node_server_1_leaf_2_interfaces": {}, 
+  "node_server_5_leaf_3_interfaces": {}, 
+  "l3_server_loopback_ips": {}, 
+  "deploy": {
+    "leaf_3": true, 
+    "leaf_2": true, 
+    "leaf_1": true, 
+    "spine_2": true, 
+    "spine_1": true
+  }, 
+  "node_server_3_leaf_1_interfaces": {}, 
+  "node_server_5_leaf_1_interfaces": {}, 
+  "node_server_4_leaf_3_interfaces": {}, 
+  "node_server_4_leaf_1_interfaces": {}, 
+  "hostnames": {}, 
+  "external_links": {
+    "router0": "router-A", 
+    "router1": "router-A"
+  }, 
+  "node_spine_2_interfaces": {}, 
+  "resource_pools": {
+    "leaf_loopback_ips": [
+      "65dfbc77-1c77-4a99-98a6-e36c5aa7e4d0"
+    ], 
+    "spine_leaf_link_ips": [
+      "65dfbc77-1c77-4a99-98a6-e36c5aa7e4d0"
+    ], 
+    "leaf_asns": [
+      "f54e93b8-d508-4bf3-8ff8-18de5efb3eae"
+    ], 
+    "l3_server_asns": [
+      "f54e93b8-d508-4bf3-8ff8-18de5efb3eae"
+    ], 
+    "leaf_l3_server_link_ips": [
+      "0310d821-d075-4075-bdda-55cc6df57258"
+    ], 
+    "l3_server_loopback_ips": [
+      "0310d821-d075-4075-bdda-55cc6df57258"
+    ], 
+    "spine_asns": [
+      "f54e93b8-d508-4bf3-8ff8-18de5efb3eae"
+    ], 
+    "spine_loopback_ips": [
+      "65dfbc77-1c77-4a99-98a6-e36c5aa7e4d0"
+    ]
+  }, 
+  "node_server_3_leaf_3_interfaces": {}, 
+  "node_server_4_leaf_2_interfaces": {}, 
+  "devices": {
+    "leaf_3": "MDgwMDI3MzdDMkMx", 
+    "leaf_2": "MDgwMDI3NzAyNUM4", 
+    "leaf_1": "MDgwMDI3NjNDQkRD", 
+    "spine_2": "MDgwMDI3QUM2MzIw", 
+    "spine_1": "MDgwMDI3QTcxQUU2"
+  }, 
+  "port_maps": {}, 
+  "node_server_3_leaf_2_interfaces": {}, 
+  "spine_loopback_ips": {}
+}

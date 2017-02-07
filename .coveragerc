@@ -1,10 +1,4 @@
-[run]
-omit =
-   *__init__.py
-
 [report]
-include =
-   pylib/*
 omit =
-   pylib/__init__.py
-
+    pylib/__init__.py
+    pylib/apstra/__init__.py

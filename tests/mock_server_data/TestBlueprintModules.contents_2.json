@@ -1,0 +1,352 @@
+{
+  "items": [
+    {
+      "slot_type": "STRING", 
+      "name": "external_router_interfaces", 
+      "ids": [
+        "spine_1<->router0", 
+        "spine_2<->router1"
+      ]
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "node_server_4_leaf_3_interfaces", 
+      "ids": [
+        "leaf_3<->server_4_leaf_3"
+      ]
+    }, 
+    {
+      "slot_type": "IP_NETWORK", 
+      "ids": [], 
+      "name": "leaf_loopback_ips", 
+      "metadata": {
+        "prefix": 32
+      }
+    }, 
+    {
+      "slot_type": "IP_NETWORK", 
+      "ids": [], 
+      "name": "spine_leaf_link_ips", 
+      "metadata": {
+        "prefix": 31
+      }
+    }, 
+    {
+      "slot_type": "IP_NETWORK", 
+      "ids": [], 
+      "name": "to_external_router_link_ips", 
+      "metadata": {
+        "prefix": 31
+      }
+    }, 
+    {
+      "slot_type": "ASN", 
+      "name": "leaf_asns", 
+      "ids": []
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "node_leaf_1_interfaces", 
+      "ids": []
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "hcls", 
+      "ids": [
+        "server_3_leaf_2", 
+        "server_4_leaf_2", 
+        "server_1_leaf_2", 
+        "server_5_leaf_3", 
+        "server_3_leaf_3", 
+        "server_5_leaf_2", 
+        "server_2_leaf_1", 
+        "server_4_leaf_1", 
+        "server_4_leaf_3", 
+        "server_2_leaf_2", 
+        "server_1_leaf_1", 
+        "server_2_leaf_3", 
+        "server_5_leaf_1", 
+        "server_1_leaf_3", 
+        "server_3_leaf_1"
+      ]
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "node_server_2_leaf_2_interfaces", 
+      "ids": [
+        "leaf_2<->server_2_leaf_2"
+      ]
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "node_server_5_leaf_1_interfaces", 
+      "ids": [
+        "leaf_1<->server_5_leaf_1"
+      ]
+    }, 
+    {
+      "slot_type": "DEVICE", 
+      "name": "devices", 
+      "ids": [
+        "server_3_leaf_2", 
+        "server_4_leaf_2", 
+        "server_1_leaf_2", 
+        "server_5_leaf_3", 
+        "server_3_leaf_3", 
+        "server_5_leaf_2", 
+        "server_2_leaf_1", 
+        "server_4_leaf_1", 
+        "server_4_leaf_3", 
+        "server_2_leaf_2", 
+        "server_1_leaf_1", 
+        "server_2_leaf_3", 
+        "server_5_leaf_1", 
+        "server_1_leaf_3", 
+        "server_3_leaf_1"
+      ]
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "node_spine_1_interfaces", 
+      "ids": []
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "node_server_1_leaf_3_interfaces", 
+      "ids": [
+        "leaf_3<->server_1_leaf_3"
+      ]
+    }, 
+    {
+      "slot_type": "ASN", 
+      "name": "l3_server_asns", 
+      "ids": []
+    }, 
+    {
+      "slot_type": "IP_NETWORK", 
+      "ids": [], 
+      "name": "spine_loopback_ips", 
+      "metadata": {
+        "prefix": 32
+      }
+    }, 
+    {
+      "slot_type": "BOOLEAN", 
+      "name": "deploy", 
+      "ids": [
+        "leaf_2", 
+        "spine_1", 
+        "leaf_3", 
+        "leaf_1", 
+        "spine_2"
+      ]
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "node_server_3_leaf_3_interfaces", 
+      "ids": [
+        "leaf_3<->server_3_leaf_3"
+      ]
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "node_server_3_leaf_1_interfaces", 
+      "ids": [
+        "leaf_1<->server_3_leaf_1"
+      ]
+    }, 
+    {
+      "slot_type": "ASN", 
+      "name": "spine_asns", 
+      "ids": []
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "node_server_5_leaf_3_interfaces", 
+      "ids": [
+        "leaf_3<->server_5_leaf_3"
+      ]
+    }, 
+    {
+      "slot_type": "IP", 
+      "name": "dhcp_server_ip", 
+      "ids": []
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "node_server_2_leaf_1_interfaces", 
+      "ids": [
+        "leaf_1<->server_2_leaf_1"
+      ]
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "logical_device_maps", 
+      "ids": [
+        "server_3_leaf_2", 
+        "server_4_leaf_2", 
+        "server_1_leaf_2", 
+        "server_5_leaf_3", 
+        "server_3_leaf_3", 
+        "server_5_leaf_2", 
+        "server_2_leaf_1", 
+        "server_4_leaf_1", 
+        "server_4_leaf_3", 
+        "server_2_leaf_2", 
+        "server_1_leaf_1", 
+        "server_2_leaf_3", 
+        "server_5_leaf_1", 
+        "server_1_leaf_3", 
+        "server_3_leaf_1"
+      ]
+    }, 
+    {
+      "slot_type": "POOL_LIST", 
+      "name": "resource_pools", 
+      "ids": [
+        "leaf_loopback_ips", 
+        "spine_leaf_link_ips", 
+        "to_external_router_link_ips", 
+        "leaf_asns", 
+        "l3_server_asns", 
+        "spine_loopback_ips", 
+        "spine_asns", 
+        "l3_server_loopback_ips", 
+        "leaf_l3_server_link_ips", 
+        "virtual_network_svi_subnets"
+      ]
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "node_leaf_3_interfaces", 
+      "ids": []
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "node_server_4_leaf_1_interfaces", 
+      "ids": [
+        "leaf_1<->server_4_leaf_1"
+      ]
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "node_server_3_leaf_2_interfaces", 
+      "ids": [
+        "leaf_2<->server_3_leaf_2"
+      ]
+    }, 
+    {
+      "slot_type": "IP_NETWORK", 
+      "ids": [], 
+      "name": "l3_server_loopback_ips", 
+      "metadata": {
+        "prefix": 32
+      }
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "node_server_5_leaf_2_interfaces", 
+      "ids": [
+        "leaf_2<->server_5_leaf_2"
+      ]
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "node_leaf_2_interfaces", 
+      "ids": []
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "node_server_1_leaf_1_interfaces", 
+      "ids": [
+        "leaf_1<->server_1_leaf_1"
+      ]
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "node_server_1_leaf_2_interfaces", 
+      "ids": [
+        "leaf_2<->server_1_leaf_2"
+      ]
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "node_server_2_leaf_3_interfaces", 
+      "ids": [
+        "leaf_3<->server_2_leaf_3"
+      ]
+    }, 
+    {
+      "slot_type": "IP_NETWORK", 
+      "ids": [], 
+      "name": "leaf_l3_server_link_ips", 
+      "metadata": {
+        "prefix": 31
+      }
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "hostnames", 
+      "ids": [
+        "server_3_leaf_2", 
+        "server_4_leaf_2", 
+        "server_1_leaf_2", 
+        "server_5_leaf_3", 
+        "server_3_leaf_3", 
+        "server_5_leaf_2", 
+        "server_2_leaf_1", 
+        "server_4_leaf_1", 
+        "server_4_leaf_3", 
+        "server_2_leaf_2", 
+        "server_1_leaf_1", 
+        "server_2_leaf_3", 
+        "server_5_leaf_1", 
+        "server_1_leaf_3", 
+        "server_3_leaf_1"
+      ]
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "external_links", 
+      "ids": []
+    }, 
+    {
+      "slot_type": "IP_NETWORK_LIST", 
+      "name": "ip_connectivity", 
+      "ids": []
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "node_spine_2_interfaces", 
+      "ids": []
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "port_maps", 
+      "ids": [
+        "server_3_leaf_2", 
+        "server_4_leaf_2", 
+        "server_1_leaf_2", 
+        "server_5_leaf_3", 
+        "server_3_leaf_3", 
+        "server_5_leaf_2", 
+        "server_2_leaf_1", 
+        "server_4_leaf_1", 
+        "server_4_leaf_3", 
+        "server_2_leaf_2", 
+        "server_1_leaf_1", 
+        "server_2_leaf_3", 
+        "server_5_leaf_1", 
+        "server_1_leaf_3", 
+        "server_3_leaf_1"
+      ]
+    }, 
+    {
+      "slot_type": "STRING", 
+      "name": "node_server_4_leaf_2_interfaces", 
+      "ids": [
+        "leaf_2<->server_4_leaf_2"
+      ]
+    }
+  ]
+}
