@@ -1,0 +1,219 @@
+{
+  "items": [
+    {
+      "device_key": "08002737C2C1", 
+      "facts": {
+        "hw_version": "", 
+        "mgmt_ifname": "eth0", 
+        "mgmt_macaddr": "08:00:27:37:c2:c1", 
+        "os_version_info": {
+          "major": "3", 
+          "build": "1", 
+          "minor": "1"
+        }, 
+        "aos_hcl_model": "Cumulus_VX", 
+        "serial_number": "08002737C2C1", 
+        "os_arch": "x86_64", 
+        "vendor": "Cumulus", 
+        "os_version": "3.1.1", 
+        "os_family": "Cumulus", 
+        "hw_model": "VX", 
+        "aos_server": "192.168.59.250", 
+        "aos_version": "AOS_1.1.0_OB.11", 
+        "mgmt_ipaddr": "192.168.60.16"
+      }, 
+      "status": {
+        "hostname": "leaf-3", 
+        "blueprint_id": "30cd9032-35f2-4532-8543-dc24fc8ec7cd", 
+        "blueprint_active": true, 
+        "error_message": "", 
+        "device_start_time": "2017-02-07T14:24:35.320738Z", 
+        "domain_name": "", 
+        "pool_id": "default_pool", 
+        "fqdn": "leaf-3", 
+        "comm_state": "on", 
+        "agent_start_time": "2017-02-07T14:24:50.000000Z", 
+        "state": "IS-ACTIVE", 
+        "is_acknowledged": true
+      }, 
+      "id": "MDgwMDI3MzdDMkMx", 
+      "user_config": {
+        "aos_hcl_model": "Cumulus_VX", 
+        "admin_state": "normal", 
+        "location": "leaf-3@demo-vpod-l3 is node leaf_3"
+      }
+    }, 
+    {
+      "device_key": "080027A71AE6", 
+      "facts": {
+        "hw_version": "", 
+        "mgmt_ifname": "Management1", 
+        "mgmt_macaddr": "08:00:27:A7:1A:E6", 
+        "os_version_info": {
+          "major": "4", 
+          "build": "6M", 
+          "minor": "16"
+        }, 
+        "aos_hcl_model": "Arista_vEOS", 
+        "serial_number": "080027A71AE6", 
+        "os_arch": "x86_64", 
+        "vendor": "Arista", 
+        "os_version": "4.16.6M", 
+        "os_family": "EOS", 
+        "hw_model": "vEOS", 
+        "aos_server": "", 
+        "aos_version": "AOS_1.1.0_OB.11", 
+        "mgmt_ipaddr": "192.168.60.19"
+      }, 
+      "status": {
+        "hostname": "spine-1", 
+        "blueprint_id": "30cd9032-35f2-4532-8543-dc24fc8ec7cd", 
+        "blueprint_active": true, 
+        "error_message": "", 
+        "device_start_time": "2017-02-07T14:25:51.792498Z", 
+        "domain_name": "", 
+        "pool_id": "default_pool", 
+        "fqdn": "spine-1", 
+        "comm_state": "on", 
+        "agent_start_time": "2017-02-07T14:27:01.000000Z", 
+        "state": "IS-ACTIVE", 
+        "is_acknowledged": true
+      }, 
+      "id": "MDgwMDI3QTcxQUU2", 
+      "user_config": {
+        "aos_hcl_model": "Arista_vEOS", 
+        "admin_state": "normal", 
+        "location": "spine-1@demo-vpod-l3 is node spine_1"
+      }
+    }, 
+    {
+      "device_key": "0800277025C8", 
+      "facts": {
+        "hw_version": "", 
+        "mgmt_ifname": "eth0", 
+        "mgmt_macaddr": "08:00:27:70:25:c8", 
+        "os_version_info": {
+          "major": "3", 
+          "build": "1", 
+          "minor": "1"
+        }, 
+        "aos_hcl_model": "Cumulus_VX", 
+        "serial_number": "0800277025C8", 
+        "os_arch": "x86_64", 
+        "vendor": "Cumulus", 
+        "os_version": "3.1.1", 
+        "os_family": "Cumulus", 
+        "hw_model": "VX", 
+        "aos_server": "192.168.59.250", 
+        "aos_version": "AOS_1.1.0_OB.11", 
+        "mgmt_ipaddr": "192.168.60.18"
+      }, 
+      "status": {
+        "hostname": "leaf-2", 
+        "blueprint_id": "30cd9032-35f2-4532-8543-dc24fc8ec7cd", 
+        "blueprint_active": true, 
+        "error_message": "", 
+        "device_start_time": "2017-02-07T14:24:35.410984Z", 
+        "domain_name": "", 
+        "pool_id": "default_pool", 
+        "fqdn": "leaf-2", 
+        "comm_state": "on", 
+        "agent_start_time": "2017-02-07T14:24:50.000000Z", 
+        "state": "IS-ACTIVE", 
+        "is_acknowledged": true
+      }, 
+      "id": "MDgwMDI3NzAyNUM4", 
+      "user_config": {
+        "aos_hcl_model": "Cumulus_VX", 
+        "admin_state": "normal", 
+        "location": "leaf-2@demo-vpod-l3 is node leaf_2"
+      }
+    }, 
+    {
+      "device_key": "080027AC6320", 
+      "facts": {
+        "hw_version": "", 
+        "mgmt_ifname": "eth0", 
+        "mgmt_macaddr": "08:00:27:ac:63:20", 
+        "os_version_info": {
+          "major": "3", 
+          "build": "1", 
+          "minor": "1"
+        }, 
+        "aos_hcl_model": "Cumulus_VX", 
+        "serial_number": "080027AC6320", 
+        "os_arch": "x86_64", 
+        "vendor": "Cumulus", 
+        "os_version": "3.1.1", 
+        "os_family": "Cumulus", 
+        "hw_model": "VX", 
+        "aos_server": "192.168.59.250", 
+        "aos_version": "AOS_1.1.0_OB.11", 
+        "mgmt_ipaddr": "192.168.60.17"
+      }, 
+      "status": {
+        "hostname": "spine-2", 
+        "blueprint_id": "30cd9032-35f2-4532-8543-dc24fc8ec7cd", 
+        "blueprint_active": true, 
+        "error_message": "", 
+        "device_start_time": "2017-02-07T14:24:36.294628Z", 
+        "domain_name": "", 
+        "pool_id": "default_pool", 
+        "fqdn": "spine-2", 
+        "comm_state": "on", 
+        "agent_start_time": "2017-02-07T14:24:52.000000Z", 
+        "state": "IS-ACTIVE", 
+        "is_acknowledged": true
+      }, 
+      "id": "MDgwMDI3QUM2MzIw", 
+      "user_config": {
+        "aos_hcl_model": "Cumulus_VX", 
+        "admin_state": "normal", 
+        "location": "spine-2@demo-vpod-l3 is node spine_2"
+      }
+    }, 
+    {
+      "device_key": "08002763CBDC", 
+      "facts": {
+        "hw_version": "", 
+        "mgmt_ifname": "eth0", 
+        "mgmt_macaddr": "08:00:27:63:cb:dc", 
+        "os_version_info": {
+          "major": "3", 
+          "build": "1", 
+          "minor": "1"
+        }, 
+        "aos_hcl_model": "Cumulus_VX", 
+        "serial_number": "08002763CBDC", 
+        "os_arch": "x86_64", 
+        "vendor": "Cumulus", 
+        "os_version": "3.1.1", 
+        "os_family": "Cumulus", 
+        "hw_model": "VX", 
+        "aos_server": "192.168.59.250", 
+        "aos_version": "AOS_1.1.0_OB.11", 
+        "mgmt_ipaddr": "192.168.60.15"
+      }, 
+      "status": {
+        "hostname": "leaf-1", 
+        "blueprint_id": "30cd9032-35f2-4532-8543-dc24fc8ec7cd", 
+        "blueprint_active": true, 
+        "error_message": "", 
+        "device_start_time": "2017-02-07T14:24:36.121210Z", 
+        "domain_name": "", 
+        "pool_id": "default_pool", 
+        "fqdn": "leaf-1", 
+        "comm_state": "on", 
+        "agent_start_time": "2017-02-07T14:24:52.000000Z", 
+        "state": "IS-ACTIVE", 
+        "is_acknowledged": true
+      }, 
+      "id": "MDgwMDI3NjNDQkRD", 
+      "user_config": {
+        "aos_hcl_model": "Cumulus_VX", 
+        "admin_state": "normal", 
+        "location": "leaf-1@demo-vpod-l3 is node leaf_1"
+      }
+    }
+  ]
+}

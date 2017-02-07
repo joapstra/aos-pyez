@@ -4,7 +4,6 @@
 # LICENSE file at http://www.apstra.com/community/eula
 
 import json
-import semantic_version
 
 from apstra.aosom.collection_item import CollectionItem
 from apstra.aosom.collection_mapper import CollectionMapper
@@ -151,7 +150,6 @@ class Collection(object):
             raise SessionRqstError(resp=got)
 
         body = got.json()
-        aos_1_0 = semantic_version.Version('1.0', partial=True)
 
         self._cache.clear()
         self._cache['list'] = list()
@@ -159,7 +157,7 @@ class Collection(object):
         self._cache['by_%s' % self.LABEL] = dict()
         self._cache['by_%s' % self.UNIQUE_ID] = dict()
 
-        items = body['items'] if self.api.version['semantic'] > aos_1_0 else body
+        items = body['items']
         for item in items:
             self._add_item(item)
 

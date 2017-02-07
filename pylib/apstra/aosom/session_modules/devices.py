@@ -69,11 +69,7 @@ class Approved(object):
         return got.json()
 
     def get_devices(self):
-        got = self.api.requests.get(self.url)
-        if not got.ok:
-            raise SessionRqstError(got)
-
-        return got.json()['devices']
+        return self.get()['devices']
 
     def update(self, device_keys):
         has_devices = self.get_devices()

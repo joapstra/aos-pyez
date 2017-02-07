@@ -9,6 +9,7 @@
 #
 
 import json
+import os
 from copy import copy
 
 from apstra.aosom.exc import *
@@ -64,6 +65,8 @@ class TestCollectionItems(AosPyEzCommonTestCase):
 
         new_item = ip_pools['new_item']
         new_item.jsonfile_load(filepath=filename)
+
+        os.remove(filename)
 
     @mock_server_json_data
     def test_collection_item_read(self, json_data):

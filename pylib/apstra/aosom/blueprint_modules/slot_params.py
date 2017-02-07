@@ -7,8 +7,6 @@ import json
 from operator import itemgetter
 from copy import copy
 
-import semantic_version
-
 from apstra.aosom.collection_mapper import CollectionMapper
 from apstra.aosom.exc import SessionRqstError
 
@@ -165,9 +163,7 @@ class BlueprintItemParamsCollection(object):
         get_name = itemgetter('name')
 
         body = got.json()
-        aos_1_0 = semantic_version.Version('1.0', partial=True)
-
-        self._cache['list'] = body['items'] if self.api.version['semantic'] > aos_1_0 else body
+        self._cache['list'] = body['items']
         self._cache['names'] = map(get_name, self._cache['list'])
         self._cache['by_name'] = {get_name(i): i for i in self._cache['list']}
 

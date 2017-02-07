@@ -16,6 +16,7 @@ from apstra.aosom.session import Session
 from aos_pyez_unittest_config import Config
 
 __all__ = [
+    'load_mock_server_json_data',
     'mock_server_json_data',
     'mock_server_json_data_named',
     'AosPyEzCommonTestCase'
@@ -24,16 +25,24 @@ __all__ = [
 mock_server_json_dir = path.join(path.dirname(path.realpath(__file__)), 'mock_server_data')
 
 
+def load_mock_server_json_data(cls_name, named):
+
+    filepath = path.join(mock_server_json_dir,"{}.{}*.json".format(
+        cls_name, named))
+
+    json_data = [json.load(open(f_name)) for f_name in glob(filepath)]
+    if not json_data:
+        raise RuntimeError("No JSON files for '{}'".format(filepath))
+
+    return json_data
+
 def mock_server_json_data(method):
     cls_name = inspect.stack()[1][3]
 
     def decorate_method(self, *vargs, **kwargs):
-        json_files = glob(path.join(
-            mock_server_json_dir,
-            "{}.{}*.json".format(cls_name, method.__name__)))
-
-        json_data = [json.load(open(f_name)) for f_name in json_files]
-        return method(self, json_data, *vargs, **kwargs)
+        return method(self,
+                      load_mock_server_json_data(cls_name, method.__name__),
+                      *vargs, **kwargs)
 
     return decorate_method
 
@@ -44,12 +53,9 @@ def mock_server_json_data_named(named):
         cls_name = inspect.stack()[1][3]
 
         def decorate_method(self, *vargs, **kwargs):
-            json_files = glob(path.join(
-                mock_server_json_dir,
-                "{}.{}*.json".format(cls_name, named)))
-
-            json_data = [json.load(open(f_name)) for f_name in json_files]
-            return method(self, json_data, *vargs, **kwargs)
+            return method(self,
+                          load_mock_server_json_data(cls_name, named),
+                          *vargs, **kwargs)
 
         return decorate_method
 
