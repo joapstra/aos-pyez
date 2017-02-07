@@ -3,5 +3,7 @@ sphinxcontrib-napoleon
 sphinx_rtd_theme
 mock
 nose
+pytest
+pytest-cov
 coverage
 requests_mock

@@ -3,18 +3,19 @@
 # This source code is licensed under End User License Agreement found in the
 # LICENSE file at http://www.apstra.com/community/eula
 
-import unittest
+from copy import copy
 from mock import patch
 import requests_mock
 
 from apstra.aosom.session import Session
 from apstra.aosom.exc import *
 
-from config_unittests import Config
+from aos_pyez_unittest_config import Config
+from aos_pyez_unittest_common import AosPyEzCommonTestCase
 
 
 # noinspection PyUnresolvedReferences
-class TestAosomSession(unittest.TestCase):
+class TestSession(AosPyEzCommonTestCase):
     """
     Test cases to verify the functionality of the Session object, mainly focused
     around the various login pass/failure cases.
@@ -38,6 +39,7 @@ class TestAosomSession(unittest.TestCase):
 
     def test_login_pass(self):
         self.aos.login()
+        self.assertEquals(self.aos.session, Config.test_session)
         self.assertEquals(self.aos.token, Config.test_auth_token)
         self.assertEquals(self.aos.api.version['version'], Config.test_server_version)
 
@@ -49,7 +51,7 @@ class TestAosomSession(unittest.TestCase):
         except LoginNoServerError:
             pass
         else:
-            self.assertTrue(False, msg='LoginNoServerError not raised as expected')
+            self.fail('LoginNoServerError not raised as expected')
         finally:
             self.aos.server = had_server
 
@@ -61,8 +63,7 @@ class TestAosomSession(unittest.TestCase):
         except LoginServerUnreachableError:
             pass
         else:
-            self.assertTrue(
-                False, msg='LoginServerUnreachableError not raised as expected')
+            self.fail('LoginServerUnreachableError not raised as expected')
 
     def test_login_bad_credentials(self):
         self.adapter.register_uri('POST', '/api/user/login', status_code=400)
@@ -72,8 +73,7 @@ class TestAosomSession(unittest.TestCase):
         except LoginAuthError:
             pass
         else:
-            self.assertTrue(
-                False, msg='LoginAuthError not raised as expected')
+            self.fail('LoginAuthError not raised as expected')
 
     # ##### -------------------------------------------------------------------
     # ##### resume session test cases
@@ -86,42 +86,42 @@ class TestAosomSession(unittest.TestCase):
 
     def test_login_resume_pass(self):
         self.adapter.register_uri('GET', '/api/user', json=self.validate_token)
-        self.aos.resume(token=Config.test_auth_token)
+        self.aos.session = Config.test_session
 
     def test_login_resume_bad_token(self):
         self.adapter.register_uri('GET', '/api/user', json=self.validate_token)
 
         try:
-            self.aos.resume(token='i am a bad token')
+            bad_session = copy(Config.test_session)
+            bad_session['token'] = 'i am a bad token'
+            self.aos.session = bad_session
         except LoginAuthError:
             pass
         else:
-            self.assertTrue(False, msg='LoginAuthError not raised as expected')
+            self.fail('LoginAuthError not raised as expected')
 
     def test_login_resume_bad_url(self):
         self.adapter.register_uri('GET', '/api/user', json=self.validate_token)
 
         try:
-            self.aos.resume(server=Config.test_server, token=Config.test_auth_token)
-            # this way is not, but using it for test point
-            self.aos.api.resume(url=Config.test_auth_token,
-                                headers=dict(AUTHTOKEN=Config.test_auth_token))
+            bad_session = copy(Config.test_session)
+            del bad_session['server']
+            self.aos.session = bad_session
         except LoginError:
             pass
         else:
-            self.assertTrue(False, msg='LoginError not raised as expected')
+            self.fail('LoginError not raised as expected')
 
     def test_login_resume_unreachable_server(self):
         self.adapter.register_uri('GET', '/api/user', json=self.validate_token)
 
         try:
             with patch.object(self.aos.api, 'probe', return_value=False):
-                self.aos.resume(token=Config.test_auth_token)
+                self.aos.session = Config.test_session
         except LoginServerUnreachableError:
             pass
         else:
-            self.assertTrue(
-                False, msg='LoginServerUnreachableError not raised as expected')
+            self.fail('LoginServerUnreachableError not raised as expected')
 
     # ##### -------------------------------------------------------------------
     # ##### test probing against real target
@@ -152,7 +152,7 @@ class TestAosomSession(unittest.TestCase):
 
     def test_property_token_ok(self):
         self.aos.login()
-        self.assertEquals(self.aos.api.headers['AUTHTOKEN'], Config.test_auth_token)
+        self.assertEquals(self.aos.token, Config.test_auth_token)
 
     def test_property_url_missing(self):
         try:

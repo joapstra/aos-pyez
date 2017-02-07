@@ -275,6 +275,9 @@ class Collection(object):
         return self.ItemIter(self)
 
     def __iadd__(self, other):
+        if not self._cache:
+            self.digest()
+
         if not isinstance(other, CollectionItem):
             raise RuntimeError("attempting to add item type(%s) not CollectionItem" % str(type(other)))
 
@@ -282,6 +285,9 @@ class Collection(object):
         return self
 
     def __isub__(self, other):
+        if not self._cache:
+            self.digest()
+
         if not isinstance(other, CollectionItem):
             raise RuntimeError(
                 "attempting to remove item type(%s) not CollectionItem" % str(type(other)))

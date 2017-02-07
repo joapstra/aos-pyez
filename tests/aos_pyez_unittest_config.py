@@ -13,5 +13,12 @@ class Config(object):
     Global test configuration
     """
     test_server = 'mock-aos-server'
+    test_server_port = 8888
     test_server_version = "1.1"
     test_auth_token = "GoodToken"
+
+    test_session = dict(
+        server=test_server,
+        port=test_server_port,
+        token=test_auth_token
+    )

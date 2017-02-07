@@ -9,7 +9,7 @@ import os
 from apstra.aosom.dynmodldr import DynamicModuleOwner
 
 from apstra.aosom.exc import (
-    LoginServerUnreachableError,
+    LoginServerUnreachableError, LoginError,
     NoLoginError, LoginNoServerError)
 
 from .session_api import Api
@@ -152,7 +152,7 @@ class Session(DynamicModuleOwner):
             self.port = prev_session['port']
             token = prev_session['token']
         except KeyError as exc:
-            raise RuntimeError("Invalid session data, missing '{}'".format(exc.message))
+            raise LoginError("Invalid session data, missing '{}'".format(exc.message))
 
         self.api.set_url(self.server, self.port)
         self.api.token = token

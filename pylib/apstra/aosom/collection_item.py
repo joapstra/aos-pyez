@@ -132,7 +132,7 @@ class CollectionItem(object):
             SessionRqstError: upon HTTP request issue
         """
         if not self.exists:
-            return self.create(value)
+            return self.create(value=value)
 
         got = self.api.requests.put(
             self.url, json=value or self.datum)
@@ -185,7 +185,7 @@ class CollectionItem(object):
 
         def throw_duplicate(name):
             raise DuplicateError("'{}' already exists in collection: {}.".format(
-                name, self.collection.RESOURCE_URI))
+                name, self.collection.URI))
 
         if self.exists:
             if not replace:
@@ -197,7 +197,7 @@ class CollectionItem(object):
         # could have already assigned it into the :prop:`datum`.  This
         # latter approach should be discouraged.
 
-        if value:
+        if value is not None:
             self.datum = copy(value)
 
         # now check to see if the new value/name exists
