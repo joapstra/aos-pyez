@@ -13,7 +13,7 @@ from mock import patch
 import requests_mock
 
 from apstra.aosom.session import Session
-from aos_pyez_unittest_config import Config
+from config import Config
 
 __all__ = [
     'load_mock_server_json_data',
@@ -22,7 +22,9 @@ __all__ = [
     'AosPyEzCommonTestCase'
 ]
 
-mock_server_json_dir = path.join(path.dirname(path.realpath(__file__)), 'mock_server_data')
+mock_server_json_dir = path.join(path.dirname(
+    path.realpath(__file__)), "..",
+    'mock_server_data')
 
 
 def load_mock_server_json_data(cls_name, named):
@@ -48,10 +50,10 @@ def mock_server_json_data(method):
     return decorate_method
 
 
-def mock_server_json_data_named(named):
+def mock_server_json_data_named(named, testcase=None):
 
     def param_decorate(method):
-        cls_name = inspect.stack()[1][3]
+        cls_name = testcase or inspect.stack()[1][3]
 
         def decorate_method(self, *vargs, **kwargs):
             return method(self,

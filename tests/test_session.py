@@ -4,14 +4,14 @@
 # LICENSE file at http://www.apstra.com/community/eula
 
 from copy import copy
-from mock import patch
+
 import requests_mock
+from utils.common import AosPyEzCommonTestCase
+from utils.config import Config
+from mock import patch
 
-from apstra.aosom.session import Session
 from apstra.aosom.exc import *
-
-from aos_pyez_unittest_config import Config
-from aos_pyez_unittest_common import AosPyEzCommonTestCase
+from apstra.aosom.session import Session
 
 
 # noinspection PyUnresolvedReferences

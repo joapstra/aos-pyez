@@ -4,8 +4,9 @@
 # LICENSE file at http://www.apstra.com/community/eula
 
 
+from utils.common import *
+
 from apstra.aosom.exc import *
-from aos_pyez_unittest_common import *
 
 
 class TestBlueprintCollection(AosPyEzCommonTestCase):
@@ -79,7 +80,7 @@ class TestBlueprintCollection(AosPyEzCommonTestCase):
 
         new_bp = blueprints['i_am_new']
 
-        def mock_new_blueprint(request, context):
+        def mock_new_blueprint(_, context):
             context.status_code = 200
             return dict(id='fake_id')
 
@@ -93,7 +94,7 @@ class TestBlueprintCollection(AosPyEzCommonTestCase):
 
         # now setup a failure case
 
-        def mock_no_new_blueprint(request, context):
+        def mock_no_new_blueprint(_, context):
             context.status_code = 200
             return dict(id=None)
 

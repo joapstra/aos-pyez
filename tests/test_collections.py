@@ -9,8 +9,10 @@
 #
 
 
+from utils.common import *
+
+from apstra.aosom.collection_mapper import CollectionMapper, MultiCollectionMapper
 from apstra.aosom.exc import *
-from aos_pyez_unittest_common import *
 
 
 class TestCollection(AosPyEzCommonTestCase):
@@ -31,7 +33,7 @@ class TestCollection(AosPyEzCommonTestCase):
         else:
             self.fail("SessionError not raised as expected")
 
-    @mock_server_json_data
+    @mock_server_json_data_named('ip_pools', testcase='*')
     def test_collection_data_exist(self, json_data):
         # use the IpPools as an example collection
         ip_pools = self.aos.IpPools
@@ -66,7 +68,7 @@ class TestCollection(AosPyEzCommonTestCase):
         else:
             self.fail("SessionRqstError not raised as expected")
 
-    @mock_server_json_data_named('test_collection_data_exist')
+    @mock_server_json_data_named('ip_pools', testcase='*')
     def test_collection_find(self, json_data):
         # use the IpPools as an example collection
         ip_pools = self.aos.IpPools
@@ -82,7 +84,7 @@ class TestCollection(AosPyEzCommonTestCase):
         this = ip_pools.find(label='this does not exist')
         self.assertEquals(this, None)
 
-    @mock_server_json_data_named('test_collection_data_exist')
+    @mock_server_json_data_named('ip_pools', testcase='*')
     def test_collection_find_bad_args(self, json_data):
         # use the IpPools as an example collection
         ip_pools = self.aos.IpPools
@@ -107,7 +109,7 @@ class TestCollection(AosPyEzCommonTestCase):
         else:
             self.fail("RuntimeError not raised as expected")
 
-    @mock_server_json_data_named('test_collection_data_exist')
+    @mock_server_json_data_named('ip_pools', testcase='*')
     def test_collection_test_operator_in(self, json_data):
         # use the IpPools as an example collection
         ip_pools = self.aos.IpPools
@@ -119,7 +121,7 @@ class TestCollection(AosPyEzCommonTestCase):
         self.assertIsInstance(
             results, bool, msg="results are not a bool as expectect")
 
-    @mock_server_json_data_named('test_collection_data_exist')
+    @mock_server_json_data_named('ip_pools', testcase='*')
     def test_collection_test_operator_iadd(self, json_data):
         # use the IpPools as an example collection
         ip_pools = self.aos.IpPools
@@ -150,7 +152,7 @@ class TestCollection(AosPyEzCommonTestCase):
         else:
             self.fail("RuntimeError not raised as expected")
 
-    @mock_server_json_data_named('test_collection_data_exist')
+    @mock_server_json_data_named('ip_pools', testcase='*')
     def test_collection_test_operator_isub(self, json_data):
         # use the IpPools as an example collection
         ip_pools = self.aos.IpPools
@@ -178,7 +180,7 @@ class TestCollection(AosPyEzCommonTestCase):
         else:
             self.fail("RuntimeError not raised as expected")
 
-    @mock_server_json_data_named('test_collection_data_exist')
+    @mock_server_json_data_named('ip_pools', testcase='*')
     def test_collection_test_operator_isub_fail_item_noexist(self, json_data):
         # try to remove an IpPool Item from an AsnPool
 
@@ -197,3 +199,54 @@ class TestCollection(AosPyEzCommonTestCase):
             pass
         else:
             self.fail("RuntimeError not raised as expected")
+
+    @mock_server_json_data_named(named='ip_pools', testcase='*')
+    def test_collection_mapper(self, json_data):
+        ip_pools = self.aos.IpPools
+        self.adapter.register_uri('GET', ip_pools.url, json=json_data[0])
+
+        xf = CollectionMapper(ip_pools)
+        to_ids = xf.from_label(dict(items=ip_pools.names))
+        to_labels = xf.from_uid(to_ids)
+
+        # verify that the mapped items are there
+        self.assertTrue(all([ip_pools.find(uid=_id) for _id in to_ids['items']]))
+        self.assertTrue(all([ip_pools.find(label=_label) for _label in to_labels['items']]))
+
+        # now add items to create value name->id mapping failures
+
+        ip_pools.names.append('name_does_not_exist')
+        try:
+            to_ids = xf.from_label(dict(items=ip_pools.names))
+        except AccessValueError:
+            pass
+        else:
+            self.fail("AccessValueError not raised as expected")
+
+        # now add items to create value id->name mapping failures
+
+        to_ids['items'].append('id_does_not_exist')
+        try:
+            to_labels = xf.from_uid(to_ids)
+        except AccessValueError:
+            pass
+        else:
+            self.fail("AccessValueError not raised as expected")
+
+    @mock_server_json_data_named(named='test_resources_in_use', testcase='TestMiscCollections')
+    def test_collection_multi_mapper(self, json_data):
+        ip_pools = self.aos.IpPools
+        asn_pools = self.aos.AsnPools
+
+        self.adapter.register_uri('GET', ip_pools.url, json=json_data[0])
+        self.adapter.register_uri('GET', asn_pools.url, json=json_data[1])
+
+        xfm = MultiCollectionMapper(
+            self.aos, dict(ip_items='IpPools', asn_items='AsnPools'))
+
+        to_ids = xfm.from_label(dict(
+            ip_items=ip_pools.names,
+            asn_items=asn_pools.names
+        ))
+
+        xfm.from_uid(to_ids)

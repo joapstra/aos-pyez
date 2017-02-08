@@ -4,8 +4,7 @@
 # LICENSE file at http://www.apstra.com/community/eula
 
 
-from apstra.aosom.exc import *
-from aos_pyez_unittest_common import *
+from utils.common import *
 
 
 class TestMiscCollections(AosPyEzCommonTestCase):
@@ -31,5 +30,3 @@ class TestMiscCollections(AosPyEzCommonTestCase):
 
         item = asn_pools[asn_pools.names[0]]
         self.assertTrue(item.in_use)
-
-

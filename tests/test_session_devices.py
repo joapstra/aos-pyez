@@ -4,9 +4,9 @@
 # LICENSE file at http://www.apstra.com/community/eula
 
 
+from utils.common import *
 
 from apstra.aosom.exc import *
-from aos_pyez_unittest_common import *
 
 
 class TestDevices(AosPyEzCommonTestCase):
@@ -106,6 +106,7 @@ class TestDevices(AosPyEzCommonTestCase):
         dev.value['status']['state'] = 'OOS-QUARANTINED'
 
         location = 'here'
+
         def do_approve(request, context):
             context.status_code = 200
             body = request.json()
@@ -114,6 +115,3 @@ class TestDevices(AosPyEzCommonTestCase):
 
         self.adapter.register_uri('PUT', dev.url, json=do_approve)
         dev.approve(location=location)
-
-
-

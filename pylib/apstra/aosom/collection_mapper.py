@@ -46,7 +46,7 @@ class CollectionMapper(object):
 
     And you want the label values, then you would use the `from_uid` method:
 
-        # >>> xf = CollectionValueTransformer(aos.IpPools)
+        # >>> xf = CollectionMapper(aos.IpPools)
         # >>> xf.from_uid(data)
         # {'my_uids': [u'Switches-IpAddrs', u'Servers-IpAddrs']}
 

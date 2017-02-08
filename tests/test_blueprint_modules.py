@@ -4,8 +4,8 @@
 # LICENSE file at http://www.apstra.com/community/eula
 
 
+from utils.common import *
 from apstra.aosom.exc import *
-from aos_pyez_unittest_common import *
 
 
 class TestBlueprintModules(AosPyEzCommonTestCase):
@@ -29,6 +29,10 @@ class TestBlueprintModules(AosPyEzCommonTestCase):
         self.bp_digest_data = json_data[0]
         self.bp_item_data = json_data[1]
         self.bp_item_params_data = json_data[2]
+
+    def test_blueprint_dynloader(self):
+        for mod in self.bp_item.ModuleCatalog:
+            getattr(self.bp_item, mod)
 
     def test_blueprint_slots(self):
         _ = [p for p in self.bp_item.params]
@@ -76,7 +80,6 @@ class TestBlueprintModules(AosPyEzCommonTestCase):
         p_names = self.bp_item.params.names
         p_0 = self.bp_item.params[p_names[0]]
 
-
         # clear an item, mock the failure
         self.adapter.register_uri('PUT', p_0.url, status_code=400)
         try:
@@ -109,7 +112,6 @@ class TestBlueprintModules(AosPyEzCommonTestCase):
         else:
             self.fail("SessionRqstError not raised as expected")
 
-
         # to a an update / PATCH on an item, ok
 
         patch_data = dict(name='jeremy', state='NC')
@@ -120,7 +122,7 @@ class TestBlueprintModules(AosPyEzCommonTestCase):
 
         self.adapter.register_uri('PATCH', p_0.url, json=do_patch)
 
-        def read_back(request, context):
+        def read_back(_, context):
             context.status_code = 200
             return patch_data
 

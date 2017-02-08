@@ -3,17 +3,13 @@
 # This source code is licensed under End User License Agreement found in the
 # LICENSE file at http://www.apstra.com/community/eula
 
-# import unittest
-# from mock import patch
-# import requests_mock
-#
 
 import json
 import os
 from copy import copy
 
+from utils.common import *
 from apstra.aosom.exc import *
-from aos_pyez_unittest_common import *
 
 
 class TestCollectionItems(AosPyEzCommonTestCase):
@@ -22,7 +18,7 @@ class TestCollectionItems(AosPyEzCommonTestCase):
         super(TestCollectionItems, self).setUp()
         self.aos.login()
 
-    @mock_server_json_data_named('ip_pools')
+    @mock_server_json_data_named('ip_pools', testcase='*')
     def test_collection_item_exists(self, json_data):
         # use the IpPools as an example collection
         ip_pools = self.aos.IpPools
@@ -37,7 +33,7 @@ class TestCollectionItems(AosPyEzCommonTestCase):
         self.assertTrue(by_name.exists)
         _ = str(by_name)
 
-    @mock_server_json_data_named('ip_pools')
+    @mock_server_json_data_named('ip_pools', testcase='*')
     def test_collection_item_noexists(self, json_data):
         # use the IpPools as an example collection
         ip_pools = self.aos.IpPools
@@ -51,7 +47,7 @@ class TestCollectionItems(AosPyEzCommonTestCase):
         else:
             self.fail("NoExistsError not raised as expected")
 
-    @mock_server_json_data_named('ip_pools')
+    @mock_server_json_data_named('ip_pools', testcase='*')
     def test_collection_item_jsonfile(self, json_data):
         # use the IpPools as an example collection
         ip_pools = self.aos.IpPools
@@ -80,7 +76,7 @@ class TestCollectionItems(AosPyEzCommonTestCase):
         # this should be A-OK
         self.assertEquals(item.read(), json_data[1])
 
-    @mock_server_json_data_named('ip_pools')
+    @mock_server_json_data_named('ip_pools', testcase='*')
     def test_collection_item_read_fail(self, json_data):
         # use the IpPools as an example collection
         ip_pools = self.aos.IpPools
@@ -152,7 +148,7 @@ class TestCollectionItems(AosPyEzCommonTestCase):
         else:
             self.fail("SessionRqstError not raised as expected")
 
-    @mock_server_json_data_named('ip_pools')
+    @mock_server_json_data_named('ip_pools', testcase='*')
     def test_collection_item_delete(self, json_data):
         # use the IpPools as an example collection
         ip_pools = self.aos.IpPools
@@ -163,7 +159,7 @@ class TestCollectionItems(AosPyEzCommonTestCase):
         self.adapter.register_uri('DELETE', item.url, status_code=200)
         del item.value
 
-    @mock_server_json_data_named('ip_pools')
+    @mock_server_json_data_named('ip_pools', testcase='*')
     def test_collection_item_delete_fail(self, json_data):
         # use the IpPools as an example collection
         ip_pools = self.aos.IpPools
@@ -217,4 +213,3 @@ class TestCollectionItems(AosPyEzCommonTestCase):
 
         new_item.write(value={ip_pools.LABEL: new_item.name})
         self.assertEquals(new_item.id, 'fake_id')
-
