@@ -7,7 +7,7 @@ import json
 
 from apstra.aosom.collection_item import CollectionItem
 from apstra.aosom.collection_mapper import CollectionMapper
-from apstra.aosom.exc import SessionRqstError
+from apstra.aosom.exc import SessionRqstError, AccessValueError, NoExistsError
 
 __all__ = [
     'Collection',
@@ -177,16 +177,16 @@ class Collection(object):
             - None if item not found
 
         Raises:
-            - A
+            - AccessValueError: invalid use of arguments
         """
         if not self._cache:
             self.digest()
 
         if not any([label, uid]):
-            raise RuntimeError('Either `label` or `id` must be provide')
+            raise AccessValueError('Either `label` or `id` must be provide')
 
         if all([label, uid]):
-            raise RuntimeError('Only one of `label` or `id` can be provided')
+            raise AccessValueError('Only one of `label` or `id` can be provided')
 
         by_method = 'by_%s' % (self.LABEL if label else self.UNIQUE_ID)
         as_dict = self._cache[by_method].get(label or uid)
@@ -239,7 +239,7 @@ class Collection(object):
             idx = next(i for i, li in enumerate(self._cache['list']) if li[self.LABEL] == item_name)
             del self._cache['list'][idx]
         except StopIteration:
-            raise RuntimeError('attempting to delete item name (%s) not found' % item_name)
+            raise NoExistsError('attempting to delete item name (%s) not found' % item_name)
 
         idx = self._cache['names'].index(item_name)
         del self._cache['names'][idx]
@@ -277,7 +277,8 @@ class Collection(object):
             self.digest()
 
         if not isinstance(other, CollectionItem):
-            raise RuntimeError("attempting to add item type(%s) not CollectionItem" % str(type(other)))
+            raise AccessValueError(
+                "attempting to add item type(%s) not CollectionItem" % str(type(other)))
 
         self._add_item(other.value)
         return self
@@ -287,7 +288,7 @@ class Collection(object):
             self.digest()
 
         if not isinstance(other, CollectionItem):
-            raise RuntimeError(
+            raise AccessValueError(
                 "attempting to remove item type(%s) not CollectionItem" % str(type(other)))
 
         self._remove_item(other.value)

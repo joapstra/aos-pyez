@@ -8,16 +8,16 @@
 # ##### Parent Exception class for everything
 # ##### ---------------------------------------------------
 
-class AosCpError(Exception):
+class AosOmError(Exception):
     def __init__(self, message=None):
-        super(AosCpError, self).__init__(message)
+        super(AosOmError, self).__init__(message)
 
 
 # ##### ---------------------------------------------------
 # ##### Login related exceptions
 # ##### ---------------------------------------------------
 
-class LoginError(AosCpError):
+class LoginError(AosOmError):
     def __init__(self, message=None):
         super(LoginError, self).__init__(
             message or 'AOS-server login error')
@@ -51,7 +51,7 @@ class NoLoginError(LoginError):
 # ##### Session processing exceptions
 # ##### ---------------------------------------------------
 
-class SessionError(AosCpError):
+class SessionError(AosOmError):
     def __init__(self, message=None):
         super(SessionError, self).__init__(message)
 

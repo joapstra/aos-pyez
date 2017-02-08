@@ -96,7 +96,7 @@ class TestCollection(AosPyEzCommonTestCase):
         ip_pools.cache.clear()
         try:
             ip_pools.find()
-        except RuntimeError:
+        except AccessValueError:
             pass
         else:
             self.fail("RuntimeError not raised as expected")
@@ -104,7 +104,7 @@ class TestCollection(AosPyEzCommonTestCase):
         # call find with both label and uid
         try:
             ip_pools.find(uid='this', label='that')
-        except RuntimeError:
+        except AccessValueError:
             pass
         else:
             self.fail("RuntimeError not raised as expected")
@@ -147,10 +147,10 @@ class TestCollection(AosPyEzCommonTestCase):
         try:
             # now remove it
             ip_pools += not_an_item
-        except RuntimeError:
+        except AccessValueError:
             pass
         else:
-            self.fail("RuntimeError not raised as expected")
+            self.fail("AccessValueError not raised as expected")
 
     @mock_server_json_data_named('ip_pools', testcase='*')
     def test_collection_test_operator_isub(self, json_data):
@@ -175,10 +175,10 @@ class TestCollection(AosPyEzCommonTestCase):
         try:
             # now remove it
             ip_pools -= not_an_item
-        except RuntimeError:
+        except AccessValueError:
             pass
         else:
-            self.fail("RuntimeError not raised as expected")
+            self.fail("AccessValueError not raised as expected")
 
     @mock_server_json_data_named('ip_pools', testcase='*')
     def test_collection_test_operator_isub_fail_item_noexist(self, json_data):
@@ -195,10 +195,10 @@ class TestCollection(AosPyEzCommonTestCase):
         ip_item = ip_pools[ip_pools.names[0]]
         try:
             asn_pools -= ip_item
-        except RuntimeError:
+        except NoExistsError:
             pass
         else:
-            self.fail("RuntimeError not raised as expected")
+            self.fail("NoExistsError not raised as expected")
 
     @mock_server_json_data_named(named='ip_pools', testcase='*')
     def test_collection_mapper(self, json_data):
