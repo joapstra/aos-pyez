@@ -1,8 +1,8 @@
-Sphinx==1.4.6
+Sphinx
 sphinxcontrib-napoleon
 sphinx_rtd_theme
+sphinx_issues
 mock
-nose
 pytest
 pytest-cov
 coverage

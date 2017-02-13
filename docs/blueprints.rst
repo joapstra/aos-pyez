@@ -1,5 +1,5 @@
-Blueprints Overview
-===================
+Managing Blueprints
+-------------------
 
 A Blueprint is a specific instance of an engineering Design Template that you build, deploy, and operate within your
 network.  A typical use-case is the following:
@@ -9,20 +9,3 @@ network.  A typical use-case is the following:
    3. assign specific devices to the blueprint
    4. deploy the blueprint onto the devices
    5. obtain operational values about the blueprint
-
-Blueprint Collection
---------------------
-
-.. currentmodule:: apstra.aosom.amods.blueprints
-
-.. autoclass:: Blueprints
-   :members:
-   :inherited-members:
-
-Blueprint Item
---------------
-
-.. autoclass:: BlueprintCollectionItem
-   :members:
-   :inherited-members:
-

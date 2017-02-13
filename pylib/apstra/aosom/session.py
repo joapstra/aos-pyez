@@ -28,8 +28,8 @@ class Session(DynamicModuleOwner):
         aos.login()                                   # username/password uses defaults
 
         print aos.api.version
-        # >>> {u'major': u'1', u'version': u'1.0',
-                'semantic': Version('1.0', partial=True), u'minor': u'0'}
+        >>> {u'major': u'1', u'version': u'1.0',
+             'semantic': Version('1.0', partial=True), u'minor': u'0'}
 
     This module will use your environment variables to provide the default login values,
     if they are set.  Refer to :data:`~Session.ENV` for specific values.
@@ -77,30 +77,38 @@ class Session(DynamicModuleOwner):
         environment, as defined in :data:`~Session.ENV`.  Once a Session instance has been
         created, the caller can complete the login process by invoking :meth:`login`.
 
-        Args:
-            server (str): the hostname or ip-addr of the AOS-server.
-
-        Keyword Args:
-            user (str): the login user-name
-            passwd (str): the login password
-            port (int): the AOS-server API port
+        Parameters
+        ----------
+        server : str
+            IP-address or hostname of the AOS server
+        user : str
+            User login name
+        passwd : str
+            User login password
+        port : int
+            AOS-server API port
         """
         self.user, self.passwd = (None, None)
         self.server, self.port = (server, None)
         self.api = Session.Api()
         self._set_login(server=server, **kwargs)
 
+    # ### ---------------------------------------------------------------------
+    # ### PROPERTY: url
+    # ### ---------------------------------------------------------------------
+
     @property
     def url(self):
         """
-        Property to return the current AOS-server API URL.  If this value is
+        Returns
+        -------
+        Return the current AOS-server API URL.  If this value is
         not set, then an exception is raised.  The raise here is important
         because other code depends on this behavior.
 
-        Returns: (str) API URL
-
-        Raises:
-            - NoLoginError: URL does not exist
+        Raises
+        ------
+        NoLoginError: URL does not exist
         """
         if not self.api.url:
             raise NoLoginError(
@@ -108,26 +116,47 @@ class Session(DynamicModuleOwner):
 
         return self.api.url
 
+    # ### ---------------------------------------------------------------------
+    # ### PROPERTY: token
+    # ### ---------------------------------------------------------------------
+
     @property
     def token(self):
         """
-        Returns: (str) - authentication token from login/resume
+        Returns
+        -------
+        str
+            Authentication token from existing session.
 
-        Raises:
-            - NoLoginError: if no token is present
+        Raises
+        ------
+        NoLoginError
+            When no token is present.
+
         """
         try:
             return self.api.token
         except:
             raise NoLoginError()
 
+    # ### ---------------------------------------------------------------------
+    # ### PROPERTY: session
+    # ### ---------------------------------------------------------------------
+
     @property
     def session(self):
         """
-        Returns the 'session' information that can be later used to to resume
-        a previous token-session
+        When used as a `setter` attempts to resume an existing session with the AOS-server using the provided session
+        data. If there is an error, an exception is raised.
 
-        Returns: (dict) containing session information required 'resume'
+        Returns
+        -------
+        dict
+            The session data that can be used for a future resume.
+
+        Raises
+        ------
+            See the :meth:`login` for details.
         """
         return {
             'server': self.server,
@@ -137,16 +166,6 @@ class Session(DynamicModuleOwner):
 
     @session.setter
     def session(self, prev_session):
-        """
-        Attempts to resume an existing session with the AOS-server using the
-        provided session data.  If there is an error, an exception is raised.
-
-        Args:
-            prev_session (dict): previous session data
-
-        Raises:
-            See Session.Api.resume for list of exceptions
-        """
         try:
             self.server = prev_session['server']
             self.port = prev_session['port']
@@ -169,15 +188,19 @@ class Session(DynamicModuleOwner):
         Login to the AOS-server, obtaining a session token for use with later
         calls to the API.
 
-        Raises:
-            - LoginNoServerError:
-                when the instance does not have :attr:`server` configured
+        Raises
+        ------
+        LoginAuthError
+            The provided user credentials are not valid.  Check the user/password
+            or session token values provided.
 
-            - LoginServerUnreachableError:
-                when the API is not able to connect to the AOS-server via the API.
-                This could be due to any number of networking related issues.
-                For example, the :attr:`port` is blocked by a firewall, or the :attr:`server`
-                value is IP unreachable.
+        LoginServerUnreachableError
+            The API is not able to connect to the AOS-server via the API. This
+            could be due to any number of networking related issues. For example,
+            the :attr:`port` is blocked by a firewall, or the :attr:`server` value is IP unreachable.
+
+        LoginNoServerError
+            The instance does not have :attr:`server` configured.
         """
         if not self.server:
             raise LoginNoServerError()

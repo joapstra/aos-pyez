@@ -116,8 +116,10 @@ class TestCollectionItems(AosPyEzCommonTestCase):
             self.fail("DuplicateError not raised as expected")
 
         # now change the label value and re-attempt the create
+        # remove the 'label' from the saved data to exercise the codepath
+
         new_value = json_data[1]
-        new_value[ip_pools.LABEL] = new_item.name
+        del new_value[ip_pools.LABEL]
 
         self.adapter.register_uri('POST', ip_pools.url, status_code=201, json={'id': 'fake_id'})
         new_item.create(value=new_value)

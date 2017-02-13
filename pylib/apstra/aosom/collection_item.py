@@ -167,13 +167,15 @@ class CollectionItem(object):
         Creates a new item using the `value` provided.
 
         Args:
-            value (dict): item value dictionary.
-            replace (bool): determine if this method should replace and
-                existing item with the same name
+            value (dict):
+                item value dictionary.
+            replace (bool):
+                determine if this method should replace and
+                existing item with the same name.
 
         Raises:
-            SessionError: upon any HTTP request issue.
-            DuplicateError: attempting to create an existing item
+            - SessionError: upon any HTTP request issue.
+            - DuplicateError: attempting to create an existing item
 
         Returns:
             the instance to the new collection item
@@ -200,9 +202,14 @@ class CollectionItem(object):
         if value is not None:
             self.datum = copy(value)
 
-        # now check to see if the new value/name exists
+        # now check to see if the new value/name exists.  if the datum
+        # does not include the lable value, we need to auto-set it from
+        # the instance name value.
 
         new_name = self.datum.get(self.collection.LABEL)
+        if not new_name:
+            self.datum[self.collection.LABEL] = self.name
+
         if new_name in self.collection:
             throw_duplicate(new_name)
 
