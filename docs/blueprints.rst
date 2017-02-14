@@ -1,3 +1,5 @@
+.. _blueprints:
+
 Managing Blueprints
 -------------------
 

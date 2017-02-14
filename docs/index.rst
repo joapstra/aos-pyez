@@ -25,7 +25,9 @@ Guide
 
     install
     quickstart
-    general
+    session
+    devices
+    collections
     resources
     design
     blueprints
@@ -39,6 +41,7 @@ API Reference
     :maxdepth: 1
 
     apidoc/session
+    apidoc/devices
     apidoc/collections
     apidoc/blueprints
 

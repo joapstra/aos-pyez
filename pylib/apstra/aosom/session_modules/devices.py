@@ -12,17 +12,42 @@ __all__ = ['DeviceManager']
 
 
 class DeviceItem(CollectionItem):
-
     @property
     def state(self):
+        """
+        Returns
+        -------
+        str
+            current AOS management state value, e.g. "IS-ACTIVE", meaning "In service, Active".
+        """
         return self.value['status']['state']
 
     @property
     def is_approved(self):
+        """
+        Returns
+        -------
+        True if this device is approved
+        False otherwise
+        """
         return bool(self.id in self.collection.approved.ids)
 
     @property
     def user_config(self):
+        """
+        As a **getter** returns the current `user_config` dictionary of values.
+        As a **setter** provides the ability to set the `user_config` values.
+
+        Returns
+        -------
+        dict
+            The 'user_config' dictionary of values
+
+        Raises
+        ------
+        SessionRqstError
+            when error occurs in setting the `user_config` value
+        """
         self.read()
         return self.value.get('user_config')
 
@@ -38,7 +63,25 @@ class DeviceItem(CollectionItem):
                 resp=got)
 
     def approve(self, location=None):
+        """
+        Approves this device for use by the AOS system.  If the device is already approved, then this
+        method will return False.
 
+        Parameters
+        ----------
+        location : str
+            optional User value that can be used to identify where this device is located in the network.
+
+        Returns
+        -------
+        True if the device is approved
+        False if the device does not need to be approved
+
+        Raises
+        ------
+        SessionRqstError
+            An error has occurred attempting to make the approve request with the AOS Server API
+        """
         if self.state != 'OOS-QUARANTINED':
             return False
 
