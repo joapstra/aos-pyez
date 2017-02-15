@@ -5,19 +5,14 @@
 
 
 import os
-import datetime
-import socket
-import time
-
-
-from copy import copy
-
-import requests
-import semantic_version
 
 from apstra.aosom.dynmodldr import DynamicModuleOwner
-from apstra.aosom.exc import NoLoginError, LoginAuthError, LoginNoServerError
-from apstra.aosom.exc import LoginServerUnreachableError
+
+from apstra.aosom.exc import (
+    LoginServerUnreachableError, LoginError,
+    NoLoginError, LoginNoServerError)
+
+from .session_api import Api
 
 __all__ = ['Session']
 
@@ -33,7 +28,8 @@ class Session(DynamicModuleOwner):
         aos.login()                                   # username/password uses defaults
 
         print aos.api.version
-        >>> {u'major': u'1', u'version': u'1.0', 'semantic': Version('1.0', partial=True), u'minor': u'0'}
+        >>> {u'major': u'1', u'version': u'1.0',
+             'semantic': Version('1.0', partial=True), u'minor': u'0'}
 
     This module will use your environment variables to provide the default login values,
     if they are set.  Refer to :data:`~Session.ENV` for specific values.
@@ -57,9 +53,6 @@ class Session(DynamicModuleOwner):
     """
     DYNMODULEDIR = '.session_modules'
 
-
-    #    ModuleCatalog = AosModuleCatalog.keys()
-
     ENV = {
         'SERVER': 'AOS_SERVER',
         'PORT': 'AOS_SERVER_PORT',
@@ -74,40 +67,7 @@ class Session(DynamicModuleOwner):
         'PORT': 8888
     }
 
-    class Api(object):
-        def __init__(self):
-            self.url = None
-            self.version = None
-            self.semantic_ver = None
-            self.headers = {}
-
-        def set_url(self, server, port):
-            self.url = "http://{server}:{port}/api".format(server=server, port=port)
-
-        def resume(self, url, headers):
-            self.url = copy(url)
-            self.headers = copy(headers)
-            self.get_ver()
-
-        def login(self, user, passwd):
-            rsp = requests.post(
-                "%s/user/login" % self.url,
-                json=dict(username=user, password=passwd))
-
-            if not rsp.ok:
-                raise LoginAuthError()
-
-            self.accept_token(rsp.json()['token'])
-            self.get_ver()
-
-        def get_ver(self):
-            got = requests.get("%s/versions/api" % self.url)
-            self.version = copy(got.json())
-            self.version['semantic'] = semantic_version.Version(self.version['version'], partial=True)
-            return self.version
-
-        def accept_token(self, token):
-            self.headers['AUTHTOKEN'] = token
+    Api = Api
 
     def __init__(self, server=None, **kwargs):
         """
@@ -117,26 +77,105 @@ class Session(DynamicModuleOwner):
         environment, as defined in :data:`~Session.ENV`.  Once a Session instance has been
         created, the caller can complete the login process by invoking :meth:`login`.
 
-        Args:
-            server (str): the hostname or ip-addr of the AOS-server.
-
-        Keyword Args:
-            user (str): the login user-name
-            passwd (str): the login password
-            port (int): the AOS-server API port
+        Parameters
+        ----------
+        server : str
+            IP-address or hostname of the AOS server
+        user : str
+            User login name
+        passwd : str
+            User login password
+        port : int
+            AOS-server API port
         """
         self.user, self.passwd = (None, None)
         self.server, self.port = (server, None)
         self.api = Session.Api()
         self._set_login(server=server, **kwargs)
 
+    # ### ---------------------------------------------------------------------
+    # ### PROPERTY: url
+    # ### ---------------------------------------------------------------------
+
     @property
     def url(self):
+        """
+        Returns
+        -------
+        Return the current AOS-server API URL.  If this value is
+        not set, then an exception is raised.  The raise here is important
+        because other code depends on this behavior.
+
+        Raises
+        ------
+        NoLoginError: URL does not exist
+        """
         if not self.api.url:
             raise NoLoginError(
                 "not logged into server '{}:{}'".format(self.server, self.port))
 
         return self.api.url
+
+    # ### ---------------------------------------------------------------------
+    # ### PROPERTY: token
+    # ### ---------------------------------------------------------------------
+
+    @property
+    def token(self):
+        """
+        Returns
+        -------
+        str
+            Authentication token from existing session.
+
+        Raises
+        ------
+        NoLoginError
+            When no token is present.
+
+        """
+        try:
+            return self.api.token
+        except:
+            raise NoLoginError()
+
+    # ### ---------------------------------------------------------------------
+    # ### PROPERTY: session
+    # ### ---------------------------------------------------------------------
+
+    @property
+    def session(self):
+        """
+        When used as a `setter` attempts to resume an existing session with the AOS-server using the provided session
+        data. If there is an error, an exception is raised.
+
+        Returns
+        -------
+        dict
+            The session data that can be used for a future resume.
+
+        Raises
+        ------
+            See the :meth:`login` for details.
+        """
+        return {
+            'server': self.server,
+            'port': self.port,
+            'token': self.token
+        }
+
+    @session.setter
+    def session(self, prev_session):
+        try:
+            self.server = prev_session['server']
+            self.port = prev_session['port']
+            token = prev_session['token']
+        except KeyError as exc:
+            raise LoginError("Invalid session data, missing '{}'".format(exc.message))
+
+        self.api.set_url(self.server, self.port)
+        self.api.token = token
+        self.api.resume()
 
     # ### ---------------------------------------------------------------------
     # ###
@@ -149,26 +188,28 @@ class Session(DynamicModuleOwner):
         Login to the AOS-server, obtaining a session token for use with later
         calls to the API.
 
-        Raises:
-            LoginNoServerError:
-                when the instance does not have :attr:`server` configured
+        Raises
+        ------
+        LoginAuthError
+            The provided user credentials are not valid.  Check the user/password
+            or session token values provided.
 
-            LoginServerUnreachableError:
-                when the API is not able to connect to the AOS-server via the API.
-                This could be due to any number of networking related issues.
-                For example, the :attr:`port` is blocked by a firewall, or the :attr:`server`
-                value is IP unreachable.
+        LoginServerUnreachableError
+            The API is not able to connect to the AOS-server via the API. This
+            could be due to any number of networking related issues. For example,
+            the :attr:`port` is blocked by a firewall, or the :attr:`server` value is IP unreachable.
 
-        Returns:
-            None
+        LoginNoServerError
+            The instance does not have :attr:`server` configured.
         """
         if not self.server:
             raise LoginNoServerError()
 
-        if not self._probe():
+        self.api.set_url(server=self.server, port=self.port)
+
+        if not self.api.probe():
             raise LoginServerUnreachableError()
 
-        self.api.set_url(server=self.server, port=self.port)
         self.api.login(self.user, self.passwd)
 
     # ### ---------------------------------------------------------------------
@@ -178,36 +219,22 @@ class Session(DynamicModuleOwner):
     # ### ---------------------------------------------------------------------
 
     def _set_login(self, **kwargs):
+        """
+        Used to configure login parameters.
+
+        Args:
+            **kwargs: see __init__ for details
+        """
         self.server = kwargs.get('server') or os.getenv(Session.ENV['SERVER'])
 
         self.port = kwargs.get('port') or \
             os.getenv(Session.ENV['PORT']) or \
-                    Session.DEFAULTS['PORT']
+            Session.DEFAULTS['PORT']
 
         self.user = kwargs.get('user') or \
             os.getenv(Session.ENV['USER']) or \
-                    Session.DEFAULTS['USER']
+            Session.DEFAULTS['USER']
 
         self.passwd = kwargs.get('passwd') or \
             os.getenv(Session.ENV['PASSWD']) or \
-                      Session.DEFAULTS['PASSWD']
-
-    def _probe(self, timeout=5, intvtimeout=1):
-        start = datetime.datetime.now()
-        end = start + datetime.timedelta(seconds=timeout)
-
-        while datetime.datetime.now() < end:
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.settimeout(intvtimeout)
-            try:
-                s.connect((self.server, int(self.port)))
-                s.shutdown(socket.SHUT_RDWR)
-                s.close()
-                return True
-            except socket.error:
-                time.sleep(1)
-                pass
-        else:
-            # elapsed = datetime.datetime.now() - start
-            return False
-
+            Session.DEFAULTS['PASSWD']

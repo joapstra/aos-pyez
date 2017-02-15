@@ -1,18 +1,20 @@
-import requests
+# Copyright 2014-present, Apstra, Inc. All rights reserved.
+#
+# This source code is licensed under End User License Agreement found in the
+# LICENSE file at http://www.apstra.com/community/eula
+
 import json
 from operator import itemgetter
 from copy import copy
 
-import semantic_version
-
-from apstra.aosom.valuexf import CollectionValueTransformer
+from apstra.aosom.collection_mapper import CollectionMapper
 from apstra.aosom.exc import SessionRqstError
 
 __all__ = ['BlueprintItemParamsCollection']
 
 
 class BlueprintItemParamsItem(object):
-    Transformer = CollectionValueTransformer
+    Transformer = CollectionMapper
 
     def __init__(self, blueprint, name, datum):
         self.api = blueprint.api
@@ -66,7 +68,7 @@ class BlueprintItemParamsItem(object):
         Raises:
             SesssionRqstError - upon API request error
         """
-        got = requests.put(self.url, headers=self.api.headers, json=replace_value)
+        got = self.api.requests.put(self.url, json=replace_value)
         if not got.ok:
             raise SessionRqstError(
                 message='unable to write slot: %s' % self.name,
@@ -81,7 +83,7 @@ class BlueprintItemParamsItem(object):
         Returns:
             The value, as a dict, of the parameter.
         """
-        got = requests.get(self.url, headers=self.api.headers)
+        got = self.api.requests.get(self.url)
         if not got.ok:
             raise SessionRqstError(
                 resp=got,
@@ -101,7 +103,7 @@ class BlueprintItemParamsItem(object):
     def update(self, merge_value):
         """
         This method will issue a PATCH to the slot value so that the caller can merge the
-        provided :param:`merge_value` with the existing value.  Once the PATCH completes,
+        provided `merge_value` with the existing value.  Once the PATCH completes,
         this method with then invoke :meth:`read` to retrieve the fully updated value.
 
         Args:
@@ -110,7 +112,7 @@ class BlueprintItemParamsItem(object):
         Raises:
             SessionRqstError - if error with API request
         """
-        got = requests.patch(self.url, headers=self.api.headers, json=merge_value)
+        got = self.api.requests.patch(self.url, json=merge_value)
         if not got.ok:
             raise SessionRqstError(
                 message='unable to patch slot: %s' % self.name,
@@ -147,6 +149,24 @@ class BlueprintItemParamsCollection(object):
         self._cache = {}
 
     @property
+    def url(self):
+        return "%s/slots" % self.blueprint.url
+
+    @property
+    def cache(self):
+        """
+        This property returns the collection digest.  If collection does not have a cached
+        digest, then the :func:`digest` is called to create the cache.
+
+        Returns:
+            The collection digest current in cache
+        """
+        if not self._cache:
+            self.digest()
+
+        return self._cache
+
+    @property
     def names(self):
         if not self._cache:
             self.digest()
@@ -154,16 +174,14 @@ class BlueprintItemParamsCollection(object):
         return self._cache['names']
 
     def digest(self):
-        got = requests.get("%s/slots" % self.blueprint.url, headers=self.api.headers)
+        got = self.api.requests.get(self.url)
         if not got.ok:
             raise SessionRqstError(resp=got, message="error fetching slots")
 
         get_name = itemgetter('name')
 
         body = got.json()
-        aos_1_0 = semantic_version.Version('1.0', partial=True)
-
-        self._cache['list'] = body['items'] if self.api.version['semantic'] > aos_1_0 else body
+        self._cache['list'] = body['items']
         self._cache['names'] = map(get_name, self._cache['list'])
         self._cache['by_name'] = {get_name(i): i for i in self._cache['list']}
 

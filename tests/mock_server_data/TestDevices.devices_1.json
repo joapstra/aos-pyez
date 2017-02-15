@@ -1,0 +1,30 @@
+{
+  "status": "in_use", 
+  "display_name": "Default Pool", 
+  "tags": [], 
+  "created_at": "1970-01-01T00:00:00.000000Z", 
+  "devices": [
+    {
+      "status": "pool_element_in_use", 
+      "id": "MDgwMDI3MzdDMkMx"
+    }, 
+    {
+      "status": "pool_element_in_use", 
+      "id": "MDgwMDI3NjNDQkRD"
+    }, 
+    {
+      "status": "pool_element_in_use", 
+      "id": "MDgwMDI3NzAyNUM4"
+    }, 
+    {
+      "status": "pool_element_in_use", 
+      "id": "MDgwMDI3QTcxQUU2"
+    }, 
+    {
+      "status": "pool_element_in_use", 
+      "id": "MDgwMDI3QUM2MzIw"
+    }
+  ], 
+  "last_modified_at": "2017-01-28T20:06:17.523359Z", 
+  "id": "default_pool"
+}

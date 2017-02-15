@@ -4,9 +4,18 @@
 # LICENSE file at http://www.apstra.com/community/eula
 
 from apstra.aosom.collection import Collection
+from apstra.aosom.collection_item import CollectionItem
 
 __all__ = ['IpPools']
 
 
+class IpPoolItem(CollectionItem):
+
+    @property
+    def in_use(self):
+        return self.value['status'] == "in_use"
+
+
 class IpPools(Collection):
-    RESOURCE_URI = 'resources/ip-pools'
+    Item = IpPoolItem
+    URI = 'resources/ip-pools'

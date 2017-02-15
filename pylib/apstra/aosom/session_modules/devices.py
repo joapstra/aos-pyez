@@ -3,34 +3,58 @@
 # This source code is licensed under End User License Agreement found in the
 # LICENSE file at http://www.apstra.com/community/eula
 
-import requests
 import retrying
 
-from apstra.aosom.exc import SessionRqstError, SessionError
+from apstra.aosom.exc import SessionRqstError
 from apstra.aosom.collection import Collection, CollectionItem
 
 __all__ = ['DeviceManager']
 
 
 class DeviceItem(CollectionItem):
-
     @property
     def state(self):
+        """
+        Returns
+        -------
+        str
+            current AOS management state value, e.g. "IS-ACTIVE", meaning "In service, Active".
+        """
         return self.value['status']['state']
 
     @property
     def is_approved(self):
+        """
+        Returns
+        -------
+        True if this device is approved
+        False otherwise
+        """
         return bool(self.id in self.collection.approved.ids)
 
     @property
     def user_config(self):
+        """
+        As a **getter** returns the current `user_config` dictionary of values.
+        As a **setter** provides the ability to set the `user_config` values.
+
+        Returns
+        -------
+        dict
+            The 'user_config' dictionary of values
+
+        Raises
+        ------
+        SessionRqstError
+            when error occurs in setting the `user_config` value
+        """
         self.read()
         return self.value.get('user_config')
 
     @user_config.setter
     def user_config(self, value):
-        got = requests.put(
-            self.url, headers=self.api.headers,
+        got = self.api.requests.put(
+            self.url,
             json=dict(user_config=value))
 
         if not got.ok:
@@ -39,7 +63,25 @@ class DeviceItem(CollectionItem):
                 resp=got)
 
     def approve(self, location=None):
+        """
+        Approves this device for use by the AOS system.  If the device is already approved, then this
+        method will return False.
 
+        Parameters
+        ----------
+        location : str
+            optional User value that can be used to identify where this device is located in the network.
+
+        Returns
+        -------
+        True if the device is approved
+        False if the device does not need to be approved
+
+        Raises
+        ------
+        SessionRqstError
+            An error has occurred attempting to make the approve request with the AOS Server API
+        """
         if self.state != 'OOS-QUARANTINED':
             return False
 
@@ -63,18 +105,14 @@ class Approved(object):
         return [item['id'] for item in self.get_devices()]
 
     def get(self):
-        got = requests.get(self.url, headers=self.api.headers)
+        got = self.api.requests.get(self.url)
         if not got.ok:
             raise SessionRqstError(got)
 
         return got.json()
 
     def get_devices(self):
-        got = requests.get(self.url, headers=self.api.headers)
-        if not got.ok:
-            raise SessionRqstError(got)
-
-        return got.json()['devices']
+        return self.get()['devices']
 
     def update(self, device_keys):
         has_devices = self.get_devices()
@@ -93,11 +131,12 @@ class Approved(object):
             has_devices.append(dict(id=new_id))
 
         timeout = 3000
+
         @retrying.retry(wait_fixed=1000, stop_max_delay=timeout)
         def put_updated():
-            got = requests.put(self.url, headers=self.api.headers,
-                               json=dict(display_name='Default Pool',
-                                         devices=has_devices))
+            got = self.api.requests.put(
+                self.url, json=dict(display_name='Default Pool',
+                                    devices=has_devices))
 
             if not got.ok:
                 raise SessionRqstError(
@@ -108,8 +147,8 @@ class Approved(object):
 
 
 class DeviceManager(Collection):
-    RESOURCE_URI = 'systems'
-    DISPLAY_NAME = 'device_key'
+    URI = 'systems'
+    LABEL = 'device_key'
     Item = DeviceItem
 
     def __init__(self, owner):

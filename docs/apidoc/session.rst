@@ -1,5 +1,6 @@
+
 Session
-=======
+-------
 
 .. currentmodule:: apstra.aosom.session
 .. autoclass:: Session
@@ -9,5 +10,6 @@ Session
    .. autoattribute:: DEFAULTS
    .. autoattribute:: ModuleCatalog
 
-   .. automethod:: __init__
+
+
 

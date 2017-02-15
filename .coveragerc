@@ -1,0 +1,4 @@
+[report]
+omit =
+    pylib/__init__.py
+    pylib/apstra/__init__.py

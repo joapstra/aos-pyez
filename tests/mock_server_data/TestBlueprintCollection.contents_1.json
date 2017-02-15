@@ -1,0 +1,40 @@
+{
+   "display_name": "demo-vpod-l3", 
+   "reference_architecture": "two_stage_l3clos", 
+   "spine_count": 2, 
+   "last_modified_at": "2017-02-07T14:24:38.639506Z", 
+   "server_count": 15, 
+   "leaf_count": 3, 
+   "edge_ip_connectivity": "l3", 
+   "anomaly_counts": {
+      "arp": 0, 
+      "all": 0, 
+      "mlag": 0, 
+      "cabling": 0, 
+      "route": 0, 
+      "lag": 0, 
+      "deployment": 0, 
+      "bgp": 0, 
+      "mac": 0, 
+      "headroom": 0, 
+      "blueprint_rendering": 0, 
+      "interface": 0, 
+      "liveness": 0, 
+      "config": 0, 
+      "hostname": 0, 
+      "counter": 0
+   }, 
+   "id": "30cd9032-35f2-4532-8543-dc24fc8ec7cd", 
+   "deployment_status": {
+      "service_config": {
+         "num_succeeded": 5, 
+         "num_failed": 0, 
+         "num_pending": 0
+      }, 
+      "discovery2_config": {
+         "num_succeeded": 0, 
+         "num_failed": 0, 
+         "num_pending": 0
+      }
+   }
+}

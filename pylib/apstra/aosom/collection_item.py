@@ -7,10 +7,8 @@ from os import path
 from copy import copy
 import json
 
-import requests
 
-from apstra.aosom.exc import SessionRqstError, SessionError
-from apstra.aosom.exc import NoExistsError, DuplicateError
+from apstra.aosom.exc import SessionRqstError, NoExistsError, DuplicateError
 
 
 # #############################################################################
@@ -112,11 +110,11 @@ class CollectionItem(object):
         """
         Used to delete the item from the AOS-server.  For example:
 
-            >>> del aos.IpPools['Servers-IpAddrs'].value
+        #    >>> del aos.IpPools['Servers-IpAddrs'].value
 
         Another way to do:
 
-            >>> aos.IpPools['Servers-IpAddrs'].delete()
+        #    >>> aos.IpPools['Servers-IpAddrs'].delete()
         """
         self.delete()
 
@@ -134,12 +132,10 @@ class CollectionItem(object):
             SessionRqstError: upon HTTP request issue
         """
         if not self.exists:
-            return self.create(value)
+            return self.create(value=value)
 
-        got = requests.put(
-            self.url,
-            headers=self.api.headers,
-            json=value or self.datum)
+        got = self.api.requests.put(
+            self.url, json=value or self.datum)
 
         if not got.ok:
             raise SessionRqstError(
@@ -157,7 +153,7 @@ class CollectionItem(object):
 
         Returns: a copy of the item value, usually a :class:`dict`.
         """
-        got = requests.get(self.url, headers=self.api.headers)
+        got = self.api.requests.get(self.url)
         if not got.ok:
             raise SessionRqstError(
                 resp=got,
@@ -171,13 +167,15 @@ class CollectionItem(object):
         Creates a new item using the `value` provided.
 
         Args:
-            value (dict): item value dictionary.
-            replace (bool): determine if this method should replace and
-                existing item with the same name
+            value (dict):
+                item value dictionary.
+            replace (bool):
+                determine if this method should replace and
+                existing item with the same name.
 
         Raises:
-            SessionError: upon any HTTP request issue.
-            DuplicateError: attempting to create an existing item
+            - SessionError: upon any HTTP request issue.
+            - DuplicateError: attempting to create an existing item
 
         Returns:
             the instance to the new collection item
@@ -189,7 +187,7 @@ class CollectionItem(object):
 
         def throw_duplicate(name):
             raise DuplicateError("'{}' already exists in collection: {}.".format(
-                name, self.collection.RESOURCE_URI))
+                name, self.collection.URI))
 
         if self.exists:
             if not replace:
@@ -201,21 +199,24 @@ class CollectionItem(object):
         # could have already assigned it into the :prop:`datum`.  This
         # latter approach should be discouraged.
 
-        if value:
+        if value is not None:
             self.datum = copy(value)
 
-        # now check to see if the new value/name exists
+        # now check to see if the new value/name exists.  if the datum
+        # does not include the lable value, we need to auto-set it from
+        # the instance name value.
 
-        new_name = self.datum.get(self.collection.DISPLAY_NAME)
+        new_name = self.datum.get(self.collection.LABEL)
+        if not new_name:
+            self.datum[self.collection.LABEL] = self.name
+
         if new_name in self.collection:
             throw_duplicate(new_name)
 
         # at this point we should be good to execute the POST and
         # create the new item in the server
 
-        got = requests.post(self.collection.url,
-                            headers=self.api.headers,
-                            json=self.datum)
+        got = self.api.requests.post(self.collection.url, json=self.datum)
 
         if not got.ok:
             raise SessionRqstError(
@@ -239,7 +240,7 @@ class CollectionItem(object):
             SessionRqstError - when API error
             NoExistsError - when item does not actually exist
         """
-        got = requests.delete(self.url, headers=self.api.headers)
+        got = self.api.requests.delete(self.url)
         if not got.ok:
             raise SessionRqstError(
                 message='unable to delete item: %s' % got.reason,
