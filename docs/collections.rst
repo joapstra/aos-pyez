@@ -126,7 +126,7 @@ add and remove items.  Other methods are described in the Collection-Item guide 
 Updating Collection Digest
 --------------------------
 If you need to update the aos-pyez collection data from the AOS-Server, for example, you're anticipating a change
-to the AOS-Server outside your program, then you can invole the collection :meth:`digest` method.  This method
+to the AOS-Server outside your program, then you can invoke the collection :meth:`digest` method.  This method
 will query the AOS-Server for what it knows, and rebuild the internal collection cache.
 
 Pretty-Printing

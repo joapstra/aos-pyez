@@ -103,7 +103,7 @@ class BlueprintItemParamsItem(object):
     def update(self, merge_value):
         """
         This method will issue a PATCH to the slot value so that the caller can merge the
-        provided :param:`merge_value` with the existing value.  Once the PATCH completes,
+        provided `merge_value` with the existing value.  Once the PATCH completes,
         this method with then invoke :meth:`read` to retrieve the fully updated value.
 
         Args:

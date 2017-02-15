@@ -17,6 +17,11 @@ This version of the aos-pyez supports all AOS 1.1 managed design elements:
     * Logical Device Maps
     * Rack Types
 
+For this version of aos-pyez you are able to manage design elements as a collection, as described in the
+:ref:`collections` guide pages.  As a practical matter, you would use the AOS-Server UI to create these elements.  You
+can then use the aos-pyez library to use the Template designs as part of building a Blueprint.
+Alternatively you could use the aos-pyez library to load the item contents from saved JSON files and create them in
+the AOS-Server.
 
 .. _design_template:
 
@@ -32,11 +37,6 @@ to a specific network equipment vendor or network operating system (NOS). When y
 Template, you can then assign into that Blueprint any specific vendor that provides for such a switch.  You create
 these design / build relationships using the other design elements such as Logical Devices, Logical Device Maps, and
 Rack Types.
-
-For this version of aos-pyez you are able to manage design Templates as a collection, as described in the
-:ref:`collections` guide pages.  As a practical matter, you would use the AOS-Server UI to architect your
-design Templates.  You can then use the aos-pyez library to use the Template designs as part of building a Blueprint.
-Alternatively you could use the library to create Logical Devices from saved JSON files.
 
 .. image:: static/aos-design-template.png
 
@@ -62,10 +62,6 @@ A typical example of a logical device is a a leaf switch with 48x10GE + 6x40GE p
 designated to connect to either servers or external-routers (for the case of 10GE router connections).  The 6x40GE
 ports would be designated as connecting leaf to spine, i.e. L3 Clos fabric ports.
 
-For this version of aos-pyez you are able to manage Logical Devices as a collection, as described in the
-:ref:`collections` guide pages.  As a practical matter, you would use the AOS-Server UI to create your
-logical devices.  Alternatively you could use the library to create Logical Devices from saved JSON files.
-
 .. image:: static/aos-logical-devices.png
 
 You can access the Logical Devices via the aos-pyez library by using the :attr:`LogicalDevices` property of the
@@ -88,10 +84,6 @@ switch running Cumulus Linux, you would create a specific logical device map for
 wanted to use a Cisco 9332 running NX-OS you would create another logical device for that purpose. Once you have
 logical device maps created, you can then use these to associate specific vendor equipment into a Blueprint.
 
-For this version of aos-pyez you are able to manage Logical Devices Maps as a collection, as described in the
-:ref:`collections` guide pages.  As a practical matter, you would use the AOS-Server UI to create your
-logical device maps.  Alternatively you could use the library to create Logical Device Maps from saved JSON files.
-
 .. image:: static/aos-logical-device-maps.png
 
 You can access the Logical Device Maps via the aos-pyez library by using the :attr:`LogicalDeviceMaps` property of the
@@ -113,10 +105,6 @@ the following properties:
     * Number of servers within the rack
     * Logical Device type of servers (modeling the number NICs)
     * The manner in which the server NICs are connected between rack leaf-switches
-
-For this version of aos-pyez you are able to manage Rack Types as a collection, as described in the
-:ref:`collections` guide pages.  As a practical matter, you would use the AOS-Server UI to create your
-rack types.  Alternatively you could use the library to create rack types from saved JSON files.
 
 .. image:: static/aos-rack-types.png
 

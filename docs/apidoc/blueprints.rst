@@ -1,4 +1,4 @@
-
+.. _api_blueprints:
 
 Blueprint Collection
 --------------------
@@ -7,12 +7,23 @@ Blueprint Collection
 
 .. autoclass:: Blueprints
    :members:
-   :inherited-members:
 
 Blueprint Item
 --------------
 
 .. autoclass:: BlueprintCollectionItem
    :members:
-   :inherited-members:
 
+.. currentmodule:: apstra.aosom.blueprint_modules.slot_params
+
+Blueprint Parameter Collection
+------------------------------
+
+.. autoclass:: BlueprintItemParamsCollection
+   :members:
+
+Blueprint Parameter Collection Item
+-----------------------------------
+
+.. autoclass:: BlueprintItemParamsItem
+   :members:

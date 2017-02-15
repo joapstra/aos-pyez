@@ -117,5 +117,10 @@ html_show_sourcelink = False
 html_show_sphinx = False
 html_show_copyright = True
 
+html_sidebars = {
+    '**': ['localtoc.html', 'relations.html', 'searchbox.html']
+}
+
+
 autodoc_member_order = 'bysource'
 

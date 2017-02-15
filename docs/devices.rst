@@ -117,4 +117,17 @@ AOS-Server with information so that a device will be recognized upon initial reg
 You can approve a given device via the aos-pyez library using the device instannce :meth:`approve` method.  This method
 takes an optional `location` parameter - this is an arbitrary string value you can use to
 identify where this device is located in the network, e.g. "rack-12, rack-unit-19".  For more details on this API
-refer to :ref:`api_devices`.
+refer to :ref:`api_devices`.  Example: ::
+
+    >>> dev = aos.Devices['080027F0E48A']
+    >>> dev.is_approved
+    False
+    >>> dev.approve(location='rack-12, ru=2')
+    True
+    >>> dev.is_approved
+    True
+
+After a device is approved, you can see the results on the AOS-Server UI, for example:
+
+.. image:: static/aos-dev-approve.png
+

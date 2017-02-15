@@ -56,10 +56,9 @@ addition to the Items properties documented there, the an IpPool item also suppo
 
 External Routers
 ----------------
-AOS currently does not manage the routers, but AOS Blueprint services need information about those routers.  For
-example, when using AOS to manage a L3 Clos , the Blueprint needs external router information to configure the
-attached switches and have the necessary information to gather the appropriate telemetry associated with the
-BGP session(s).
+AOS Blueprints need information about external routers.  For example, when using AOS to manage a L3 Clos , the
+Blueprint needs external router information to configure the attached switches and have the necessary information to
+gather the appropriate telemetry associated with the BGP session(s).
 
 You can access the External Routers resource via the aos-pyez library using the :attr:`ExternalRouters` property
 of the Session: ::
