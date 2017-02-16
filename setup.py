@@ -17,7 +17,7 @@ setup(
     name="aos-pyez",
     namespace_packages=['apstra'],
     url="https://github.com/Apstra/aos-pyez",
-    version="0.6.0",
+    version="0.6.1",
     author="Jeremy Schulman",
     author_email="jeremy@apstra.com",
     description=("Python wrapper library for Apstra AOS REST API "),
