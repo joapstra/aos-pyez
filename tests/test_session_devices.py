@@ -139,4 +139,3 @@ class TestDevices(AosPyEzCommonTestCase):
         self.adapter.register_uri('GET', dev.url, json=mock_dev_data)
         self.assertEquals(dev.services.names, mock_dev_service_list)
         self.assertEquals(str(mock_dev_service_list), str(dev.services))
-

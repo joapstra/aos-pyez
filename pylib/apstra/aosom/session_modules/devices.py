@@ -35,7 +35,6 @@ class DeviceServices(object):
 
 
 class DeviceItem(CollectionItem):
-
     @property
     def services(self):
         return DeviceServices(self)
