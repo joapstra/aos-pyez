@@ -3,7 +3,7 @@
 # This source code is licensed under End User License Agreement found in the
 # LICENSE file at http://www.apstra.com/community/eula
 
-
+from copy import copy
 from utils.common import *
 
 from apstra.aosom.exc import *
@@ -115,3 +115,27 @@ class TestDevices(AosPyEzCommonTestCase):
 
         self.adapter.register_uri('PUT', dev.url, json=do_approve)
         dev.approve(location=location)
+
+    @mock_server_json_data
+    def test_device_service_get(self, json_data):
+        dev = self.devs[self.devs.names[0]]
+
+        self.adapter.register_uri('GET', dev.url+"/lldp", json=json_data[0])
+        mock_lldp = json_data[0]['items']
+        lldp = dev.services['lldp']
+        self.assertEquals(lldp, mock_lldp)
+
+        self.adapter.register_uri('GET', dev.url+"/lldp", status_code=400)
+        try:
+            _ = dev.services['lldp']
+        except SessionRqstError:
+            pass
+        else:
+            self.fail("SessionRqstError not raised as expected")
+
+        mock_dev_data = copy(json_data[0]['items'][0])
+        mock_dev_service_list = [u'lldp', u'bgp', u'arp']
+        mock_dev_data['services'] = mock_dev_service_list
+        self.adapter.register_uri('GET', dev.url, json=mock_dev_data)
+        self.assertEquals(dev.services.names, mock_dev_service_list)
+        self.assertEquals(str(mock_dev_service_list), str(dev.services))

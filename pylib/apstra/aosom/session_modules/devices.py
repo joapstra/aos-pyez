@@ -11,7 +11,34 @@ from apstra.aosom.collection import Collection, CollectionItem
 __all__ = ['DeviceManager']
 
 
+class DeviceServices(object):
+    def __init__(self, device):
+        self.device = device
+
+    @property
+    def names(self):
+        if 'services' not in self.device.value:
+            self.device.read()
+        return self.device.value['services']
+
+    def __getitem__(self, service):
+        got = self.device.api.requests.get(self.device.url + "/%s" % service)
+        if not got.ok:
+            raise SessionRqstError(message="unable to retrieve service=%s" % service,
+                                   resp=got)
+        return got.json()['items']
+
+    def __str__(self):
+        return str(self.names)
+
+    __repr__ = __str__
+
+
 class DeviceItem(CollectionItem):
+    @property
+    def services(self):
+        return DeviceServices(self)
+
     @property
     def state(self):
         """

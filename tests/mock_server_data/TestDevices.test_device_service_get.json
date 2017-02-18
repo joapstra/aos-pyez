@@ -1,0 +1,79 @@
+{"items": [
+  {
+    "status": "ok", 
+    "last_fetched_at": "2017-02-16T21:56:42.649907Z", 
+    "actual": {
+      "neighbor_system_id": "leaf-1", 
+      "neighbor_interface_name": "Ethernet7"
+    }, 
+    "last_modified_at": "2017-02-16T21:56:42.649907Z", 
+    "role": "spine_leaf", 
+    "expected": {
+      "neighbor_system_id": "leaf-1", 
+      "neighbor_interface_name": "Ethernet7"
+    }, 
+    "system_id": "080027BBC39E", 
+    "type": "lldp", 
+    "identity": {
+      "interface_name": "swp2", 
+      "system_description": "Arista Networks EOS version 4.16.6M running on an Arista Networks vEOS"
+    }
+  }, 
+  {
+    "status": "unintended", 
+    "last_fetched_at": "2017-02-16T21:56:42.650008Z", 
+    "actual": {
+      "neighbor_system_id": "ext-router", 
+      "neighbor_interface_name": "swp4"
+    }, 
+    "last_modified_at": "2017-02-16T21:56:42.650008Z", 
+    "role": "unknown", 
+    "system_id": "080027BBC39E", 
+    "type": "lldp", 
+    "identity": {
+      "interface_name": "swp1", 
+      "system_description": "Cumulus Linux version 2.5.6 running on innotek GmbH VirtualBox"
+    }
+  }, 
+  {
+    "status": "ok", 
+    "last_fetched_at": "2017-02-16T21:56:42.650009Z", 
+    "actual": {
+      "neighbor_system_id": "leaf-2", 
+      "neighbor_interface_name": "swp7"
+    }, 
+    "last_modified_at": "2017-02-16T21:56:42.650009Z", 
+    "role": "spine_leaf", 
+    "expected": {
+      "neighbor_system_id": "leaf-2", 
+      "neighbor_interface_name": "swp7"
+    }, 
+    "system_id": "080027BBC39E", 
+    "type": "lldp", 
+    "identity": {
+      "interface_name": "swp3", 
+      "system_description": "Cumulus Linux version 3.1.1 running on innotek GmbH VirtualBox"
+    }
+  }, 
+  {
+    "status": "ok", 
+    "last_fetched_at": "2017-02-16T21:56:42.650010Z", 
+    "actual": {
+      "neighbor_system_id": "leaf-3", 
+      "neighbor_interface_name": "swp7"
+    }, 
+    "last_modified_at": "2017-02-16T21:56:42.650010Z", 
+    "role": "spine_leaf", 
+    "expected": {
+      "neighbor_system_id": "leaf-3", 
+      "neighbor_interface_name": "swp7"
+    }, 
+    "system_id": "080027BBC39E", 
+    "type": "lldp", 
+    "identity": {
+      "interface_name": "swp4", 
+      "system_description": "Cumulus Linux version 3.1.1 running on innotek GmbH VirtualBox"
+    }
+  }
+]
+}
