@@ -6,55 +6,42 @@
 
 import jmespath
 from lollipop import types as lt
-from apstra.aosom.views import ViewHandler
-
-from apstra.aosom.session_modules import ip_pools as module
+from apstra.aosom.views.handler import FileView, ApiView, ViewBroker
 from apstra.aosom.schemas import ip_pool as schema
 
 __all__ = ['IpPoolView']
 
-# using jmespath to parse/transform data.  precompile the expressions
-# that we will be using.  'a->v' means transform from AOS to View and
-# 'v->a' means transform from View to AOS.  #dope
 
-_jpc_subnets = {
-    'a->v': jmespath.compile('subnets[].network'),
-    'v->a': jmespath.compile('subnets[].{network: @}')
-}
+class _IpPoolApiView(ApiView):
+    Schema = schema.IpPool
 
-
-class IpPoolView(ViewHandler):
-
-    Api = schema.IpPool
-    Module = module.IpPools
-
-    # -------------------------------------------------------------------------
-    # AOS -> View
-    # -------------------------------------------------------------------------
-    # The View schema defines the structure of the content and provides
-    # the functions to convert the API data to the view schema
-    # -------------------------------------------------------------------------
-
-    View = lt.Object({
-        'name': lt.FunctionField(
-            lt.String(),
-            lambda api: api[module.IpPools.LABEL]),
-
-        'subnets': lt.FunctionField(
-            lt.List(lt.String()),
-            lambda api: _jpc_subnets['a->v'].search(api))})
-
-    # -------------------------------------------------------------------------
-    # View -> AOS
-    # -------------------------------------------------------------------------
-    # The ViewHandler must implement the property names defined by the AOS
-    # API schema.
-    # -------------------------------------------------------------------------
+    _jpc_subnets = jmespath.compile('subnets[].{network: @}')
 
     @property
     def display_name(self):
-        return self.data['name']
+        return self.import_item['name']
 
     @property
     def subnets(self):
-        return _jpc_subnets['v->a'].search(self.data)
+        return self._jpc_subnets.search(self.import_item)
+
+
+class _IpPoolFileView(FileView):
+    Schema = lt.Object({
+        'name': lt.String(),
+        'subnets': lt.List(lt.String())})
+
+    _jpc_subnets = jmespath.compile('subnets[].network')
+
+    @property
+    def name(self):
+        return self.import_item['display_name']
+
+    @property
+    def subnets(self):
+        return self._jpc_subnets.search(self.import_item)
+
+
+class IpPoolView(ViewBroker):
+    Api = _IpPoolApiView
+    File = _IpPoolFileView

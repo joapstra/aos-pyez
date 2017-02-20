@@ -2,3 +2,5 @@ pyyaml
 requests
 retrying
 semantic_version
+jmespath
+lollipop

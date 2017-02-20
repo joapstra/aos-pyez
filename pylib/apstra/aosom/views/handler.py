@@ -4,61 +4,80 @@
 # LICENSE file at http://www.apstra.com/community/eula
 
 
-from copy import copy
 import yaml
-import json
-import contextlib
 
-__all__ = ['ViewHandler']
-
-
-class ViewHandlerType(type):
-    """
-    This type is used to metaclass the ViewHandler.  The general purpose
-    is so that when someone subclasses ViewHandler, the schema will be
-    auto-constructed using the subclass class.
-    """
-    def __new__(mcs, name, bases, cls_dict):
-        new_cls = type.__new__(mcs, name, bases, cls_dict)
-
-        view_schema = cls_dict['View']
-        if view_schema:
-            view_schema._constructor = lambda **kw: new_cls(**kw)
-
-        return new_cls
+__all__ = [
+    'FileView',
+    'ApiView',
+    'ViewBroker'
+]
 
 
-class ViewHandler(object):
-    __metaclass__ = ViewHandlerType
+class FileView(object):
+    Schema = None
 
+    def __init__(self, broker):
+        self._broker = broker
+        self.import_item = None
+        self.export_item = dict()
+
+    def clear(self):
+        self.export_item.clear()
+        self.import_item = None
+
+    def __getitem__(self, item):
+        return self.export_item[item]
+
+
+class ApiView(object):
+    Schema = None
+
+    def __init__(self, broker):
+        self._broker = broker
+        self.import_item = dict()
+        self.export_item = None
+
+    def clear(self):
+        self.import_item.clear()
+        self.export_item = None
+
+    def __getitem__(self, item):
+        return self.export_item.value[item]
+
+
+class ViewBroker(object):
     Api = None
-    Module = None
-    View = None
+    File = None
 
-    def __init__(self, **kwargs):
-        self.data = copy(kwargs)
+    def __init__(self):
+        self.api_view = self.Api(self)
+        self.file_view = self.File(self)
+
+    def clear(self):
+        self.file_view.clear()
+        self.api_view.clear()
+
+    def from_file(self, filepath):
+        # import the data and validate it
+        data = yaml.load(open(filepath))
+        self.file_view.Schema.validate(data)
+
+        # setup the import/export view data
+        self.file_view.export_item.clear()
+        self.file_view.export_item.update(data)
+        self.api_view.import_item = self.file_view.export_item
+
+    def from_api(self, api_item):
+        # we are not currently validating the data
+        # received from the AOS server; presumes that the Schema written
+        # by aos-pyez is correct.
+        self.api_view.export_item = api_item
+        self.file_view.import_item = self.api_view.export_item.value
+
+    def to_file(self):
+        return self.file_view.Schema.dump(self.file_view)
 
     def to_api(self):
-        return self.Api.dump(self)
+        return self.api_view.Schema.dump(self.api_view)
 
-    @classmethod
-    def loads(cls, stream):
-        return cls.View.load(yaml.load(stream))
 
-    @classmethod
-    def load_api(cls, api_item):
-        return cls(**cls.View.dump(api_item.value))
-
-    @classmethod
-    def load_file(cls, filepath):
-        return cls.loads(open(filepath))
-
-    @contextlib.contextmanager
-    def api_item(self, session):
-        module = getattr(session, self.Module.__name__)
-        yield module[getattr(self, self.Module.LABEL)]
-
-    def __str__(self):
-        return json.dumps(self.data, indent=2)
-
-    __repr__ = __str__
