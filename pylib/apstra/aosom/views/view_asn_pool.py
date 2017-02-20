@@ -45,4 +45,3 @@ class _FileView(FileView):
 class AsnPoolView(ViewBroker):
     Api = _ApiView
     File = _FileView
-

@@ -79,5 +79,3 @@ class ViewBroker(object):
 
     def to_api(self):
         return self.api_view.Schema.dump(self.api_view)
-
-
