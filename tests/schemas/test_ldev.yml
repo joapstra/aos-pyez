@@ -1,0 +1,11 @@
+---
+name: 48x10r2_6x40
+panels:
+    - group: 48x10G
+      roles:
+        external-router: [1, 2]
+        server: all
+
+    - group: 6x40G
+      roles:
+        spine: all
