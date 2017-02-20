@@ -16,9 +16,9 @@ _valid_asn_value = lv.Range(
 
 
 def _valid_asn_range(asn_r):
-    if not asn_r['first'] < asn_r['last']:
+    if not asn_r['first'] <= asn_r['last']:
         raise lv.ValidationError(
-            "first={} must be < last={}".format(
+            "first={} must be <= last={}".format(
                 asn_r['first'], asn_r['last']))
 
 

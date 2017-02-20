@@ -29,7 +29,9 @@ class _ApiView(ApiView):
 class _FileView(FileView):
     Schema = lt.Object({
         'name': lt.String(),
-        'ranges': lt.List(lt.String())})
+        'ranges': lt.List(
+            lt.List(lt.Integer()))
+    })
 
     _jpc_ranges = jmespath.compile('ranges[*].[first, last]')
 
