@@ -8,6 +8,7 @@ import retrying
 from apstra.aosom.collection import Collection, CollectionItem
 from apstra.aosom.exc import SessionRqstError
 from apstra.aosom.dynmodldr import DynamicModuleOwner
+from apstra.aosom.blueprint_modules.cabling import Cabling
 
 __all__ = [
     'Blueprints'
@@ -86,6 +87,14 @@ class BlueprintCollectionItem(CollectionItem, DynamicModuleOwner):
             - `None` if no errors
         """
         return self.contents.get('errors')
+
+    # -------------------------------------------------------------------------
+    # PROPERTY: cabling
+    # -------------------------------------------------------------------------
+
+    @property
+    def cabling(self):
+        return Cabling(self)
 
     # =========================================================================
     #
