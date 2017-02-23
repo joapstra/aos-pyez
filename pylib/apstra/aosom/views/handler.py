@@ -45,9 +45,7 @@ class ApiView(object):
         return self.export_item.value[item]
 
 
-class ViewBroker(object):
-    Api = None
-    File = None
+class _ViewBroker(object):
 
     def __init__(self):
         self.api_view = self.Api(self)
@@ -79,3 +77,11 @@ class ViewBroker(object):
 
     def to_api(self):
         return self.api_view.Schema.dump(self.api_view)
+
+
+class ViewBroker(type):
+    def __new__(mcs, name, file_view, api_view):
+        return type.__new__(type, name, (_ViewBroker,), {
+            'Api': api_view,
+            'File': file_view
+        })

@@ -12,7 +12,7 @@ from apstra.aosom.schemas import ip_pool as schema
 __all__ = ['IpPoolView']
 
 
-class _IpPoolApiView(ApiView):
+class _ApiView(ApiView):
     Schema = schema.IpPool
 
     _jpc_subnets = jmespath.compile('subnets[].{network: @}')
@@ -26,7 +26,7 @@ class _IpPoolApiView(ApiView):
         return self._jpc_subnets.search(self.import_item)
 
 
-class _IpPoolFileView(FileView):
+class _FileView(FileView):
     Schema = lt.Object({
         'name': lt.String(),
         'subnets': lt.List(lt.String())})
@@ -42,6 +42,6 @@ class _IpPoolFileView(FileView):
         return self._jpc_subnets.search(self.import_item)
 
 
-class IpPoolView(ViewBroker):
-    Api = _IpPoolApiView
-    File = _IpPoolFileView
+IpPoolView = ViewBroker(
+    'IpPoolView',
+    file_view=_FileView, api_view=_ApiView)

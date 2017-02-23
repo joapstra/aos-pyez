@@ -44,6 +44,5 @@ class _FileView(FileView):
         return self._jpc_ranges.search(self.import_item)
 
 
-class AsnPoolView(ViewBroker):
-    Api = _ApiView
-    File = _FileView
+AsnPoolView = ViewBroker(
+    'AsnPoolView', file_view=_FileView, api_view=_ApiView)
